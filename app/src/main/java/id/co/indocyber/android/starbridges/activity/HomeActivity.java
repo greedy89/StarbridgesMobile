@@ -123,12 +123,13 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
                     try {
                         //JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(HomeActivity.this, "Failed to get image", Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivity.this, "Session Expired", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-//                    session.logoutUser();
-//                    finish();
+
+                    session.logoutUser();
+                    finish();
                 }
                 progressDialog.dismiss();
             }
@@ -163,22 +164,22 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showCheckInOut(View view) {
-        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
-            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-            alert.setTitle("Alert");
-            alert.setTitle("You do not have privilege to access this menu");
-            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-
-            alert.show();
-        } else {
+//        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
+//            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+//            alert.setTitle("Alert");
+//            alert.setTitle("You do not have privilege to access this menu");
+//            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                }
+//            });
+//
+//            alert.show();
+//        } else {
             Intent checkInOut = new Intent(this, CheckInOutActivity.class);
             startActivity(checkInOut);
-        }
+//        }
     }
 
     public void showHistory(View view) {

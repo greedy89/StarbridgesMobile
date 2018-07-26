@@ -363,6 +363,7 @@ public class StartEndDayActivity extends AppCompatActivity {
                         if(x.getLogType().equals("End Day"))
                         {
                             mShowDetail.setEnabled(false);
+                            mShowDetail.setBackground(ContextCompat.getDrawable(StartEndDayActivity.this, R.drawable.rounded_btn_disabled));
                         }else if (x.getLogType().equals("Start Day")){
                             mShowDetail.setText("End Day");
 
@@ -399,7 +400,7 @@ public class StartEndDayActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<History> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

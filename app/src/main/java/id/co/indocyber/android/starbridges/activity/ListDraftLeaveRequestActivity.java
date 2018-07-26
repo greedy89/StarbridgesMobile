@@ -130,7 +130,7 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
             @Override
             public void onFailure(Call<DeleteLeaveRequest> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });
@@ -148,113 +148,120 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<ListDraftLeaveRequest> call, Response<ListDraftLeaveRequest> response) {
                 progressDialog.dismiss();
-                listdata = response.body();
+                if(response.body().getIsSucceed())
+                {
+                    listdata = response.body();
 
-                if (listdata != null) {
+                    if (listdata != null)
+                    {
 
-                    // pass context and data to the custor adapter
+                        // pass context and data to the custor adapter
 //                    adapter = new ListDraftLeaveRequestAdapter(ListDraftLeaveRequestActivity.this, data.getReturnValue());
-                    //13/06/18
-                    adapter2 = new ListDraftLeaveRequestAdapter2(ListDraftLeaveRequestActivity.this, R.layout.list_draft_leave_request2, listdata.getReturnValue());
-                    // get listView from activity
-                    listView = (ListView) findViewById(R.id.listDraftLeaveRequest);
+                        //13/06/18
+                        adapter2 = new ListDraftLeaveRequestAdapter2(ListDraftLeaveRequestActivity.this, R.layout.list_draft_leave_request2, listdata.getReturnValue());
+                        // get listView from activity
+                        listView = (ListView) findViewById(R.id.listDraftLeaveRequest);
 
-                    // set listadapter
+                        // set listadapter
 //                    listView.setAdapter(adapter);
-                    // 13/06/18
-                    listView.setAdapter(adapter2);
-                    listView.setOnItemClickListener(ListDraftLeaveRequestActivity.this);
-                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                    listView.setItemsCanFocus(true);
-                    listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                        @Override
-                        public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                        // 13/06/18
+                        listView.setAdapter(adapter2);
+                        listView.setOnItemClickListener(ListDraftLeaveRequestActivity.this);
+                        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                        listView.setItemsCanFocus(true);
+                        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                            @Override
+                            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
 
-                            // Capture total checked items
-                            final int checkedCount = listView.getCheckedItemCount();
-                            // Set the CAB title according to total checked items
-                            actionMode.setTitle(checkedCount + " Selected");
-                            // Calls toggleSelection method from ListViewAdapter Class
-                            adapter2.toggleSelection(i);
-
-
-                        }
-
-                        @Override
-                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                            MenuInflater inflater = actionMode.getMenuInflater();
-                            inflater.inflate(R.menu.menu_draft_correction, menu);
-                            return true;
-
-                        }
-
-                        @Override
-                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                            return false;
-
-                        }
-
-                        @Override
-                        public boolean onActionItemClicked(final ActionMode actionMode, MenuItem menuItem) {
-
-                            switch (menuItem.getItemId()) {
-                                case R.id.deleteDraft:
-                                    AlertDialog.Builder alert = new AlertDialog.Builder(ListDraftLeaveRequestActivity.this);
-                                    alert.setTitle("Confirmation");
-                                    alert.setTitle("This information will be deleted");
-
-                                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            // Calls getSelectedIds method from ListViewAdapter Class
-                                            final SparseBooleanArray selected = adapter2
-                                                    .getSelectedIds();
-//                                idSelected= SharedPreferenceUtils.getSetting(DraftCorrectionListActivity.this, "lstIdSelected", "");
-                                            listSelectedId = new ArrayList<>();
-                                            // Captures all selected ids with a loop
-                                            for (int i2 = (selected.size() - 1); i2 >= 0; i2--) {
-                                                if (selected.valueAt(i2)) {
-                                                    ReturnValue selecteditem = adapter2
-                                                            .getItem(selected.keyAt(i2));
-                                                    // Remove selected items following the ids
-                                                    listSelectedId.add(selecteditem.getID());
-                                                    adapter2.remove(selecteditem);
-                                                }
-                                            }
-                                            selectedId = listSelectedId.toString();
-                                            Log.d("lstIdSelected", selectedId);
-                                            deleteCheckedDraft(selectedId);
-                                            // Close CAB
-                                            actionMode.finish();
-
-                                        }
-                                    });
-
-                                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        }
-                                    });
-
-                                    alert.show();
+                                // Capture total checked items
+                                final int checkedCount = listView.getCheckedItemCount();
+                                // Set the CAB title according to total checked items
+                                actionMode.setTitle(checkedCount + " Selected");
+                                // Calls toggleSelection method from ListViewAdapter Class
+                                adapter2.toggleSelection(i);
 
 
-                                    return true;
-                                default:
-                                    return false;
                             }
-                        }
 
-                        @Override
-                        public void onDestroyActionMode(ActionMode actionMode) {
+                            @Override
+                            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                                MenuInflater inflater = actionMode.getMenuInflater();
+                                inflater.inflate(R.menu.menu_draft_correction, menu);
+                                return true;
 
-                            adapter2.removeSelection();
+                            }
 
-                        }
-                    });
-                } else {
+                            @Override
+                            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                                return false;
+
+                            }
+
+                            @Override
+                            public boolean onActionItemClicked(final ActionMode actionMode, MenuItem menuItem) {
+
+                                switch (menuItem.getItemId()) {
+                                    case R.id.deleteDraft:
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(ListDraftLeaveRequestActivity.this);
+                                        alert.setTitle("Confirmation");
+                                        alert.setTitle("This information will be deleted");
+
+                                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                // Calls getSelectedIds method from ListViewAdapter Class
+                                                final SparseBooleanArray selected = adapter2
+                                                        .getSelectedIds();
+//                                idSelected= SharedPreferenceUtils.getSetting(DraftCorrectionListActivity.this, "lstIdSelected", "");
+                                                listSelectedId = new ArrayList<>();
+                                                // Captures all selected ids with a loop
+                                                for (int i2 = (selected.size() - 1); i2 >= 0; i2--) {
+                                                    if (selected.valueAt(i2)) {
+                                                        ReturnValue selecteditem = adapter2
+                                                                .getItem(selected.keyAt(i2));
+                                                        // Remove selected items following the ids
+                                                        listSelectedId.add(selecteditem.getID());
+                                                        adapter2.remove(selecteditem);
+                                                    }
+                                                }
+                                                selectedId = listSelectedId.toString();
+                                                Log.d("lstIdSelected", selectedId);
+                                                deleteCheckedDraft(selectedId);
+                                                // Close CAB
+                                                actionMode.finish();
+
+                                            }
+                                        });
+
+                                        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+
+                                        alert.show();
+
+
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+
+                            @Override
+                            public void onDestroyActionMode(ActionMode actionMode) {
+
+                                adapter2.removeSelection();
+
+                            }
+                        });
+                    }
+
+                }
+                else
+                {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(ListDraftLeaveRequestActivity.this, jObjError.toString(), Toast.LENGTH_LONG).show();
@@ -263,12 +270,13 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
                     }
                 }
 
+
             }
 
             @Override
             public void onFailure(Call<ListDraftLeaveRequest> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

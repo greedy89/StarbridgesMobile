@@ -1,8 +1,10 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -132,6 +134,34 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 saveSubmitData("Save");
+            }
+        });
+        btnSubmitCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveSubmitData("Submit");
+            }
+        });
+
+        btnCancelCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(LoanRequestCreateActivity.this);
+                alert.setTitle("This information will not be saved");
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+
+                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alert.show();
             }
         });
     }

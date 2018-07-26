@@ -224,7 +224,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         returnValue.setAddress("");
         returnValue.setCode("");
         returnValue.setDescription("");
-        returnValue.setName("");
+        returnValue.setName("--other--");
         listReturnValue.add(returnValue);
 
         apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -377,11 +377,11 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
     public void setEnableSpinnerAndEditTextLocation()
     {
 
-        if(mLocationSpinner.getSelectedItem().toString().matches(""))
+        if(mLocationSpinner.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(true);
         }
-        else if(!mLocationSpinner.getSelectedItem().toString().matches(""))
+        else if(!mLocationSpinner.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(false);
         }

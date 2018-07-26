@@ -125,7 +125,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
             @Override
             public void onFailure(Call<DeleteMedical> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });
@@ -165,7 +165,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
             @Override
             public void onFailure(Call<ListDraftMedical> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

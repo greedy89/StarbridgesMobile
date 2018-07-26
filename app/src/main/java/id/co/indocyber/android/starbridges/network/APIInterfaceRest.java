@@ -8,6 +8,7 @@ import id.co.indocyber.android.starbridges.model.Authentication;
 import id.co.indocyber.android.starbridges.model.CorrectionDetail.CorrectionDetail;
 import id.co.indocyber.android.starbridges.model.DecisionNumber.DecisionNumber;
 import id.co.indocyber.android.starbridges.model.DeleteShiftExchange.DeleteShiftExchange;
+import id.co.indocyber.android.starbridges.model.EditDraftLoan.EditDraftLoan;
 import id.co.indocyber.android.starbridges.model.EditLeaveCancelation.EditLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.EditOvertime.EditOvertime;
 import id.co.indocyber.android.starbridges.model.EditReimbursement.EditReimbursement;
@@ -520,5 +521,11 @@ public interface APIInterfaceRest {
 
     @POST("api/Loan/SaveLoanRequest")
     Call<MessageReturn>saveLoanRequest(@Body RequestBody body,@Query("TransactionStatusLoan") String TransactionStatusLoan);
+
+    @POST("api/Loan/DeleteDraft")
+    Call<MessageReturn> deleteDraftLoan(@Body RequestBody body);
+
+    @POST("api/Loan/EditDraft")
+    Call<EditDraftLoan> editDraftLoan(@Query("id") String id);
 
 }

@@ -36,6 +36,8 @@ import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.adapter.ListDraftLoanTransactionApprovedAdapter;
+import id.co.indocyber.android.starbridges.model.EditDraftLoan.EditDraftLoan;
+import id.co.indocyber.android.starbridges.model.EditLeaveCancelation.EditLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoanApproved.ListDraftTransactionLoanApproved;
 import id.co.indocyber.android.starbridges.model.LoanSchedule.LoanSchedule;
 import id.co.indocyber.android.starbridges.model.LoanTransactionType.LoanTransactionType;
@@ -67,6 +69,9 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
     List<id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue> lstLoanSchedule;
 
     String transactionStatusID, transactionTypeID, employeeLoanScheduleID;
+    String id;
+
+    id.co.indocyber.android.starbridges.model.EditDraftLoan.ReturnValue editLoan;
 
     List<Object> exclusiveFields;
     @Override
@@ -83,10 +88,17 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         btnCancelPostpone=(Button)findViewById(R.id.btnCancelPostpone);
 
         loanBalanceID= getIntent().getStringExtra("LoanBalanceId");
+        id=getIntent().getStringExtra("ID");
+        if(id!=null)
+        {
+            getData();
+        }
+        else
+        {
+            initSpinnerTransactionType();
 
-        initSpinnerTransactionType();
-
-        initSpinnerSchedule();
+            initSpinnerSchedule();
+        }
 
         spnTransactionTypePostpone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -170,6 +182,16 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         spnTransactionTypePostpone.setAdapter(adapter);
 
 
+        if(editLoan!=null)
+        {
+            int counter=0;
+            for(ReturnValue decisionNumber:lstLoanTransactionType)
+            {
+                if(editLoan.getLoanTransactionTypeID().equals(decisionNumber.getId())) break;
+                counter++;
+            }
+            spnTransactionTypePostpone.setSelection(counter);
+        }
 
     }
 
@@ -216,6 +238,32 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnSchedullePostpone.setAdapter(adapter);
 
+        if(editLoan!=null)
+        {
+            int counter=0;
+            for(id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue decisionNumber:lstLoanSchedule)
+            {
+                int scheduleId=1000000;
+                try
+                {
+                    scheduleId=Integer.parseInt(editLoan.getEmployeeLoanScheduleID()+"");
+                }
+                catch (Exception e)
+                {
+                    scheduleId=1000000;
+                }
+                String sScheduleId=scheduleId+"";
+
+                if(sScheduleId.equals(decisionNumber.getId())) break;
+                    counter++;
+            }
+            if(counter>=lstLoanSchedule.size())
+            {
+                counter=0;
+            }
+            spnSchedullePostpone.setSelection(counter);
+        }
+
     }
 
     public void saveSubmitData(String transactionStatus)
@@ -236,8 +284,6 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
             paramObject.put("TransactionStatusID",null);
             paramObject.put("LoanTransactionTypeID",transactionTypeID);
             paramObject.put("LoanPolicyID", null);
-
-
 
             Date date=new Date();
             String patternSQLServer = "yyyy-MM-dd'T'HH:mm:ss.sssssZ";
@@ -269,7 +315,6 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
                 if (response.body().isIsSucceed()) {
                     Toast.makeText(LoanDetailPostPoneActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
                 } else {
                     Toast.makeText(LoanDetailPostPoneActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -288,6 +333,41 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void getData()
+    {
+        progressDialog= new ProgressDialog(LoanDetailPostPoneActivity.this);
+        progressDialog.setTitle("Loading");
+        progressDialog.show();
+
+        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface.editDraftLoan(id).enqueue(new Callback<EditDraftLoan>() {
+            @Override
+            public void onResponse(Call<EditDraftLoan> call, Response<EditDraftLoan> response) {
+
+                if (response.body().getIsSucceed()) {
+                    editLoan= response.body().getReturnValue();
+
+                    txtAmountPostpone.setText(editLoan.getAmount()+"");
+                    txtDescriptionPostpone.setText(editLoan.getDescription()+"");
+
+
+                } else {
+
+                    Toast.makeText(LoanDetailPostPoneActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+                initSpinnerTransactionType();
+                initSpinnerSchedule();
+            }
+
+            @Override
+            public void onFailure(Call<EditDraftLoan> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(LoanDetailPostPoneActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

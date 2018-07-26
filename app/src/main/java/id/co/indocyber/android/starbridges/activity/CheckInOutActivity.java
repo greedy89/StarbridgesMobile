@@ -587,6 +587,7 @@ public class CheckInOutActivity extends AppCompatActivity {
                     } else if (lastLogType.equals("End Day")) {
                         mShowDetail.setText("Check Out");
                         mShowDetail.setEnabled(false);
+                        mShowDetail.setBackground(ContextCompat.getDrawable(CheckInOutActivity.this, R.drawable.rounded_btn_disabled));
                     } else {
                         mShowDetail.setText("Check In");
                     }
@@ -606,7 +607,7 @@ public class CheckInOutActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<History> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Maaf koneksi bermasalah", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

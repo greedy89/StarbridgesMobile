@@ -71,6 +71,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
     int timeZoneOffset;
     String sLocationName;
     String sLocationAddress;
+    String attendancePrivilege;
     List<ReturnValue> LocItems;
     final List<ReturnValue> listReturnValue= new ArrayList<>();
 
@@ -96,7 +97,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         String token_sp = user.get(SessionManagement.KEY_TOKEN);
         String loginName = user.get(SessionManagement.KEY_LOGINNAME);
         String employeeId = user.get(SessionManagement.KEY_EMPLOYEE_ID);
-
+        attendancePrivilege=user.get(SessionManagement.KEY_ATTENDANCE_PRIVILEGE);
 
         GlobalVar.setToken(token_sp);
         GlobalVar.setLoginName(loginName);
@@ -367,7 +368,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         returnValue.setAddress("");
         returnValue.setCode("");
         returnValue.setDescription("");
-        returnValue.setName("");
+        returnValue.setName("--other--");
         listReturnValue.add(returnValue);
 
         apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -482,7 +483,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
 
             SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
             Calendar todaysTime = new GregorianCalendar();
-            if(checkStartDay==false)
+            if(checkStartDay==false&&!attendancePrivilege.equals("False")&&attendancePrivilege!=null)
             {
 
                 //adding time 1 second for checkin
@@ -570,11 +571,11 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
     public void setEnableSpinnerAndEditTextLocation()
     {
 
-        if(mLocationSpinner.getSelectedItem().toString().matches(""))
+        if(mLocationSpinner.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(true);
         }
-        else if(!mLocationSpinner.getSelectedItem().toString().matches(""))
+        else if(!mLocationSpinner.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(false);
         }
