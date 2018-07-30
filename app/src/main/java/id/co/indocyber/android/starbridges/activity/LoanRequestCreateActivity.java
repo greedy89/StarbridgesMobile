@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -39,12 +41,14 @@ import java.util.List;
 import java.util.Locale;
 
 import id.co.indocyber.android.starbridges.R;
+import id.co.indocyber.android.starbridges.model.EditDraftLoan.EditDraftLoan;
 import id.co.indocyber.android.starbridges.model.LoanPolicy.LoanPolicy;
 import id.co.indocyber.android.starbridges.model.LoanPolicy.ReturnValue;
 import id.co.indocyber.android.starbridges.model.LoanSettingLimit.LoanSettingLimit;
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
+import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -53,7 +57,7 @@ import retrofit2.Response;
 
 public class LoanRequestCreateActivity extends AppCompatActivity {
 
-    TextView txtLoanSettingCreate, txtLimitCreate;
+    TextView txtLoanSettingCreate, txtLimitCreate, txtErrorPolicyCreate;
     Spinner spnPolicyCreate;
     EditText txtStartDateCreate, txtAmountCreate, txtCreditAmountCreate, txtDescriptionCreate;
     ImageView imgStartDateCreate;
@@ -64,11 +68,13 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
     List<ReturnValue> lstLoanPolicies;
 
-    String loanPolicyId, employeeLoanScheduleID;
+    String loanPolicyId, employeeLoanScheduleID, id;
 
     List<Object> exclusiveFields;
 
     id.co.indocyber.android.starbridges.model.LoanSettingLimit.ReturnValue loanLimit;
+
+    id.co.indocyber.android.starbridges.model.EditDraftLoan.ReturnValue editLoan;
 
     Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -104,9 +110,20 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         btnSubmitCreate=(Button)findViewById(R.id.btnSubmitCreate);
         btnSaveCreate=(Button)findViewById(R.id.btnSaveCreate);
         btnCancelCreate=(Button)findViewById(R.id.btnCancelCreate);
+        txtErrorPolicyCreate=(TextView)findViewById(R.id.txtErrorPolicyCreate);
+
+        id=getIntent().getStringExtra("ID");
+
 
         getLimitLoan();
-        initSpinnerLoanPolicy();
+        if(id!=null)
+        {
+            getData();
+        }
+        else
+        {
+            initSpinnerLoanPolicy();
+        }
 
         imgStartDateCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,13 +150,83 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         btnSaveCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSubmitData("Save");
+                if(!checkValidation())
+                {
+
+                }
+                else
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(LoanRequestCreateActivity.this);
+                    alert.setTitle("Request Confirmation");
+                    alert.setMessage("Policy\n" +
+                            "\t"+spnPolicyCreate.getSelectedItem().toString()+"" +
+                            "\nStart Date\n" +
+                            "\t"+ new StringConverter().dateFormatInput2dMMMMYYYY(txtStartDateCreate.getText().toString()) +
+                            "\nAmount\n" +
+                            "\t"+new StringConverter().numberFormat(txtAmountCreate.getText().toString()) +
+                            "\nCredit Amount\n" +
+                            "\t"+new StringConverter().numberFormat(txtCreditAmountCreate.getText().toString())+
+                            "\nDescription\n" +
+                            "\t"+txtDescriptionCreate.getText().toString() +
+                            "\n\n" +
+                            "This information will be saved in draft");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveSubmitData("Save");
+                        }
+                    });
+
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.show();
+                }
+
             }
         });
         btnSubmitCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSubmitData("Submit");
+
+                if(!checkValidation())
+                {
+
+                }
+                else
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(LoanRequestCreateActivity.this);
+                    alert.setTitle("Request Confirmation");
+                    alert.setMessage("Policy\n" +
+                            "\t"+spnPolicyCreate.getSelectedItem().toString()+"" +
+                            "\nStart Date\n" +
+                            "\t"+ new StringConverter().dateFormatInput2dMMMMYYYY(txtStartDateCreate.getText().toString()) +
+                            "\nAmount\n" +
+                            "\t"+new StringConverter().numberFormat(txtAmountCreate.getText().toString()) +
+                            "\nCredit Amount\n" +
+                            "\t"+new StringConverter().numberFormat(txtCreditAmountCreate.getText().toString())+
+                            "\nDescription\n" +
+                                    "\t"+txtDescriptionCreate.getText().toString() +
+                            "\n");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveSubmitData("Submit");
+                        }
+                    });
+
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.show();
+                }
+
             }
         });
 
@@ -168,10 +255,11 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
     public void getLimitLoan()
     {
-        progressDialog= new ProgressDialog(LoanRequestCreateActivity.this);
-        progressDialog.setTitle("Loading");
-        progressDialog.show();
-
+        if(progressDialog==null||!progressDialog.isShowing()) {
+            progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
+            progressDialog.setTitle("Loading");
+            progressDialog.show();
+        }
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         apiInterface.getLoanSettingLimit().enqueue(new Callback<LoanSettingLimit>() {
             @Override
@@ -200,12 +288,12 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
     public void initSpinnerLoanPolicy()
     {
-        if(progressDialog==null||!progressDialog.isShowing())
-        {
-            progressDialog= new ProgressDialog(LoanRequestCreateActivity.this);
+        if(progressDialog==null||!progressDialog.isShowing()) {
+            progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
             progressDialog.setTitle("Loading");
             progressDialog.show();
         }
+
         lstLoanPolicies=new ArrayList<>();
         ReturnValue loanPolicy=new ReturnValue();
         lstLoanPolicies.add(loanPolicy);
@@ -223,6 +311,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(LoanRequestCreateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
 
             }
 
@@ -240,6 +329,24 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         ArrayAdapter<ReturnValue> adapter = new ArrayAdapter<ReturnValue>(LoanRequestCreateActivity.this, android.R.layout.simple_spinner_item, lstLoanPolicies);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnPolicyCreate.setAdapter(adapter);
+
+        if(editLoan!=null)
+        {
+            int counter=0;
+            for(id.co.indocyber.android.starbridges.model.LoanPolicy.ReturnValue decisionNumber:lstLoanPolicies)
+            {
+//                String sScheduleId=editLoan.getEmployeeLoanScheduleID()+"";
+
+                if(editLoan.getLoanPolicyID()==decisionNumber.getID()) break;
+                counter++;
+            }
+            if(counter>=lstLoanPolicies.size())
+            {
+                counter=0;
+            }
+            spnPolicyCreate.setSelection(counter);
+        }
+        progressDialog.dismiss();
     }
 
     public void saveSubmitData(String transactionStatus)
@@ -253,18 +360,18 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         JSONObject paramObject= new JSONObject();
         try {
 
-            paramObject.put("ID",null);
+            paramObject.put("ID",id);
             paramObject.put("EmployeeID", GlobalVar.getEmployeeId());
             paramObject.put("EmployeeLoanBalanceID",  null);
-            paramObject.put("DecisionNumber",null);
-            paramObject.put("TransactionStatusID",null);
-            paramObject.put("LoanTransactionTypeID",null);
+            paramObject.put("DecisionNumber",editLoan==null?null:editLoan.getDecisionNumber());
+            paramObject.put("TransactionStatusID",editLoan==null?null:editLoan.getTransactionStatusID());
+            paramObject.put("LoanTransactionTypeID",editLoan==null?null:editLoan.getLoanTransactionTypeID());
             paramObject.put("LoanPolicyID", loanPolicyId);
 
 
 
             Date date=new Date();
-            String patternSQLServer = "yyyy-MM-dd'T'HH:mm:ss.sssssZ";
+            String patternSQLServer = "yyyy-MM-dd";
             String patternDate="dd/MM/yyyy";
             SimpleDateFormat formatTimeSQLServer = new SimpleDateFormat(patternSQLServer);
             SimpleDateFormat formatTimeStarbridge=new SimpleDateFormat(patternDate);
@@ -287,11 +394,9 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             paramObject.put("Description", txtDescriptionCreate.getText().toString());
             paramObject.put("LoanSettingName", loanLimit.getNameLoanSetting());
             paramObject.put("Limit", loanLimit.getLimit());
-            paramObject.put("AdditionalBalance", null);
-            paramObject.put("TransactionStatusID", null);
             paramObject.put("FullAccess", fullAccess);
-            paramObject.put("ExclusiveFields", exclusiveFields);
-            paramObject.put("AccessibilityAttribute", accessibilityAttribute);
+            paramObject.put("ExclusiveFields", editLoan==null?null:editLoan.getExclusionFields());
+            paramObject.put("AccessibilityAttribute", editLoan==null?null:editLoan.getAccessibilityAttribute());
 
         }catch (Exception e)
         {
@@ -327,4 +432,70 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
     }
 
+    public void getData()
+    {
+        if(progressDialog==null||!progressDialog.isShowing()) {
+            progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
+            progressDialog.setTitle("Loading");
+            progressDialog.show();
+        }
+        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface.editDraftLoan(id).enqueue(new Callback<EditDraftLoan>() {
+            @Override
+            public void onResponse(Call<EditDraftLoan> call, Response<EditDraftLoan> response) {
+
+                if (response.body().getIsSucceed()) {
+                    editLoan= response.body().getReturnValue();
+                    txtStartDateCreate.setText(new StringConverter().dateFormatDDMMYYYY(editLoan.getStartNewLoanDate()));
+                    txtAmountCreate.setText(editLoan.getAmount()+"");
+                    txtCreditAmountCreate.setText(editLoan.getCreditAmount()+"");
+                    txtDescriptionCreate.setText(editLoan.getDescription()+"");
+                } else {
+
+                    Toast.makeText(LoanRequestCreateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+                initSpinnerLoanPolicy();
+
+            }
+
+            @Override
+            public void onFailure(Call<EditDraftLoan> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(LoanRequestCreateActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public boolean checkValidation()
+    {
+        if(loanPolicyId.matches("null"))
+        {
+            txtErrorPolicyCreate.setError("");
+            txtErrorPolicyCreate.setTextColor(Color.RED);//just to highlight that this is an error
+            txtErrorPolicyCreate.setText(" Please select policy");//changes the selected item text to this
+            return false;
+        }
+        else if(txtStartDateCreate.getText().toString().matches(""))
+        {
+            txtStartDateCreate.setError("Please fill start date");
+            return false;
+        }
+        else if(txtAmountCreate.getText().toString().matches("")||txtAmountCreate.getText().toString().matches("\\+")||txtAmountCreate.getText().toString().matches("-"))
+        {
+            txtAmountCreate.setError("Please fill amount");
+            return false;
+        }
+        else if(txtCreditAmountCreate.getText().toString().matches("")||txtCreditAmountCreate.getText().toString().matches("\\+")||txtCreditAmountCreate.getText().toString().matches("-"))
+        {
+            txtCreditAmountCreate.setError("Please fill amount");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
+    }
 }

@@ -1,6 +1,7 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.app.ProgressDialog;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -80,5 +81,10 @@ public class LoanScheduleActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 }

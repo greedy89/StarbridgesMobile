@@ -374,7 +374,29 @@ public class ReimburseDetailActivity extends AppCompatActivity {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
                 imgReimburseDetail.setImageBitmap(selectedImage);
-                photo = encodeImage(selectedImage);
+                if(selectedImage.getHeight()>600||selectedImage.getWidth()>600)
+                {
+                    int newWidth=0;
+                    int newHeight=0;
+                    int maxPixel=600;
+                    if(selectedImage.getWidth()>selectedImage.getHeight())
+                    {
+                        newHeight=maxPixel;
+                        newWidth=maxPixel*selectedImage.getWidth()/selectedImage.getHeight();
+                    }
+                    else
+                    {
+                        newWidth=maxPixel;
+                        newHeight=maxPixel*selectedImage.getHeight()/selectedImage.getWidth();
+
+                    }
+//                    selectedImage2.createScaledBitmap(selectedImage, newWidth, newHeight, false);
+                    Bitmap selectedImage2 = Bitmap.createScaledBitmap(selectedImage, newWidth, newHeight, false);
+                    photo = encodeImage(selectedImage2);
+
+                }
+                else
+                    photo = encodeImage(selectedImage);
             }catch (FileNotFoundException e){
                 e.printStackTrace();
                 Toast.makeText(ReimburseDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();

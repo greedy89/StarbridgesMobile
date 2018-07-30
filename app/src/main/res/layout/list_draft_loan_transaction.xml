@@ -31,13 +31,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txtPolicyTransactionLoan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Policy"
-        android:textSize="14dp" />
-
-    <TextView
         android:id="@+id/txtAmountTransactionLoan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

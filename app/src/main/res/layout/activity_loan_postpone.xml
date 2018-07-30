@@ -10,21 +10,49 @@
     <!--Header-->
 
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Transaction Type" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Transaction Type" />
+
+        <TextView
+            android:id="@+id/txtErrorTransactionTypePostpone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="right" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/spnTransactionTypePostpone"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
-    <TextView
-
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Schedulle" />
+        android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Schedulle" />
+
+        <TextView
+            android:id="@+id/txtErrorSchedulePostpone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/spnSchedullePostpone"
@@ -35,7 +63,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ammount" />
+        android:text="Amount" />
 
     <EditText
         android:id="@+id/txtAmountPostpone"

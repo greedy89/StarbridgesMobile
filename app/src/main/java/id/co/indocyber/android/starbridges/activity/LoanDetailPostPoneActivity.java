@@ -1,14 +1,18 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -19,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -45,6 +50,7 @@ import id.co.indocyber.android.starbridges.model.LoanTransactionType.ReturnValue
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
+import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -57,6 +63,8 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
     Spinner spnTransactionTypePostpone, spnSchedullePostpone;
     EditText txtAmountPostpone, txtDescriptionPostpone;
     Button btnSubmitPostpone, btnSavePostpone, btnCancelPostpone;
+
+    TextView txtErrorTransactionTypePostpone, txtErrorSchedulePostpone;
 
     String loanBalanceID;
 
@@ -86,6 +94,9 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         btnSubmitPostpone=(Button)findViewById(R.id.btnSubmitPostpone);
         btnSavePostpone=(Button)findViewById(R.id.btnSavePostpone);
         btnCancelPostpone=(Button)findViewById(R.id.btnCancelPostpone);
+
+        txtErrorTransactionTypePostpone=(TextView)findViewById(R.id.txtErrorTransactionTypePostpone);
+        txtErrorSchedulePostpone=(TextView)findViewById(R.id.txtErrorSchedulePostpone);
 
         loanBalanceID= getIntent().getStringExtra("LoanBalanceId");
         id=getIntent().getStringExtra("ID");
@@ -129,14 +140,72 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         btnSavePostpone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSubmitData("Save");
+                if(checkValidation())
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(LoanDetailPostPoneActivity.this);
+                    alert.setTitle("Request Confirmation");
+                    alert.setMessage("Transaction Type\n" +
+                            "\t"+spnTransactionTypePostpone.getSelectedItem().toString()+"" +
+                            "\nSchedule\n" +
+                            "\t"+ spnSchedullePostpone.getSelectedItem().toString() +
+                            "\nAmount\n" +
+                            "\t"+new StringConverter().numberFormat(txtAmountPostpone.getText().toString()) +
+                            "\nDescription\n" +
+                            "\t"+txtDescriptionPostpone.getText().toString() +
+                            "\n\n" +
+                            "This information will be saved in draft");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveSubmitData("Save");
+                        }
+                    });
+
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.show();
+
+                }
+
             }
         });
 
         btnSubmitPostpone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSubmitData("Submit");
+                if(checkValidation())
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(LoanDetailPostPoneActivity.this);
+                    alert.setTitle("Request Confirmation");
+                    alert.setMessage("Transaction Type\n" +
+                            "\t"+spnTransactionTypePostpone.getSelectedItem().toString()+"" +
+                            "\nSchedule\n" +
+                            "\t"+ spnSchedullePostpone.getSelectedItem().toString() +
+                            "\nAmount\n" +
+                            "\t"+new StringConverter().numberFormat(txtAmountPostpone.getText().toString()) +
+                            "\nDescription\n" +
+                            "\t"+txtDescriptionPostpone.getText().toString() +
+                            "\n");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            saveSubmitData("Submit");
+                        }
+                    });
+
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.show();
+                }
+
             }
         });
     }
@@ -243,18 +312,9 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
             int counter=0;
             for(id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue decisionNumber:lstLoanSchedule)
             {
-                int scheduleId=1000000;
-                try
-                {
-                    scheduleId=Integer.parseInt(editLoan.getEmployeeLoanScheduleID()+"");
-                }
-                catch (Exception e)
-                {
-                    scheduleId=1000000;
-                }
-                String sScheduleId=scheduleId+"";
+//                String sScheduleId=editLoan.getEmployeeLoanScheduleID()+"";
 
-                if(sScheduleId.equals(decisionNumber.getId())) break;
+                if(editLoan.getEmployeeLoanScheduleID()==decisionNumber.getId()) break;
                     counter++;
             }
             if(counter>=lstLoanSchedule.size())
@@ -277,27 +337,27 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         JSONObject paramObject= new JSONObject();
         try {
 
-            paramObject.put("ID",null);
+            paramObject.put("ID",id);
             paramObject.put("EmployeeID", GlobalVar.getEmployeeId());
-            paramObject.put("EmployeeLoanBalanceID",  loanBalanceID);
-            paramObject.put("DecisionNumber",null);
-            paramObject.put("TransactionStatusID",null);
-            paramObject.put("LoanTransactionTypeID",transactionTypeID);
-            paramObject.put("LoanPolicyID", null);
+            paramObject.put("EmployeeLoanBalanceID",  editLoan==null?loanBalanceID:editLoan.getEmployeeLoanBalanceID());
+            paramObject.put("DecisionNumber",editLoan==null?null:editLoan.getDecisionNumber());
+            paramObject.put("TransactionStatusID",editLoan==null?null:editLoan.getTransactionStatusID());
+            paramObject.put("LoanTransactionTypeID",editLoan==null?transactionTypeID:editLoan.getLoanTransactionTypeID());
+            paramObject.put("LoanTransactionType", id==null?null:spnTransactionTypePostpone.getSelectedItem().toString());
+            paramObject.put("LoanPolicyID", editLoan==null?null:editLoan.getLoanPolicyID());
 
-            Date date=new Date();
-            String patternSQLServer = "yyyy-MM-dd'T'HH:mm:ss.sssssZ";
-            SimpleDateFormat formatTimeSQLServer = new SimpleDateFormat(patternSQLServer);
+//            Date date=new Date();
+//            String patternSQLServer = "yyyy-MM-dd'T'HH:mm:ss.sssssZ";
+//            SimpleDateFormat formatTimeSQLServer = new SimpleDateFormat(patternSQLServer);
 
-            paramObject.put("StartNewLoanDate",formatTimeSQLServer.format(date).toString());
-            paramObject.put("CreditAmount",null);
-            paramObject.put("EmployeeLoanScheduleID",employeeLoanScheduleID);
+//            paramObject.put("StartNewLoanDate",editLoan==null?formatTimeSQLServer.format(date).toString():editLoan.getStartNewLoanDate()  );
+            paramObject.put("StartNewLoanDate",editLoan==null?null:editLoan.getStartNewLoanDate()  );
+            paramObject.put("CreditAmount",editLoan==null?null:editLoan.getCreditAmount());
+            paramObject.put("EmployeeLoanScheduleID",editLoan==null?employeeLoanScheduleID:editLoan.getEmployeeLoanScheduleID() );
             paramObject.put("Amount", txtAmountPostpone.getText().toString());
             paramObject.put("Description", txtDescriptionPostpone.getText().toString());
-            paramObject.put("LoanSettingName", null);
-            paramObject.put("Limit", null);
-            paramObject.put("AdditionalBalance", null);
-            paramObject.put("TransactionStatusID", null);
+            paramObject.put("LoanSettingName", editLoan==null?null:editLoan.getLoanSettingName());
+            paramObject.put("Limit", editLoan==null?null:editLoan.getLimit());
             paramObject.put("FullAccess", fullAccess);
             paramObject.put("ExclusiveFields", exclusiveFields);
             paramObject.put("AccessibilityAttribute", accessibilityAttribute);
@@ -368,6 +428,30 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
                 Toast.makeText(LoanDetailPostPoneActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public boolean checkValidation()
+    {
+        if(spnTransactionTypePostpone.getSelectedItem().toString()==null)
+        {
+            txtErrorTransactionTypePostpone.setError("");
+            txtErrorTransactionTypePostpone.setTextColor(Color.RED);//just to highlight that this is an error
+            txtErrorTransactionTypePostpone.setText(" Please select reimburse type");//changes the selected item text to this
+            return false;
+        }
+        else if(spnSchedullePostpone.getSelectedItem().toString()==null)
+        {
+            txtErrorSchedulePostpone.setError("");
+            txtErrorSchedulePostpone.setTextColor(Color.RED);//just to highlight that this is an error
+            txtErrorSchedulePostpone.setText(" Please select reimburse type");//changes the selected item text to this
+            return false;
+        }
+        else if(txtAmountPostpone.getText().toString().matches("")||txtAmountPostpone.getText().toString().matches("\\+")||txtAmountPostpone.getText().toString().matches("-"))
+        {
+            txtAmountPostpone.setError("Please fill amount");
+            return false;
+        }
+        return true;
     }
 
 }

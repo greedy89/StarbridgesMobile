@@ -50,7 +50,7 @@ public class ReturnValue implements Serializable, Parcelable
     private Integer creditAmount;
     @SerializedName("EmployeeLoanScheduleID")
     @Expose
-    private Object employeeLoanScheduleID;
+    private Integer employeeLoanScheduleID;
     @SerializedName("Amount")
     @Expose
     private Integer amount;
@@ -103,7 +103,7 @@ public class ReturnValue implements Serializable, Parcelable
         this.loanPolicyLookUp = ((Object) in.readValue((Object.class.getClassLoader())));
         this.startNewLoanDate = ((String) in.readValue((String.class.getClassLoader())));
         this.creditAmount = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.employeeLoanScheduleID = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.employeeLoanScheduleID = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.amount = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.description = ((Object) in.readValue((Object.class.getClassLoader())));
         this.loanSettingName = ((Object) in.readValue((Object.class.getClassLoader())));
@@ -143,7 +143,7 @@ public class ReturnValue implements Serializable, Parcelable
      * @param loanTransactionTypeLookUp
      * @param transactionStatusID
      */
-    public ReturnValue(String iD, String employeeID, Integer employeeLoanBalanceID, Object decisionNumber, Integer transactionStatusID, Integer loanTransactionTypeID, String loanTransactionType, Object loanTransactionTypeLookUp, Integer loanPolicyID, Object loanPolicyLookUp, String startNewLoanDate, Integer creditAmount, Object employeeLoanScheduleID, Integer amount, Object description, Object loanSettingName, Object limit, Boolean fullAccess, List<Object> exclusionFields, String accessibilityAttribute) {
+    public ReturnValue(String iD, String employeeID, Integer employeeLoanBalanceID, Object decisionNumber, Integer transactionStatusID, Integer loanTransactionTypeID, String loanTransactionType, Object loanTransactionTypeLookUp, Integer loanPolicyID, Object loanPolicyLookUp, String startNewLoanDate, Integer creditAmount, Integer employeeLoanScheduleID, Integer amount, Object description, Object loanSettingName, Object limit, Boolean fullAccess, List<Object> exclusionFields, String accessibilityAttribute) {
         super();
         this.iD = iD;
         this.employeeID = employeeID;
@@ -327,11 +327,11 @@ public class ReturnValue implements Serializable, Parcelable
         return employeeLoanScheduleID;
     }
 
-    public void setEmployeeLoanScheduleID(Object employeeLoanScheduleID) {
+    public void setEmployeeLoanScheduleID(Integer employeeLoanScheduleID) {
         this.employeeLoanScheduleID = employeeLoanScheduleID;
     }
 
-    public ReturnValue withEmployeeLoanScheduleID(Object employeeLoanScheduleID) {
+    public ReturnValue withEmployeeLoanScheduleID(Integer employeeLoanScheduleID) {
         this.employeeLoanScheduleID = employeeLoanScheduleID;
         return this;
     }

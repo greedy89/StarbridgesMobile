@@ -377,7 +377,7 @@ public class StartEndDayActivity extends AppCompatActivity {
 ////                        int dataSize=data.getReturnValue().size()-1;
 //                        lastLogType=data.getReturnValue().get(0).getLogType();
 //                    }
-//                    if (lastLogType.equals("Start Day") ) {
+//                    if (lastLogType.equals("Start Day7") ) {
 //                        mShowDetail.setText("End Day");
 //                    } else if (lastLogType.equals("End Day")) {
 //                        mShowDetail.setEnabled(false);

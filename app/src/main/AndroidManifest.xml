@@ -225,26 +225,54 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoanMainHistoryActivity" />
-        <activity android:name=".activity.LoanHistoryActivity" />
-        <activity android:name=".activity.LoanScheduleActivity" />
+        <activity android:name=".activity.LoanMainHistoryActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.LoanHistoryActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanMainHistoryActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.LoanScheduleActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanMainHistoryActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.LoanSelectorActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activity.LoanTransactionMainActivity" />
-        <activity android:name=".activity.LoanTransactionActivity" />
-        <activity android:name=".activity.ListDraftLoanTransactionApprovedActivity" />
-        <activity android:name=".activity.ListDraftLoanTransactionActivity"></activity>
-        <activity android:name=".activity.LoanDetailPostPoneActivity"
+        <activity android:name=".activity.LoanTransactionMainActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.LoanTransactionActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanTransactionMainActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.ListDraftLoanTransactionApprovedActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanTransactionMainActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.ListDraftLoanTransactionActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanTransactionActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".activity.LoanDetailPostPoneActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.LoanTransactionActivity"
             android:theme="@style/TranslucentTheme"
             ></activity>
         <activity android:name=".activity.LoanRequestCreateActivity"
             android:configChanges="orientation"
-            android:parentActivityName=".activity.HomeActivity"
+            android:parentActivityName=".activity.LoanTransactionMainActivity"
             android:theme="@style/TranslucentTheme"
             ></activity>
 

@@ -43,7 +43,6 @@ public class ListDraftLoanTransactionAdapter extends ArrayAdapter<ReturnValue> {
 
         // get the text view from the rowView
         TextView txtTransactionTypeTransactionLoan = (TextView) rowView.findViewById(R.id.txtTransactionTypeTransactionLoan);
-        TextView txtPolicyTransactionLoan = (TextView) rowView.findViewById(R.id.txtPolicyTransactionLoan);
         TextView txtAmountTransactionLoan = (TextView) rowView.findViewById(R.id.txtAmountTransactionLoan);
         TextView txtStartDateTransactionLoan = (TextView) rowView.findViewById(R.id.txtStartDateTransactionLoan);
 
@@ -52,7 +51,6 @@ public class ListDraftLoanTransactionAdapter extends ArrayAdapter<ReturnValue> {
 
         txtAmountTransactionLoan.setText("Amount: " + stringConverter.numberFormat(listTransaction.get(position).getAmount() + ""));
         txtTransactionTypeTransactionLoan.setText(listTransaction.get(position).getTransactionType());
-        txtPolicyTransactionLoan.setText(listTransaction.get(position).getPolicy());
         txtStartDateTransactionLoan.setText(stringConverter.dateFormat3(listTransaction.get(position).getStartDate()));
 
         return rowView;
