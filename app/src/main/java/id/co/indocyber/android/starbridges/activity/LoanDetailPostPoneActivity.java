@@ -436,14 +436,14 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         {
             txtErrorTransactionTypePostpone.setError("");
             txtErrorTransactionTypePostpone.setTextColor(Color.RED);//just to highlight that this is an error
-            txtErrorTransactionTypePostpone.setText(" Please select reimburse type");//changes the selected item text to this
+            txtErrorTransactionTypePostpone.setText(" Please select transaction type");//changes the selected item text to this
             return false;
         }
         else if(spnSchedullePostpone.getSelectedItem().toString()==null)
         {
             txtErrorSchedulePostpone.setError("");
             txtErrorSchedulePostpone.setTextColor(Color.RED);//just to highlight that this is an error
-            txtErrorSchedulePostpone.setText(" Please select reimburse type");//changes the selected item text to this
+            txtErrorSchedulePostpone.setText(" Please select schedule");//changes the selected item text to this
             return false;
         }
         else if(txtAmountPostpone.getText().toString().matches("")||txtAmountPostpone.getText().toString().matches("\\+")||txtAmountPostpone.getText().toString().matches("-"))

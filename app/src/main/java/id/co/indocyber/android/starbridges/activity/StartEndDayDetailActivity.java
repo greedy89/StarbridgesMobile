@@ -1,7 +1,9 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -93,7 +95,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         sUsername = GlobalVar.loginName();
         sLogType=intent.getStringExtra("logType");
         client = LocationServices.getFusedLocationProviderClient(this);
-        getLocation();
+
 
         mDateView.setText(sDate);
         mTimeView.setText(sTime);
@@ -156,6 +158,24 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     sLongitude = String.valueOf(location.getLongitude());
 
                 }
+                if(sLatitude==null&&sLongitude==null)
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(StartEndDayDetailActivity.this);
+                    alert.setTitle(getString(R.string.failed_to_process));
+                    alert.setMessage(getString(R.string.attention_cant_get_location));
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+                    alert.show();
+                }
+                else
+                {
+                    callInputAbsence();
+                }
             }
         });
 
@@ -171,7 +191,8 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
             }
             else
             {
-                callInputAbsence();
+                getLocation();
+
             }
             sLocationName = mLocationNameView.getText().toString();
             sLocationAddress = null;
@@ -179,7 +200,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
         }
         else
-            callInputAbsence();
+            getLocation();
 
     }
 

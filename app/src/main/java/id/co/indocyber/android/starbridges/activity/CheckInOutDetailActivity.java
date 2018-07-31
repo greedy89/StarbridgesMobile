@@ -1,7 +1,9 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -346,12 +348,30 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    if (sLogType.equals("Check In")) {
-                        dispatchTakePictureIntent();
-                    } else {
-                        sPhoto=null;
+                    if(sLatitude==null&&sLongitude==null)
+                    {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(CheckInOutDetailActivity.this);
+                        alert.setTitle(getString(R.string.failed_to_process));
+                        alert.setMessage(getString(R.string.attention_cant_get_location));
+                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                        alert.show();
+                    }
+                    else
+                    {
                         callInputAbsence();
                     }
+//                    if (sLogType.equals("Check In")) {
+//                        dispatchTakePictureIntent();
+//                    } else {
+//                        sPhoto=null;
+//                        callInputAbsence();
+//                    }
                 }
             }
         });

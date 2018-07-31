@@ -72,6 +72,8 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
     List<Object> exclusiveFields;
 
+    String creditAmount="";
+
     id.co.indocyber.android.starbridges.model.LoanSettingLimit.ReturnValue loanLimit;
 
     id.co.indocyber.android.starbridges.model.EditDraftLoan.ReturnValue editLoan;
@@ -128,9 +130,12 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         imgStartDateCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(LoanRequestCreateActivity.this, date, myCalendar
+                DatePickerDialog dialog= new DatePickerDialog(LoanRequestCreateActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis());
+                dialog.show();
+
             }
         });
 
@@ -139,6 +144,17 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ReturnValue loanPolicy=(ReturnValue)spnPolicyCreate.getItemAtPosition(i);
                 loanPolicyId=loanPolicy.getID()+"";
+
+                if(loanPolicy.getName()!=null&&loanPolicy.getName().matches("General Loan"))
+                {
+                    txtCreditAmountCreate.setEnabled(true);
+                    txtCreditAmountCreate.setText(creditAmount);
+                }
+                else
+                {
+                    txtCreditAmountCreate.setEnabled(false);
+                    txtCreditAmountCreate.setText("");
+                }
             }
 
             @Override
@@ -251,6 +267,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                 alert.show();
             }
         });
+
     }
 
     public void getLimitLoan()
@@ -306,6 +323,10 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
                 if (response.body().getIsSucceed()) {
                     lstLoanPolicies.addAll(response.body().getReturnValue());
+                    ReturnValue loanPolicy=new ReturnValue();
+                    loanPolicy.setID(100);
+                    loanPolicy.setName("Car Ownership Program");
+                    lstLoanPolicies.add(loanPolicy);
                     setupSpinnerLoanPolicy();
 
                 } else {
@@ -446,6 +467,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
                 if (response.body().getIsSucceed()) {
                     editLoan= response.body().getReturnValue();
+                    creditAmount=editLoan.getCreditAmount()+"";
                     txtStartDateCreate.setText(new StringConverter().dateFormatDDMMYYYY(editLoan.getStartNewLoanDate()));
                     txtAmountCreate.setText(editLoan.getAmount()+"");
                     txtCreditAmountCreate.setText(editLoan.getCreditAmount()+"");
@@ -486,7 +508,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             txtAmountCreate.setError("Please fill amount");
             return false;
         }
-        else if(txtCreditAmountCreate.getText().toString().matches("")||txtCreditAmountCreate.getText().toString().matches("\\+")||txtCreditAmountCreate.getText().toString().matches("-"))
+        else if(txtCreditAmountCreate.isEnabled()&&(txtCreditAmountCreate.getText().toString().matches("")||txtCreditAmountCreate.getText().toString().matches("\\+")||txtCreditAmountCreate.getText().toString().matches("-")))
         {
             txtCreditAmountCreate.setError("Please fill amount");
             return false;

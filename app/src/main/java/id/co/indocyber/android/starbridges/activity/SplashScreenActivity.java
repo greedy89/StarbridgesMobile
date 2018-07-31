@@ -2,6 +2,8 @@ package id.co.indocyber.android.starbridges.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -18,6 +21,8 @@ import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.model.versioning.Versioning;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
+import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerMasuk;
+import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerPulang;
 import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash_screen);
+        setAlarmMasukPulang(getApplicationContext());
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
@@ -127,5 +133,34 @@ public class SplashScreenActivity extends AppCompatActivity{
 
     public void imgAction(View view) {
         checkAppVersion();
+    }
+
+    private void setAlarmMasukPulang(Context context) {
+        boolean isAlarmMasuk = (PendingIntent.getBroadcast(context, 0,
+                new Intent("id.co.indocyber.android.starbridges.ACTION_NOTIFY_MASUK"),
+                PendingIntent.FLAG_NO_CREATE) != null);
+
+        if (isAlarmMasuk) {
+            Log.d("myTag", "Alarm Masuk is already active");
+//            Toast.makeText(context, "Alarm Masuk is already active", Toast.LENGTH_SHORT).show();
+        } else {
+            AlarmManagerMasuk.start(context);
+            Log.d("myTag", "AlarmMasuk is Created");
+//            Toast.makeText(context, "AlarmMasuk is Created", Toast.LENGTH_SHORT).show();
+        }
+
+        boolean isAlarmKeluar = (PendingIntent.getBroadcast(context, 1,
+                new Intent("id.co.indocyber.android.starbridges.ACTION_NOTIFY_PULANG"),
+                PendingIntent.FLAG_NO_CREATE) != null);
+
+        if (isAlarmKeluar) {
+            Log.d("myTag", "AlarmPulang is already active");
+//            Toast.makeText(context, "Alarm Pulang is already active", Toast.LENGTH_SHORT).show();
+        } else {
+            AlarmManagerPulang.start(context);
+            Log.d("myTag", "AlarmPulang is Created");
+//            Toast.makeText(context, "AlarmPulang is Created", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

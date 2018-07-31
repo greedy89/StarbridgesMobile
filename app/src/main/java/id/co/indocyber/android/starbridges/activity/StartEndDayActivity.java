@@ -3,13 +3,16 @@ package id.co.indocyber.android.starbridges.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,14 +20,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import id.co.indocyber.android.starbridges.R;
@@ -63,6 +76,8 @@ public class StartEndDayActivity extends AppCompatActivity {
     List<id.co.indocyber.android.starbridges.model.OLocation.ReturnValue> listReturnValueLocation = new ArrayList<>();;
     String sLocationID, sLocationName, sLocationAddress, sLatitude, sLongitude;
     private FusedLocationProviderClient client;
+    private GoogleApiClient googleApiClient;
+    final static int REQUEST_LOCATION = 199;
 
     static final int REQUEST_ACCESS_LOCATION = 101;
 
@@ -96,54 +111,143 @@ public class StartEndDayActivity extends AppCompatActivity {
         mShowDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, 0);
+                final LocationManager manager = (LocationManager) StartEndDayActivity.this.getSystemService(Context.LOCATION_SERVICE);
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(StartEndDayActivity.this)) {
+//            Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
+                    List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, 0);
 
-                if (isAppInstalled("com.lexa.fakegps")
-                        || isAppInstalled("com.theappninjas.gpsjosystick")
-                        ||isAppInstalled("com.incorporateapps.fakegps.fre")
-                        ||isAppInstalled("com.divi.fakeGPS")
-                        ||isAppInstalled("com.fakegps.mock")
-                        ||isAppInstalled("com.frastan.fakegps")
-                        ||isAppInstalled("com.gsmartstudio.fakegps")
-                        ||isAppInstalled("com.lkr.fakelocation")
-                        ||isAppInstalled("com.ltp.pro.fakelocation")
-                        ||isAppInstalled("com.pe.fakegpsrun")
-                        ||isAppInstalled("com.perfect.apps.fakegps.flygps.fake.location.changer.fake.gps")
-                        ||isAppInstalled("com.usefullapps.fakegpslocationpro")
-                        ||isAppInstalled("com.fake.gps.location")
-                        ||isAppInstalled("org.hola.gpslocation")
-                        ){
-                    //Toast.makeText(StartEndDayActivity.this,"Terdeteksi",Toast.LENGTH_SHORT).show();
-                    AlertDialogManager alertDialogManager = new AlertDialogManager();
-                    alertDialogManager.showAlertDialog(StartEndDayActivity.this, "Warning","Please Uninstall your Fake GPS Apps",false);
+                    if (isAppInstalled("com.lexa.fakegps")
+                            || isAppInstalled("com.theappninjas.gpsjosystick")
+                            ||isAppInstalled("com.incorporateapps.fakegps.fre")
+                            ||isAppInstalled("com.divi.fakeGPS")
+                            ||isAppInstalled("com.fakegps.mock")
+                            ||isAppInstalled("com.frastan.fakegps")
+                            ||isAppInstalled("com.gsmartstudio.fakegps")
+                            ||isAppInstalled("com.lkr.fakelocation")
+                            ||isAppInstalled("com.ltp.pro.fakelocation")
+                            ||isAppInstalled("com.pe.fakegpsrun")
+                            ||isAppInstalled("com.perfect.apps.fakegps.flygps.fake.location.changer.fake.gps")
+                            ||isAppInstalled("com.usefullapps.fakegpslocationpro")
+                            ||isAppInstalled("com.fake.gps.location")
+                            ||isAppInstalled("org.hola.gpslocation")
+                            ){
+                        //Toast.makeText(StartEndDayActivity.this,"Terdeteksi",Toast.LENGTH_SHORT).show();
+                        AlertDialogManager alertDialogManager = new AlertDialogManager();
+                        alertDialogManager.showAlertDialog(StartEndDayActivity.this, "Warning","Please Uninstall your Fake GPS Apps",false);
+                    }
+                    else if(mShowDetail.getText().toString().matches("End Day"))
+                    {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(StartEndDayActivity.this);
+                        alert.setTitle("Are you sure want to end day?");
+                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                getLocation();
+                            }
+                        });
+                        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                        alert.show();
+
+
+                    }
+                    else
+                        showDetail();
                 }
-                else if(mShowDetail.getText().toString().matches("End Day"))
-                {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(StartEndDayActivity.this);
-                    alert.setTitle("Are you sure want to end day?");
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            getLocation();
-                        }
-                    });
-                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                // Todo Location Already on  ... end
 
-                        }
-                    });
-
-                    alert.show();
-
-
+                if (!hasGPSDevice(StartEndDayActivity.this)) {
+                    Toast.makeText(StartEndDayActivity.this, "Gps not Supported", Toast.LENGTH_SHORT).show();
                 }
-                else
-                    showDetail();
+
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(StartEndDayActivity.this)) {
+                    Log.e("Starbridges", "Gps already enabled");
+                    Toast.makeText(StartEndDayActivity.this, "Gps not enabled", Toast.LENGTH_SHORT).show();
+                    enableLoc();
+                } else {
+                    Log.e("Starbridges", "Gps already enabled");
+                    //Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
+                }
+
+
+
             }
         });
 
         //getAttendaceLog(dateString2, dateString2);
+    }
+
+    private boolean hasGPSDevice(Context context) {
+        final LocationManager mgr = (LocationManager) context
+                .getSystemService(Context.LOCATION_SERVICE);
+        if (mgr == null)
+            return false;
+        final List<String> providers = mgr.getAllProviders();
+        if (providers == null)
+            return false;
+        return providers.contains(LocationManager.GPS_PROVIDER);
+    }
+
+    private void enableLoc() {
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(StartEndDayActivity.this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(Bundle bundle) {
+
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int i) {
+                            googleApiClient.connect();
+                        }
+                    })
+                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(ConnectionResult connectionResult) {
+
+                            Log.d("Location error", "Location error " + connectionResult.getErrorCode());
+                        }
+                    }).build();
+            googleApiClient.connect();
+
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(30 * 1000);
+            locationRequest.setFastestInterval(5 * 1000);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
+
+            builder.setAlwaysShow(true);
+
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                status.startResolutionForResult(StartEndDayActivity.this, REQUEST_LOCATION);
+
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     public void getLocation() {
@@ -213,8 +317,24 @@ public class StartEndDayActivity extends AppCompatActivity {
 
 
                 }
+                if(sLatitude==null&&sLongitude==null)
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(StartEndDayActivity.this);
+                    alert.setTitle(getString(R.string.failed_to_process));
+                    alert.setMessage(getString(R.string.attention_cant_get_location));
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                callInputAbsence();
+                        }
+                    });
+
+                    alert.show();
+                }
+                else
+                {
+                    callInputAbsence();
+                }
 
             }
         });

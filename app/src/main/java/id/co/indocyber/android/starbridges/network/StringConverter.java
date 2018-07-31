@@ -40,8 +40,16 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
 
     public String numberFormat(String number)
     {
-        NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-        String result = format.format(Integer.parseInt(number));
+        String result="";
+        try{
+            NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
+            result = format.format(Integer.parseInt(number));
+        }
+        catch (Exception e)
+        {
+
+        }
+
         return result;
     }
 
