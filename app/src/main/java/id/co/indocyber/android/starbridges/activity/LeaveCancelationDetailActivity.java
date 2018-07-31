@@ -589,7 +589,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
             paramObject.put("CancelFrom",cancelFrom);
             paramObject.put("CancelTo", cancelTo);
             paramObject.put("Notes", txtNotesCancelDetail.getText().toString());
-            paramObject.put("AttachmentFile", photo);
+            paramObject.put("AttachmentFile", null);
             paramObject.put("AttachmentID", null);
             paramObject.put("AdditionalBalance", null);
             paramObject.put("TransactionStatusID", null);
@@ -797,7 +797,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MessageReturn> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_connection)+" or make sure you have fast internet connection", Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

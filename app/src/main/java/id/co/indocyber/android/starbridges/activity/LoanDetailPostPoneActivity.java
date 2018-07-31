@@ -314,7 +314,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
             {
 //                String sScheduleId=editLoan.getEmployeeLoanScheduleID()+"";
 
-                if(editLoan.getEmployeeLoanScheduleID()==decisionNumber.getId()) break;
+                if(editLoan.getEmployeeLoanScheduleID().equals(decisionNumber.getId())) break;
                     counter++;
             }
             if(counter>=lstLoanSchedule.size())
@@ -353,7 +353,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 //            paramObject.put("StartNewLoanDate",editLoan==null?formatTimeSQLServer.format(date).toString():editLoan.getStartNewLoanDate()  );
             paramObject.put("StartNewLoanDate",editLoan==null?null:editLoan.getStartNewLoanDate()  );
             paramObject.put("CreditAmount",editLoan==null?null:editLoan.getCreditAmount());
-            paramObject.put("EmployeeLoanScheduleID",editLoan==null?employeeLoanScheduleID:editLoan.getEmployeeLoanScheduleID() );
+            paramObject.put("EmployeeLoanScheduleID",employeeLoanScheduleID );
             paramObject.put("Amount", txtAmountPostpone.getText().toString());
             paramObject.put("Description", txtDescriptionPostpone.getText().toString());
             paramObject.put("LoanSettingName", editLoan==null?null:editLoan.getLoanSettingName());
@@ -410,7 +410,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
                     editLoan= response.body().getReturnValue();
 
                     txtAmountPostpone.setText(editLoan.getAmount()+"");
-                    txtDescriptionPostpone.setText(editLoan.getDescription()+"");
+                    txtDescriptionPostpone.setText(editLoan.getDescription());
 
 
                 } else {

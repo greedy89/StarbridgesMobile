@@ -312,7 +312,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Register succesful. Now you can login", Toast.LENGTH_LONG).show();
                     } else {
                         showProgress(false);
-                        Toast.makeText(LoginActivity.this, "Failed to register", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -548,8 +548,8 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="352875087316146";// maryuri
 //        IMEI="865684032897881";
 //        IMEI="863263034362087"; // Dhaba
-//        IMEI="8680420031440079";// Dhaba new
-        IMEI="866941024390260";// Pak rio
+//        IMEI="868042031440079";// Dhaba new
+//        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
 
     }

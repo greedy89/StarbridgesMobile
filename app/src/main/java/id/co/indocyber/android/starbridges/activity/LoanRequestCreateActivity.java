@@ -285,7 +285,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
                 if (response.body().getIsSucceed()) {
                     loanLimit=response.body().getReturnValue();
-                    txtLimitCreate.setText(response.body().getReturnValue().getLimit());
+                    txtLimitCreate.setText(new StringConverter().numberFormat(response.body().getReturnValue().getLimit()));
                     txtLoanSettingCreate.setText(response.body().getReturnValue().getNameLoanSetting());
                 } else {
                     Toast.makeText(LoanRequestCreateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -323,10 +323,10 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
                 if (response.body().getIsSucceed()) {
                     lstLoanPolicies.addAll(response.body().getReturnValue());
-                    ReturnValue loanPolicy=new ReturnValue();
-                    loanPolicy.setID(100);
-                    loanPolicy.setName("Car Ownership Program");
-                    lstLoanPolicies.add(loanPolicy);
+//                    ReturnValue loanPolicy=new ReturnValue();
+//                    loanPolicy.setID(100);
+//                    loanPolicy.setName("Car Ownership Program");
+//                    lstLoanPolicies.add(loanPolicy);
                     setupSpinnerLoanPolicy();
 
                 } else {
@@ -516,8 +516,4 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
-    }
 }

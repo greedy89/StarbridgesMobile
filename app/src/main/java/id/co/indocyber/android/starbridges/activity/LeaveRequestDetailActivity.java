@@ -650,7 +650,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                 transactionStatus, id, employeeID, roster, requestDate, employeeNIK, employeeName, leaveRequestRuleID, leaveRequestType,
                 employeeLeaveBalanceUID, currentBalance, balanceExpireDate, totalUnit, totalUnitReduce, startLeave,
                 endLeave, leaveAt, returnAt, minIntervalViolation, unitLimitViolation, occurenceViolation, notesStr,
-                attachmentFile, attachmentID, decisionNumber, transactionStatusID, approveDate, isHalfDay, submitType,
+                null, attachmentID, decisionNumber, transactionStatusID, approveDate, isHalfDay, submitType,
                 message, transactionStatusSaveOrSubmit, photo, fullAccess, exclusionFields, accessibilityAttribute);
         call3.enqueue(new Callback<RequestConfirmation>() {
 
@@ -688,7 +688,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                     unitLimitViolation = requestConfirmation.getUnitLimitViolation();
                     occurenceViolation = requestConfirmation.getOccurenceViolation();
                     notesStr = requestConfirmation.getNotes();
-                    attachmentFile = requestConfirmation.getAttachmentFile();
+//                    attachmentFile = requestConfirmation.getAttachmentFile();
                     attachmentID = requestConfirmation.getAttachmentID();
 //                    attachmentID = null;
                     decisionNumber = requestConfirmation.getDecisionNumber();
@@ -935,7 +935,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SaveLeaveRequest> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(LeaveRequestDetailActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LeaveRequestDetailActivity.this, getString(R.string.error_connection)+" or make sure you have fast internet connection", Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

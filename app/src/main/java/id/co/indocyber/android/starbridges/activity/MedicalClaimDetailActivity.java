@@ -744,7 +744,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
             paramObject.put("MedicalClaimPolicyID",medicalClaimPolicyID);
             paramObject.put("TotalClaim", totalClaim);
             paramObject.put("TotalReimbursement", totalReimbursement);
-            paramObject.put("AttachmentFile", attachmentFile);
+            paramObject.put("AttachmentFile", null);
             paramObject.put("AttachmentID", attachmentID);
             paramObject.put("ReceiptDate", receiptDate);
             paramObject.put("DecisionNumber", decisionNumber);
@@ -960,7 +960,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MedicalSaveDetail> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(MedicalClaimDetailActivity.this, "Something went wrong...Please try again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MedicalClaimDetailActivity.this, "Something went wrong...Please try again! or make sure you have fast internet connection", Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
         });

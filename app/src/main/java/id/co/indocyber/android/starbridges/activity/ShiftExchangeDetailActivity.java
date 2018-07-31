@@ -543,6 +543,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
             paramObject.put("ID", TransID);
             paramObject.put("EmployeeID", empID);
             paramObject.put("ShiftID", shiftID);
+            paramObject.put("ShiftName",mShiftSpinner.getSelectedItem().toString());
             paramObject.put("Notes", txtNotesShiftEx.getText().toString());
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
@@ -557,7 +558,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
             }
 
             paramObject.put("Date", transactionDate);
-            paramObject.put("TransactionStatusID", transactionStatus);
+            paramObject.put("TransactionStatusID", editShiftChange==null?null:editShiftChange.getTransactionStatusID());
             paramObject.put("AttachmentFile", photo);
             paramObject.put("AttachmentID", editShiftChange.getAttachmentID()==null?null:editShiftChange.getAttachmentID());
 

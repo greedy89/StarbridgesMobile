@@ -20,6 +20,7 @@ import id.co.indocyber.android.starbridges.model.ListTransactionInformation.List
 import id.co.indocyber.android.starbridges.model.LoanSettingLimit.LoanSettingLimit;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
+import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import retrofit2.Call;
@@ -81,7 +82,7 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
 
 
                 if (response.body().getIsSucceed()) {
-                    txtLimitHistoryLoan.setText(response.body().getReturnValue().getLimit());
+                    txtLimitHistoryLoan.setText(new StringConverter().numberFormat(response.body().getReturnValue().getLimit()) );
                     getListTransactionInformation();
                 } else {
                     Toast.makeText(LoanMainHistoryActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
