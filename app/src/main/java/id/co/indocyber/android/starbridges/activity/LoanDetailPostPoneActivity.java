@@ -409,7 +409,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
                 if (response.body().getIsSucceed()) {
                     editLoan= response.body().getReturnValue();
 
-                    txtAmountPostpone.setText(editLoan.getAmount()+"");
+                    txtAmountPostpone.setText((editLoan==null||editLoan.getAmount()==null)?0+"":editLoan.getAmount()+"");
                     txtDescriptionPostpone.setText(editLoan.getDescription());
 
 

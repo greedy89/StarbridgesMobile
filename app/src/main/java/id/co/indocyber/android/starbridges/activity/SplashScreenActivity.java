@@ -89,7 +89,7 @@ public class SplashScreenActivity extends AppCompatActivity{
                             finish();
                         }
                     } else {
-                        alertNotif("", "your version is out of date please update ");
+                        alertNotif("", "your version is out of date, please update ");
                     }
                 }
                 else

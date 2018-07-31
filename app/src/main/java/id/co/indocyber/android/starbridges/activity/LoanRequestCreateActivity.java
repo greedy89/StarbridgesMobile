@@ -17,6 +17,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -268,6 +269,22 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             }
         });
 
+        txtAmountCreate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b)
+                {
+                    if(Integer.parseInt(txtAmountCreate.getText().toString())>Integer.parseInt(loanLimit.getLimit()))
+                    {
+                        txtAmountCreate.setError("loan greater than the limit, approval may take longer");
+
+                    }
+                }
+
+
+            }
+        });
+
     }
 
     public void getLimitLoan()
@@ -469,8 +486,8 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                     editLoan= response.body().getReturnValue();
                     creditAmount=editLoan.getCreditAmount()+"";
                     txtStartDateCreate.setText(new StringConverter().dateFormatDDMMYYYY(editLoan.getStartNewLoanDate()));
-                    txtAmountCreate.setText(editLoan.getAmount()+"");
-                    txtCreditAmountCreate.setText(editLoan.getCreditAmount()+"");
+                    txtAmountCreate.setText((editLoan==null||editLoan.getAmount()==null)?0+"":editLoan.getAmount()+"");
+                    txtCreditAmountCreate.setText((editLoan==null||editLoan.getCreditAmount()==null)?0+"":editLoan.getCreditAmount()+"");
                     txtDescriptionCreate.setText(editLoan.getDescription()+"");
                 } else {
 
