@@ -484,10 +484,21 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
                 if (response.body().getIsSucceed()) {
                     editLoan= response.body().getReturnValue();
-                    creditAmount=editLoan.getCreditAmount()+"";
+//                    creditAmount=editLoan.getCreditAmount()+"";
                     txtStartDateCreate.setText(new StringConverter().dateFormatDDMMYYYY(editLoan.getStartNewLoanDate()));
                     txtAmountCreate.setText((editLoan==null||editLoan.getAmount()==null)?0+"":editLoan.getAmount()+"");
-                    txtCreditAmountCreate.setText((editLoan==null||editLoan.getCreditAmount()==null)?0+"":editLoan.getCreditAmount()+"");
+                    String tCreditAmount="";
+                    if(editLoan!=null)
+                    {
+                        if(editLoan.getCreditAmount()!=null)
+                        {
+                            creditAmount=editLoan.getCreditAmount()+"";
+                        }
+                        else
+                        {
+                            creditAmount="";
+                        }
+                    }
                     txtDescriptionCreate.setText(editLoan.getDescription()+"");
                 } else {
 

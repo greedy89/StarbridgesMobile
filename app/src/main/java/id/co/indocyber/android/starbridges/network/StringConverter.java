@@ -13,6 +13,7 @@ import com.google.gson.JsonSerializer;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         String result="";
         try{
             NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-            result = format.format(Integer.parseInt(number));
+            result = format.format(new BigInteger(number));
         }
         catch (Exception e)
         {

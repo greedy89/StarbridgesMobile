@@ -129,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
 
                     session.logoutUser();
+                    progressDialog.dismiss();
                     finish();
                 }
                 progressDialog.dismiss();

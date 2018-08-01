@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -562,7 +563,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
     public String numberFormat(String number)
     {
         NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-        String result = format.format(Integer.parseInt(number));
+        String result = format.format(new BigInteger(number));
         return result;
     }
 

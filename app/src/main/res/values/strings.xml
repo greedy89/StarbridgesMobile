@@ -41,6 +41,6 @@
     <string name="reminder_title">Star Brigdes</string>
     <string name="reminder_pesan_masuk">Jam kerja akan di mulai, Pastikan sudah melakukan absensi masuk  !!!</string>
     <string name="reminder_pesan_pulang">Jam kerja akan berakhir, Pastikan melakukan absensi pulang !!!</string>
-    <string name="attention_cant_get_location">Something went wrong on your phone, can not get your location</string>
+    <string name="attention_cant_get_location">Something went wrong on your phone, can not get your location. Please try again until you get your location</string>
     <string name="failed_to_process">Failed to process</string>
 </resources>

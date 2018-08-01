@@ -550,7 +550,7 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="863263034362087"; // Dhaba
 //        IMEI="868042031440079";// Dhaba new
 //        IMEI="866941024390260";// Pak rio
-//        IMEI="861558031284990"; //Bang rizal
+        IMEI="861558031284990"; //Bang rizal
 
     }
 
