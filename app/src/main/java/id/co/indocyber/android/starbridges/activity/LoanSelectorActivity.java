@@ -17,15 +17,17 @@ public class LoanSelectorActivity extends AppCompatActivity {
     }
 
     public void showLoanHistory(View view){
-        Intent shiftExchange = new Intent(this, HistoryFilterActivity.class);
-        shiftExchange.putExtra("destination", "LoanHistory");
+//        Intent shiftExchange = new Intent(this, HistoryFilterActivity.class);
+        Intent shiftExchange = new Intent(this, LoanMainHistoryActivity.class);
+//        shiftExchange.putExtra("destination", "LoanHistory");
         startActivity(shiftExchange);
         finish();
     }
 
     public void showLoanTransaction(View view){
-        Intent shiftExchange = new Intent(this, HistoryFilterActivity.class);
-        shiftExchange.putExtra("destination", "LoanTransaction");
+//        Intent shiftExchange = new Intent(this, HistoryFilterActivity.class);
+        Intent shiftExchange = new Intent(this, LoanTransactionMainActivity.class);
+//        shiftExchange.putExtra("destination", "LoanTransaction");
         startActivity(shiftExchange);
         finish();
     }

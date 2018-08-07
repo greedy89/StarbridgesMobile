@@ -47,23 +47,23 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
         txtLimitHistoryLoan=(TextView)findViewById(R.id.txtLimitHistoryLoan);
         lstLoanHistory=(ListView)findViewById(R.id.lstLoanHistory);
 
-        sDateFrom=getIntent().getStringExtra("from");
-        sDateTo=getIntent().getStringExtra("to");
-
-        if(sDateFrom==null||sDateFrom=="")
-        {
-            sDateFrom= SharedPreferenceUtils.getSetting(getApplicationContext(), "fromDate", "");
-        }
-        else
-            SharedPreferenceUtils.setSetting(getApplicationContext(),"fromDate", sDateFrom);
-
-
-        if(sDateTo==null||sDateTo=="")
-        {
-            sDateTo= SharedPreferenceUtils.getSetting(getApplicationContext(), "toDate", "");
-        }
-        else
-            SharedPreferenceUtils.setSetting(getApplicationContext(),"toDate", sDateTo);
+//        sDateFrom=getIntent().getStringExtra("from");
+//        sDateTo=getIntent().getStringExtra("to");
+//
+//        if(sDateFrom==null||sDateFrom=="")
+//        {
+//            sDateFrom= SharedPreferenceUtils.getSetting(getApplicationContext(), "fromDate", "");
+//        }
+//        else
+//            SharedPreferenceUtils.setSetting(getApplicationContext(),"fromDate", sDateFrom);
+//
+//
+//        if(sDateTo==null||sDateTo=="")
+//        {
+//            sDateTo= SharedPreferenceUtils.getSetting(getApplicationContext(), "toDate", "");
+//        }
+//        else
+//            SharedPreferenceUtils.setSetting(getApplicationContext(),"toDate", sDateTo);
 
         getLimitLoan();
 
@@ -102,7 +102,7 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
     public void getListTransactionInformation()
     {
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
-        apiInterface.getListTransactionInformation(sDateFrom, sDateTo).enqueue(new Callback<ListTransactionInformation>() {
+        apiInterface.getListTransactionInformation2().enqueue(new Callback<ListTransactionInformation>() {
             @Override
             public void onResponse(Call<ListTransactionInformation> call, Response<ListTransactionInformation> response) {
 

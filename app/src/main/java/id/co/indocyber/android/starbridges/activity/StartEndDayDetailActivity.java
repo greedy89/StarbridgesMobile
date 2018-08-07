@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +53,6 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
     private FusedLocationProviderClient client;
 
     private EditText mEventView, mDateView, mTimeView, mLocationNameView, mNotesView;
-    private Spinner mLocationSpinner;
     private Button mSubmit;
     private String sLocationID, sUsername, sLongitude, sLatitude, sDate, sTime,sLogType;
     private APIInterfaceRest apiInterface;
@@ -62,7 +62,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
     int timeZoneOffset;
     final List<ReturnValue> listReturnValue= new ArrayList<>();
     SessionManagement session;
-
+    Spinner spnSearchLocation;
 
 
     @Override
@@ -73,9 +73,9 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         mEventView = (EditText) findViewById(R.id.txt_event_sd);
         mDateView = (EditText) findViewById(R.id.txt_date_sd);
         mTimeView = (EditText) findViewById(R.id.txt_time_sd);
-        mLocationSpinner = (Spinner) findViewById(R.id.sp_location_sd);
         mLocationNameView = (EditText) findViewById(R.id.txt_location_name_sd);
         mNotesView = (EditText) findViewById(R.id.txt_notes_sd);
+        spnSearchLocation=(Spinner)findViewById(R.id.spnSearchLocation);
 
         mSubmit = (Button) findViewById(R.id.btn_submit_sd);
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -103,12 +103,12 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
 
 
-        mLocationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnSearchLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i>0)
                 {
-                    final ReturnValue returnValue1=(ReturnValue)mLocationSpinner.getItemAtPosition(i);
+                    final ReturnValue returnValue1=(ReturnValue)spnSearchLocation.getItemAtPosition(i);
                     //Log.d("LocationIdnya", returnValue1.getID());
                     sLocationID=returnValue1.getID();
                     sLocationName=returnValue1.getName();
@@ -167,6 +167,12 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
+                        }
+                    });
+                    alert.setNegativeButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     });
 
@@ -265,7 +271,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     ArrayAdapter<ReturnValue> adapter = new ArrayAdapter<ReturnValue>(StartEndDayDetailActivity.this,
                             android.R.layout.simple_spinner_item, listReturnValue);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    mLocationSpinner.setAdapter(adapter);
+                    spnSearchLocation.setAdapter(adapter);
                 } else {
 
                     Toast.makeText(StartEndDayDetailActivity.this, "Failed to get data", Toast.LENGTH_SHORT).show();
@@ -307,7 +313,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         if(counter >= listReturnValue.size())
             counter=0;
 
-        mLocationSpinner.setSelection(counter);
+        spnSearchLocation.setSelection(counter);
         progressDialog.dismiss();
     }
 
@@ -358,7 +364,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
         }
 
-        if((mLocationNameView.isEnabled()&&!mLocationNameView.getText().toString().matches(""))||!mLocationSpinner.getSelectedItem().toString().matches(""))
+        if((mLocationNameView.isEnabled()&&!mLocationNameView.getText().toString().matches(""))||!spnSearchLocation.getSelectedItem().toString().matches(""))
         {
             // khusus logType di hardcode -> LogType -> Start Day
             Call<Attendence> call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, sLogType, sPhoto, sNotes, sEvent, timeZoneOffset);
@@ -398,21 +404,21 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
     public void setEnableSpinnerAndEditTextLocation()
     {
 
-        if(mLocationSpinner.getSelectedItem().toString().matches("--other--"))
+        if(spnSearchLocation.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(true);
         }
-        else if(!mLocationSpinner.getSelectedItem().toString().matches("--other--"))
+        else if(!spnSearchLocation.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(false);
         }
 
         if(mLocationNameView.getText().toString().matches(""))
         {
-            mLocationSpinner.setEnabled(true);
+            spnSearchLocation.setEnabled(true);
         }
         else
-            mLocationSpinner.setEnabled(false);
+            spnSearchLocation.setEnabled(false);
 
     }
 }

@@ -6,22 +6,39 @@
     android:padding="10dp">
 
 
-    <TextView
-        android:id="@+id/txtInstalmentLoanSchedule"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="100"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtAmountLoanSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="100"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtProcessPeriodLoanSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="TextView"
+            android:textColor="@color/wallet_holo_blue_light" />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/txtAmountLoanSchedule"
+        android:id="@+id/txtIsProcessLoanSchedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="100000" />
 
     <TextView
-        android:id="@+id/txtProcessStepLoanSchedule"
+        android:id="@+id/txtIsCloseStepLoanSchedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Closed" />

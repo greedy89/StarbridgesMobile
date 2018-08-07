@@ -1,10 +1,14 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
@@ -14,6 +18,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.provider.SyncStateContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,9 +37,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import id.co.indocyber.android.starbridges.R;
 
 import java.io.ByteArrayOutputStream;
@@ -50,12 +70,13 @@ import id.co.indocyber.android.starbridges.model.OLocation.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GpsLocationTracker;
 import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CheckInOutDetailActivity extends AppCompatActivity {
+public class CheckInOutDetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_ACCESS_LOCATION = 101;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -63,7 +84,6 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
     private LocationManager locationManager;
 
     private EditText mEventView, mDateView, mTimeView, mLocationNameView, mNotesView;
-    private Spinner mLocationSpinner;
     private Button mSubmit;
     private String sLocationID, sUsername, sLongitude, sLatitude, sDate, sTime, sLogType, sPhoto;
     private APIInterfaceRest apiInterface;
@@ -75,10 +95,31 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
     String sLocationAddress;
     String attendancePrivilege;
     List<ReturnValue> LocItems;
-    final List<ReturnValue> listReturnValue= new ArrayList<>();
+    final List<ReturnValue> listReturnValue = new ArrayList<>();
+    Spinner spnSearchLocation;
+    GoogleApiClient mGoogleApiClient;
+    Location myCurrentLocation;
+    LocationRequest locationRequest;
 
+    @Override
+    public void onLocationChanged(Location location) {
+        myCurrentLocation= LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
 
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -90,21 +131,36 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         mEventView = (EditText) findViewById(R.id.txt_event);
         mDateView = (EditText) findViewById(R.id.txt_date);
         mTimeView = (EditText) findViewById(R.id.txt_time);
-        mLocationSpinner = (Spinner) findViewById(R.id.sp_location);
         mLocationNameView = (EditText) findViewById(R.id.txt_location_name);
         mNotesView = (EditText) findViewById(R.id.txt_notes);
+        spnSearchLocation = (Spinner) findViewById(R.id.spnSearchLocation);
 
         session = new SessionManagement(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
         String token_sp = user.get(SessionManagement.KEY_TOKEN);
         String loginName = user.get(SessionManagement.KEY_LOGINNAME);
         String employeeId = user.get(SessionManagement.KEY_EMPLOYEE_ID);
-        attendancePrivilege=user.get(SessionManagement.KEY_ATTENDANCE_PRIVILEGE);
+        attendancePrivilege = user.get(SessionManagement.KEY_ATTENDANCE_PRIVILEGE);
 
         GlobalVar.setToken(token_sp);
         GlobalVar.setLoginName(loginName);
         GlobalVar.setEmployeeId(employeeId);
 
+
+        mGoogleApiClient =new GoogleApiClient.Builder(CheckInOutDetailActivity.this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mGoogleApiClient.connect();
+
+//                new GoogleApiClient
+//                .Builder(CheckInOutDetailActivity.this)
+//                .enableAutoManage(CheckInOutDetailActivity.this, 34992, this)
+//                .addApi(LocationServices.API)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .build();
 
         mSubmit = (Button) findViewById(R.id.btn_submit);
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +171,6 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         });
 
 
-
         Intent intent = getIntent();
         sDate = intent.getStringExtra("date");
         sTime = intent.getStringExtra("time");
@@ -123,32 +178,25 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         sLogType = intent.getStringExtra("logType");
         checkStartDay = intent.getBooleanExtra("checkStartDay", false);
         TimeZone timezone = TimeZone.getDefault();
-        timeZoneOffset = timezone.getRawOffset()/(60 * 60 * 1000);
+        timeZoneOffset = timezone.getRawOffset() / (60 * 60 * 1000);
 
 
         mDateView.setText(sDate);
         mTimeView.setText(sTime);
         initSpinnerLoc();
 
-        mLocationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnSearchLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
-                    final ReturnValue returnValue1 = (ReturnValue) mLocationSpinner.getItemAtPosition(i);
+                    final ReturnValue returnValue1 = (ReturnValue) spnSearchLocation.getItemAtPosition(i);
                     //Log.d("LocationIdnya", returnValue1.getID());
                     sLocationID = returnValue1.getID();
-                    sLocationName=returnValue1.getName();
-                    sLocationAddress=returnValue1.getAddress();
+                    sLocationName = returnValue1.getName();
+                    sLocationAddress = returnValue1.getAddress();
                 }
 
                 setEnableSpinnerAndEditTextLocation();
-
-//                try {
-//                    getInternetTime();
-//                } catch (Exception e) {
-//
-//                }
-
             }
 
             @Override
@@ -156,7 +204,6 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
                 setEnableSpinnerAndEditTextLocation();
             }
         });
-
 
 
         mLocationNameView.addTextChangedListener(new TextWatcher() {
@@ -224,14 +271,14 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
 //                break;
 //        }
 
-        if (requestCode == REQUEST_ACCESS_LOCATION){
+        if (requestCode == REQUEST_ACCESS_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "GPS granted", Toast.LENGTH_SHORT).show();
                 //getLocation();
             } else {
                 Toast.makeText(this, "Need your location!", Toast.LENGTH_SHORT).show();
             }
-        }else if (requestCode == MY_CAMERA_REQUEST_CODE){
+        } else if (requestCode == MY_CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
@@ -308,24 +355,106 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_LOCATION);
         }
 
-        if(mLocationNameView.isEnabled())
-        {
-            if(mLocationNameView.getText().toString().matches(""))
-            {
+        if (mLocationNameView.isEnabled()) {
+            if (mLocationNameView.getText().toString().matches("")) {
                 mLocationNameView.setError("Please fill the location");
-            }
-            else
-            {
+            } else {
                 capturePhoto();
             }
-            sLocationID=null;
+            sLocationID = null;
             sLocationName = mLocationNameView.getText().toString();
-            sLocationAddress=null;
-        }
-        else
-        {
+            sLocationAddress = null;
+        } else {
             capturePhoto();
         }
+    }
+
+    /**
+     * Prompt user to enable GPS and Location Services
+     * @param mGoogleApiClient
+     * @param activity
+     */
+    public void locationChecker(GoogleApiClient mGoogleApiClient, final Activity activity) {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(50 * 1000);
+        locationRequest.setFastestInterval(10 * 1000);
+
+
+//        if(myCurrentLocation==null)
+//            PendingResult<LocationSettingsResult> result2=LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, (android.location.LocationListener)this);
+        myCurrentLocation= LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        final PendingResult<Status> result2 =LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,locationRequest,(LocationListener) this);
+        result2.setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        // All location settings are satisfied. The client can initialize location
+                        // requests here.
+                        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+                        Location location = new Location(LocationManager.NETWORK_PROVIDER);
+
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the user
+                        // a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            status.startResolutionForResult(
+                                    activity, 1000);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        // Location settings are not satisfied. However, we have no way to fix the
+                        // settings so we won't show the dialog.
+                        break;
+                }
+            }
+        });
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                final LocationSettingsStates state = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        // All location settings are satisfied. The client can initialize location
+                        // requests here.
+                        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+                        Location location = new Location(LocationManager.NETWORK_PROVIDER);
+
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the user
+                        // a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            status.startResolutionForResult(
+                                    activity, 1000);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        // Location settings are not satisfied. However, we have no way to fix the
+                        // settings so we won't show the dialog.
+                        break;
+                }
+            }
+        });
     }
 
     public void capturePhoto()
@@ -348,6 +477,27 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
                 }
                 else
                 {
+
+//                    GpsLocationTracker mGpsLocationTracker = new GpsLocationTracker(CheckInOutDetailActivity.this);
+//
+//                    /**
+//                     * Set GPS Location fetched address
+//                     */
+//                    if (mGpsLocationTracker.canGetLocation())
+//                    {
+//                        sLatitude = mGpsLocationTracker.getLatitude()+"";
+//                        sLongitude = mGpsLocationTracker.getLongitude()+"";
+//
+//
+//                    }
+//                    else
+//                    {
+//                        mGpsLocationTracker.showSettingsAlert();
+//                    }
+
+//                    locationChecker(mGoogleApiClient, CheckInOutDetailActivity.this);
+
+
                     if(sLatitude==null&&sLongitude==null)
                     {
                         AlertDialog.Builder alert = new AlertDialog.Builder(CheckInOutDetailActivity.this);
@@ -359,6 +509,12 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
 
                             }
                         });
+                        alert.setNegativeButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            }
+                        });
 
                         alert.show();
                     }
@@ -366,12 +522,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
                     {
                         callInputAbsence();
                     }
-//                    if (sLogType.equals("Check In")) {
-//                        dispatchTakePictureIntent();
-//                    } else {
-//                        sPhoto=null;
-//                        callInputAbsence();
-//                    }
+
                 }
             }
         });
@@ -408,7 +559,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
                     ArrayAdapter<ReturnValue> adapter = new ArrayAdapter<ReturnValue>(CheckInOutDetailActivity.this,
                             android.R.layout.simple_spinner_item, listReturnValue);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    mLocationSpinner.setAdapter(adapter);
+                    spnSearchLocation.setAdapter(adapter);
                 } else {
 
                     Toast.makeText(CheckInOutDetailActivity.this, "Failed to get data", Toast.LENGTH_SHORT).show();
@@ -447,7 +598,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
         if(counter >= LocItems.size())
             counter=0;
 
-        mLocationSpinner.setSelection(counter);
+        spnSearchLocation.setSelection(counter);
         progressDialog.dismiss();
     }
 
@@ -495,7 +646,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
 
         }
 
-        if((mLocationNameView.isEnabled()&&!mLocationNameView.getText().toString().matches(""))||!mLocationSpinner.getSelectedItem().toString().matches(""))
+        if((mLocationNameView.isEnabled()&&!mLocationNameView.getText().toString().matches(""))||!spnSearchLocation.getSelectedItem().toString().matches(""))
         {
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Loading");
@@ -591,21 +742,21 @@ public class CheckInOutDetailActivity extends AppCompatActivity {
     public void setEnableSpinnerAndEditTextLocation()
     {
 
-        if(mLocationSpinner.getSelectedItem().toString().matches("--other--"))
+        if(spnSearchLocation.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(true);
         }
-        else if(!mLocationSpinner.getSelectedItem().toString().matches("--other--"))
+        else if(!spnSearchLocation.getSelectedItem().toString().matches("--other--"))
         {
             mLocationNameView.setEnabled(false);
         }
 
         if(mLocationNameView.getText().toString().matches(""))
         {
-            mLocationSpinner.setEnabled(true);
+            spnSearchLocation.setEnabled(true);
         }
         else
-            mLocationSpinner.setEnabled(false);
+            spnSearchLocation.setEnabled(false);
 
     }
 

@@ -54,9 +54,9 @@
         android:layout_height="wrap_content"
         android:text="Location" />
 
-    <Spinner
-        android:id="@+id/sp_location"
-        android:layout_width="match_parent"
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spnSearchLocation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView

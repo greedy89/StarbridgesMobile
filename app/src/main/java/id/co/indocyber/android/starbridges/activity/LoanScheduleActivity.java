@@ -64,7 +64,7 @@ public class LoanScheduleActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ListLoanSchedule> call, Response<ListLoanSchedule> response) {
 
-                if (response.body().isIsSucceed()) {
+                if (response.body().getIsSucceed()) {
                     viewAdapter = new LoanScheduleAdapter(LoanScheduleActivity.this, response.body().getReturnValue());
                     lstScheduleLoan.setAdapter(viewAdapter);
 

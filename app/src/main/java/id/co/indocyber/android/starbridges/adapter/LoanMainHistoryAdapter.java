@@ -49,13 +49,14 @@ public class LoanMainHistoryAdapter extends ArrayAdapter<ReturnValue> {
 
         StringConverter stringConverter=new StringConverter();
         txtRemainingLoan.setText("Remaining Loan: "+ stringConverter.numberFormat(listTransaction.get(position).getRemainingLoan()));
-        txtRemainingInstallment.setText("Remaining Installment: "+listTransaction.get(position).getRemainingInstallment());
+        String month=Integer.parseInt(listTransaction.get(position).getRemainingInstallment())<2?" month":" months";
+        txtRemainingInstallment.setText("Remaining Months: "+listTransaction.get(position).getRemainingInstallment() + month);
 
         btnScheduleLoan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, LoanScheduleActivity.class);
-                intent.putExtra("LoanBalanceId",listTransaction.get(position).getLoanBalanceID());
+                intent.putExtra("LoanBalanceId",listTransaction.get(position).getID());
                 intent.putExtra("PolicyName",listTransaction.get(position).getPolicyName());
                 intent.putExtra("RemainingLoan",listTransaction.get(position).getRemainingLoan());
                 context.startActivity(intent);
@@ -66,7 +67,7 @@ public class LoanMainHistoryAdapter extends ArrayAdapter<ReturnValue> {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, LoanHistoryActivity.class);
-                intent.putExtra("LoanBalanceId",listTransaction.get(position).getLoanBalanceID());
+                intent.putExtra("LoanBalanceId",listTransaction.get(position).getID());
                 intent.putExtra("PolicyName",listTransaction.get(position).getPolicyName());
                 intent.putExtra("RemainingLoan",listTransaction.get(position).getRemainingLoan());
                 context.startActivity(intent);

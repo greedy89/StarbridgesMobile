@@ -46,7 +46,8 @@ public class LoanMainTransactionAdapter extends ArrayAdapter<ReturnValue> {
 
         StringConverter stringConverter=new StringConverter();
         txtRemainingLoan.setText("Remaining Loan: "+ stringConverter.numberFormat(listTransaction.get(position).getRemainingLoan()));
-        txtRemainingInstallment.setText("Remaining Installment: "+listTransaction.get(position).getRemainingInstallment());
+        String month=Integer.parseInt(listTransaction.get(position).getRemainingInstallment())<2?" month":" months";
+        txtRemainingInstallment.setText("Remaining Months: "+listTransaction.get(position).getRemainingInstallment()+month);
 
         return rowView;
 //        View itemView = convertView;

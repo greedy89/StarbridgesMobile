@@ -50,23 +50,23 @@ public class LoanTransactionMainActivity extends AppCompatActivity implements Ad
         lstLoanTransactionMain=(ListView)findViewById(R.id.lstLoanTransactionMain);
         fabAddLoanTransactionMain=(FloatingActionButton)findViewById(R.id.fabAddLoanTransactionMain);
 
-        sDateFrom=getIntent().getStringExtra("from");
-        sDateTo=getIntent().getStringExtra("to");
-
-        if(sDateFrom==null||sDateFrom=="")
-        {
-            sDateFrom= SharedPreferenceUtils.getSetting(getApplicationContext(), "fromDate", "");
-        }
-        else
-            SharedPreferenceUtils.setSetting(getApplicationContext(),"fromDate", sDateFrom);
-
-
-        if(sDateTo==null||sDateTo=="")
-        {
-            sDateTo= SharedPreferenceUtils.getSetting(getApplicationContext(), "toDate", "");
-        }
-        else
-            SharedPreferenceUtils.setSetting(getApplicationContext(),"toDate", sDateTo);
+//        sDateFrom=getIntent().getStringExtra("from");
+//        sDateTo=getIntent().getStringExtra("to");
+//
+//        if(sDateFrom==null||sDateFrom=="")
+//        {
+//            sDateFrom= SharedPreferenceUtils.getSetting(getApplicationContext(), "fromDate", "");
+//        }
+//        else
+//            SharedPreferenceUtils.setSetting(getApplicationContext(),"fromDate", sDateFrom);
+//
+//
+//        if(sDateTo==null||sDateTo=="")
+//        {
+//            sDateTo= SharedPreferenceUtils.getSetting(getApplicationContext(), "toDate", "");
+//        }
+//        else
+//            SharedPreferenceUtils.setSetting(getApplicationContext(),"toDate", sDateTo);
 
         getListTransactionInformation();
 
@@ -87,7 +87,7 @@ public class LoanTransactionMainActivity extends AppCompatActivity implements Ad
 //        list.setAdapter(viewAdapter);
 
         Intent intent=new Intent(LoanTransactionMainActivity.this, LoanTransactionActivity.class);
-        intent.putExtra("LoanBalanceId",data1.getLoanBalanceID());
+        intent.putExtra("LoanBalanceId",data1.getID());
         intent.putExtra("PolicyName",data1.getPolicyName());
         intent.putExtra("RemainingLoan",data1.getRemainingLoan());
         startActivity(intent);
@@ -100,7 +100,7 @@ public class LoanTransactionMainActivity extends AppCompatActivity implements Ad
         progressDialog.setTitle("Loading");
         progressDialog.show();
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
-        apiInterface.getListTransactionInformation(sDateFrom, sDateTo).enqueue(new Callback<ListTransactionInformation>() {
+        apiInterface.getListTransactionInformation2().enqueue(new Callback<ListTransactionInformation>() {
             @Override
             public void onResponse(Call<ListTransactionInformation> call, Response<ListTransactionInformation> response) {
 

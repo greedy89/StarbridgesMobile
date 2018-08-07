@@ -1,5 +1,5 @@
 
-package id.co.indocyber.android.starbridges.model.ListLoanSchedule;
+package id.co.indocyber.android.starbridges.model.LoanLoanSchedule;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +20,7 @@ public class ListLoanSchedule implements Serializable, Parcelable
     private List<ReturnValue> returnValue = null;
     @SerializedName("isSucceed")
     @Expose
-    private Boolean isSucceed;
+    private boolean isSucceed;
     @SerializedName("message")
     @Expose
     private String message;
@@ -40,12 +40,12 @@ public class ListLoanSchedule implements Serializable, Parcelable
 
     }
     ;
-    private final static long serialVersionUID = -559334692784199999L;
+    private final static long serialVersionUID = 2102179061706603625L;
 
     protected ListLoanSchedule(Parcel in) {
         this.customField = ((CustomField) in.readValue((CustomField.class.getClassLoader())));
         in.readList(this.returnValue, (ReturnValue.class.getClassLoader()));
-        this.isSucceed = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.isSucceed = ((boolean) in.readValue((boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
     }
 
@@ -63,7 +63,7 @@ public class ListLoanSchedule implements Serializable, Parcelable
      * @param customField
      * @param returnValue
      */
-    public ListLoanSchedule(CustomField customField, List<ReturnValue> returnValue, Boolean isSucceed, String message) {
+    public ListLoanSchedule(CustomField customField, List<ReturnValue> returnValue, boolean isSucceed, String message) {
         super();
         this.customField = customField;
         this.returnValue = returnValue;
@@ -97,15 +97,15 @@ public class ListLoanSchedule implements Serializable, Parcelable
         return this;
     }
 
-    public Boolean getIsSucceed() {
+    public boolean isIsSucceed() {
         return isSucceed;
     }
 
-    public void setIsSucceed(Boolean isSucceed) {
+    public void setIsSucceed(boolean isSucceed) {
         this.isSucceed = isSucceed;
     }
 
-    public ListLoanSchedule withIsSucceed(Boolean isSucceed) {
+    public ListLoanSchedule withIsSucceed(boolean isSucceed) {
         this.isSucceed = isSucceed;
         return this;
     }

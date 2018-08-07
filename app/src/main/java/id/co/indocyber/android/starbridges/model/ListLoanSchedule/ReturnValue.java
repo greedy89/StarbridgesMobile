@@ -16,13 +16,22 @@ public class ReturnValue implements Serializable, Parcelable
     private String iD;
     @SerializedName("Amount")
     @Expose
-    private int amount;
+    private Integer amount;
     @SerializedName("ProcessStep")
     @Expose
-    private String processStep;
+    private Object processStep;
     @SerializedName("Installment")
     @Expose
-    private int installment;
+    private Integer installment;
+    @SerializedName("ProcessPeriod")
+    @Expose
+    private String processPeriod;
+    @SerializedName("IsProcessed")
+    @Expose
+    private Boolean isProcessed;
+    @SerializedName("IsClosed")
+    @Expose
+    private Boolean isClosed;
     public final static Creator<ReturnValue> CREATOR = new Creator<ReturnValue>() {
 
 
@@ -39,13 +48,16 @@ public class ReturnValue implements Serializable, Parcelable
 
     }
     ;
-    private final static long serialVersionUID = -2462783911234334878L;
+    private final static long serialVersionUID = -8245928984376486092L;
 
     protected ReturnValue(Parcel in) {
         this.iD = ((String) in.readValue((String.class.getClassLoader())));
-        this.amount = ((int) in.readValue((int.class.getClassLoader())));
-        this.processStep = ((String) in.readValue((String.class.getClassLoader())));
-        this.installment = ((int) in.readValue((int.class.getClassLoader())));
+        this.amount = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.processStep = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.installment = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.processPeriod = ((String) in.readValue((String.class.getClassLoader())));
+        this.isProcessed = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.isClosed = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
     }
 
     /**
@@ -59,15 +71,21 @@ public class ReturnValue implements Serializable, Parcelable
      * 
      * @param installment
      * @param amount
+     * @param processPeriod
      * @param processStep
+     * @param isProcessed
+     * @param isClosed
      * @param iD
      */
-    public ReturnValue(String iD, int amount, String processStep, int installment) {
+    public ReturnValue(String iD, Integer amount, Object processStep, Integer installment, String processPeriod, Boolean isProcessed, Boolean isClosed) {
         super();
         this.iD = iD;
         this.amount = amount;
         this.processStep = processStep;
         this.installment = installment;
+        this.processPeriod = processPeriod;
+        this.isProcessed = isProcessed;
+        this.isClosed = isClosed;
     }
 
     public String getID() {
@@ -83,42 +101,81 @@ public class ReturnValue implements Serializable, Parcelable
         return this;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
-    public ReturnValue withAmount(int amount) {
+    public ReturnValue withAmount(Integer amount) {
         this.amount = amount;
         return this;
     }
 
-    public String getProcessStep() {
+    public Object getProcessStep() {
         return processStep;
     }
 
-    public void setProcessStep(String processStep) {
+    public void setProcessStep(Object processStep) {
         this.processStep = processStep;
     }
 
-    public ReturnValue withProcessStep(String processStep) {
+    public ReturnValue withProcessStep(Object processStep) {
         this.processStep = processStep;
         return this;
     }
 
-    public int getInstallment() {
+    public Integer getInstallment() {
         return installment;
     }
 
-    public void setInstallment(int installment) {
+    public void setInstallment(Integer installment) {
         this.installment = installment;
     }
 
-    public ReturnValue withInstallment(int installment) {
+    public ReturnValue withInstallment(Integer installment) {
         this.installment = installment;
+        return this;
+    }
+
+    public String getProcessPeriod() {
+        return processPeriod;
+    }
+
+    public void setProcessPeriod(String processPeriod) {
+        this.processPeriod = processPeriod;
+    }
+
+    public ReturnValue withProcessPeriod(String processPeriod) {
+        this.processPeriod = processPeriod;
+        return this;
+    }
+
+    public Boolean getIsProcessed() {
+        return isProcessed;
+    }
+
+    public void setIsProcessed(Boolean isProcessed) {
+        this.isProcessed = isProcessed;
+    }
+
+    public ReturnValue withIsProcessed(Boolean isProcessed) {
+        this.isProcessed = isProcessed;
+        return this;
+    }
+
+    public Boolean getIsClosed() {
+        return isClosed;
+    }
+
+    public void setIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
+    }
+
+    public ReturnValue withIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
         return this;
     }
 
@@ -127,6 +184,9 @@ public class ReturnValue implements Serializable, Parcelable
         dest.writeValue(amount);
         dest.writeValue(processStep);
         dest.writeValue(installment);
+        dest.writeValue(processPeriod);
+        dest.writeValue(isProcessed);
+        dest.writeValue(isClosed);
     }
 
     public int describeContents() {

@@ -37,15 +37,21 @@ public class LoanScheduleAdapter extends ArrayAdapter<ReturnValue> {
         View rowView = inflater.inflate(R.layout.list_loan_schedule, parent, false);
 
         // get the text view from the rowView
-        TextView txtInstalmentLoanSchedule = (TextView) rowView.findViewById(R.id.txtInstalmentLoanSchedule);
+        TextView txtIsProcessLoanSchedule = (TextView) rowView.findViewById(R.id.txtIsProcessLoanSchedule);
+        TextView txtIsCloseStepLoanSchedule = (TextView) rowView.findViewById(R.id.txtIsCloseStepLoanSchedule);
         TextView txtAmountLoanSchedule = (TextView) rowView.findViewById(R.id.txtAmountLoanSchedule);
-        TextView txtProcessStepLoanSchedule = (TextView) rowView.findViewById(R.id.txtProcessStepLoanSchedule);
+        TextView txtProcessPeriodLoanSchedule=(TextView)rowView.findViewById(R.id.txtProcessPeriodLoanSchedule);
 
         StringConverter stringConverter=new StringConverter();
 
-        txtInstalmentLoanSchedule.setText("Installment: "+listTransaction.get(position).getInstallment()+"");
+        String isProcess=listTransaction.get(position).getIsProcessed()==false?"Scheduled":"Processed";
+        String isClose=listTransaction.get(position).getIsClosed()==false?"Scheduled":"Closed";
+
+
         txtAmountLoanSchedule.setText("Amount: "+ stringConverter.numberFormat(listTransaction.get(position).getAmount()+""));
-        txtProcessStepLoanSchedule.setText(listTransaction.get(position).getProcessStep());
+        txtIsProcessLoanSchedule.setText("Is Processed: "+isProcess);
+        txtIsCloseStepLoanSchedule.setText("Is Closed: "+isClose);
+        txtProcessPeriodLoanSchedule.setText(stringConverter.dateFormatMMMMYYYY(listTransaction.get(position).getProcessPeriod()));
 
         return rowView;
 //        View itemView = convertView;

@@ -86,6 +86,22 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         return dateResult;
     }
 
+    public String dateFormatMMMMYYYY(String dateInput)
+    {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        DateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+        String dateResult = "";
+        try{
+            Date result =  df.parse(dateInput);
+            dateResult=sdf.format(result);
+        }catch (Exception e)
+        {
+
+        }
+
+        return dateResult;
+    }
+
     private String encodeImage(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);

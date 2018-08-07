@@ -487,6 +487,9 @@ public interface APIInterfaceRest {
     @POST("api/Loan/ListTransactionInformation")
     Call<ListTransactionInformation>getListTransactionInformation(@Query("startDate") String startDate, @Query("endDate") String endDate);
 
+    @GET("api/Loan/ListTransactionInformation")
+    Call<ListTransactionInformation>getListTransactionInformation2();
+
     @FormUrlEncoded
     @POST("api/Loan/ListLoanSchedule")
     Call<ListLoanSchedule>getListLoanSchedule(@Field("loanBalanceID") String loanBalanceID);
