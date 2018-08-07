@@ -228,7 +228,7 @@ public class GpsLocationTracker extends Service implements LocationListener
             }
         });
 
-        mAlertDialog.setNegativeButton("cancle", new DialogInterface.OnClickListener() {
+        mAlertDialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 // TODO Auto-generated method stub

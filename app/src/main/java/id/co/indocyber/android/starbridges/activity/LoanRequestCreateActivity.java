@@ -135,6 +135,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH));
                 dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis());
+//                dialog.getDatePicker();
                 dialog.show();
 
             }
@@ -146,7 +147,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                 ReturnValue loanPolicy=(ReturnValue)spnPolicyCreate.getItemAtPosition(i);
                 loanPolicyId=loanPolicy.getID()+"";
 
-                if(loanPolicy.getName()!=null&&loanPolicy.getName().matches("General Loan"))
+                if(loanPolicy.getCreditTypeID()!=null&&loanPolicy.getCreditTypeID()==20)
                 {
                     txtCreditAmountCreate.setEnabled(true);
                     txtCreditAmountCreate.setText(creditAmount);
