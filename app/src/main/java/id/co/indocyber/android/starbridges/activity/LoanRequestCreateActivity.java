@@ -275,7 +275,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if(!b)
                 {
-                    if(Integer.parseInt(txtAmountCreate.getText().toString())>Integer.parseInt(loanLimit.getLimit()))
+                    if(!txtAmountCreate.getText().toString().matches("") &&  Integer.parseInt(txtAmountCreate.getText().toString())>Integer.parseInt(loanLimit.getLimit()))
                     {
                         txtAmountCreate.setError("loan greater than the limit, approval may take longer");
 

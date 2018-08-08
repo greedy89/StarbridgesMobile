@@ -43,8 +43,10 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
@@ -121,6 +123,41 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
     }
 
+    private LocationCallback mLocationCallback;
+    boolean mRequestingLocationUpdates;
+    private FusedLocationProviderClient mFusedLocationClient;
+    LocationRequest mLocationRequest;
+    String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    private void startLocationUpdates() {
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+    }
+
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        // Update the value of mRequestingLocationUpdates from the Bundle.
+        if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+            mRequestingLocationUpdates = savedInstanceState.getBoolean(
+                    REQUESTING_LOCATION_UPDATES_KEY);
+        }
+
+        // ...
+
+        // Update UI to match restored state
+//        updateUI();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +165,22 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         setContentView(R.layout.activity_check_in_out_detail);
 
         setTitle("ATTENDANCE");
+
+//        mLocationCallback = new LocationCallback() {
+//            @Override
+//            public void onLocationResult(LocationResult locationResult) {
+//                if (locationResult == null) {
+//                    return;
+//                }
+//                for (Location location : locationResult.getLocations()) {
+//                    // Update UI with location data
+//                    // ...
+//                }
+//            };
+//        };
+//
+//        updateValuesFromBundle(savedInstanceState);
+
         mEventView = (EditText) findViewById(R.id.txt_event);
         mDateView = (EditText) findViewById(R.id.txt_date);
         mTimeView = (EditText) findViewById(R.id.txt_time);
@@ -498,6 +551,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 //                    locationChecker(mGoogleApiClient, CheckInOutDetailActivity.this);
 
 
+
                     if(sLatitude==null&&sLongitude==null)
                     {
                         AlertDialog.Builder alert = new AlertDialog.Builder(CheckInOutDetailActivity.this);
@@ -759,5 +813,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
             spnSearchLocation.setEnabled(false);
 
     }
+
+
 
 }
