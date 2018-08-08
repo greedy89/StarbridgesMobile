@@ -50,11 +50,13 @@ public class SplashScreenActivity extends AppCompatActivity{
     private void checkAppVersion() {
         String versionName = "";
         String versionCode = "";
+        int versionCodeI = 0;
 //        Boolean versionEqual = false;
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionName = packageInfo.versionName;
             versionCode = String.valueOf(packageInfo.versionCode);
+            versionCodeI =packageInfo.versionCode;
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -63,6 +65,7 @@ public class SplashScreenActivity extends AppCompatActivity{
         final Call<Versioning> call3 = apiInterface.checkAppVerion();
         final String finalVersionCode = versionCode;
         final String finalVersionName = versionName;
+        final int finalVersionCodeI=versionCodeI;
         call3.enqueue(new Callback<Versioning>() {
             @Override
             public void onResponse(Call<Versioning> call, Response<Versioning> response) {
@@ -71,8 +74,9 @@ public class SplashScreenActivity extends AppCompatActivity{
                 {
                     String versionCodeAPi = response.body().getReturnValue().getVersionCode().toString();
                     String versionNameApi = response.body().getReturnValue().getVersionName().toString();
-                    if (versionCodeAPi.equalsIgnoreCase(String.valueOf(finalVersionCode)) &&
-                            versionNameApi.equalsIgnoreCase(finalVersionName)) {
+//                    if (versionCodeAPi.equalsIgnoreCase(String.valueOf(finalVersionCode)) &&
+//                            versionNameApi.equalsIgnoreCase(finalVersionName)) {
+                    if (finalVersionCodeI >= Integer.parseInt(response.body().getReturnValue().getVersionCode())  ) {
                         versionEqual = true;
                     } else {
                         versionEqual = false;
