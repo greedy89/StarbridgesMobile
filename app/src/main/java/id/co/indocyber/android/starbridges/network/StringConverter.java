@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -146,5 +147,16 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         }
 
         return dateResult;
+    }
+
+    public String int2MonthName(int iMonth)
+    {
+        String month = "";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (iMonth >= 0 && iMonth <= 11 ) {
+            month = months[iMonth];
+        }
+        return month;
     }
 }

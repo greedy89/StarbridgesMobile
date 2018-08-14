@@ -44,6 +44,7 @@ import id.co.indocyber.android.starbridges.adapter.ListDraftLoanTransactionAppro
 import id.co.indocyber.android.starbridges.model.EditDraftLoan.EditDraftLoan;
 import id.co.indocyber.android.starbridges.model.EditLeaveCancelation.EditLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoanApproved.ListDraftTransactionLoanApproved;
+import id.co.indocyber.android.starbridges.model.ListLoanSchedule.ListLoanSchedule;
 import id.co.indocyber.android.starbridges.model.LoanSchedule.LoanSchedule;
 import id.co.indocyber.android.starbridges.model.LoanTransactionType.LoanTransactionType;
 import id.co.indocyber.android.starbridges.model.LoanTransactionType.ReturnValue;
@@ -74,10 +75,12 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
     List<ReturnValue> lstLoanTransactionType;
 
-    List<id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue> lstLoanSchedule;
+    List<id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue> lstLoanSchedule;
 
     String transactionStatusID, transactionTypeID, employeeLoanScheduleID;
     String id;
+    Integer employeeScheduleAmount;
+    String remainingLoan;
 
     id.co.indocyber.android.starbridges.model.EditDraftLoan.ReturnValue editLoan;
 
@@ -99,6 +102,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         txtErrorSchedulePostpone=(TextView)findViewById(R.id.txtErrorSchedulePostpone);
 
         loanBalanceID= getIntent().getStringExtra("LoanBalanceId");
+        remainingLoan= getIntent().getStringExtra("RemainingLoan");
         id=getIntent().getStringExtra("ID");
         if(id!=null)
         {
@@ -127,8 +131,9 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         spnSchedullePostpone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue loanSchedule=(id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue)spnSchedullePostpone.getItemAtPosition(i);
-                employeeLoanScheduleID=loanSchedule.getId()+"";
+                id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue loanSchedule=(id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue)spnSchedullePostpone.getItemAtPosition(i);
+                employeeLoanScheduleID=loanSchedule.getID()+"";
+                employeeScheduleAmount=loanSchedule.getAmount();
             }
 
             @Override
@@ -208,6 +213,28 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
             }
         });
+
+        btnCancelPostpone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(LoanDetailPostPoneActivity.this);
+                alert.setTitle("This information will not be saved");
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+
+                alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alert.show();
+            }
+        });
     }
 
     public void initSpinnerTransactionType()
@@ -275,16 +302,23 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
 
         lstLoanSchedule=new ArrayList<>();
-        id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue returnValue=new id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue();
+        final id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue returnValue=new id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue();
         lstLoanSchedule.add(returnValue);
 
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
-        apiInterface.getLoanSchedule(loanBalanceID).enqueue(new Callback<LoanSchedule>() {
+        apiInterface.getListLoanSchedule(loanBalanceID).enqueue(new Callback<ListLoanSchedule>() {
             @Override
-            public void onResponse(Call<LoanSchedule> call, Response<LoanSchedule> response) {
+            public void onResponse(Call<ListLoanSchedule> call, Response<ListLoanSchedule> response) {
 
                 if (response.body().getIsSucceed()) {
-                    lstLoanSchedule.addAll(response.body().getReturnValue());
+                    for(id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue returnValue1:response.body().getReturnValue())
+                    {
+                        if(returnValue1.getIsProcessed()==false)
+                        {
+                            lstLoanSchedule.add(returnValue1);
+                        }
+                    }
+//                    lstLoanSchedule.addAll(response.body().getReturnValue());
                     setupSpinnerLoanSchedule();
                 } else {
                     Toast.makeText(LoanDetailPostPoneActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -293,7 +327,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoanSchedule> call, Throwable t) {
+            public void onFailure(Call<ListLoanSchedule> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(LoanDetailPostPoneActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
 
@@ -303,18 +337,18 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
     public void setupSpinnerLoanSchedule()
     {
-        ArrayAdapter<id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue> adapter = new ArrayAdapter<id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue>(LoanDetailPostPoneActivity.this, android.R.layout.simple_spinner_item, lstLoanSchedule);
+        ArrayAdapter<id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue> adapter = new ArrayAdapter<id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue>(LoanDetailPostPoneActivity.this, android.R.layout.simple_spinner_item, lstLoanSchedule);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnSchedullePostpone.setAdapter(adapter);
 
         if(editLoan!=null)
         {
             int counter=0;
-            for(id.co.indocyber.android.starbridges.model.LoanSchedule.ReturnValue decisionNumber:lstLoanSchedule)
+            for(id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue decisionNumber:lstLoanSchedule)
             {
 //                String sScheduleId=editLoan.getEmployeeLoanScheduleID()+"";
 
-                if(editLoan.getEmployeeLoanScheduleID().equals(decisionNumber.getId())) break;
+                if(editLoan.getEmployeeLoanScheduleID().toString().equals(decisionNumber.getID())) break;
                     counter++;
             }
             if(counter>=lstLoanSchedule.size())
@@ -439,7 +473,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
             txtErrorTransactionTypePostpone.setText(" Please select transaction type");//changes the selected item text to this
             return false;
         }
-        else if(spnSchedullePostpone.getSelectedItem().toString()==null)
+        else if(spnSchedullePostpone.getSelectedItem().toString().matches(""))
         {
             txtErrorSchedulePostpone.setError("");
             txtErrorSchedulePostpone.setTextColor(Color.RED);//just to highlight that this is an error
@@ -449,6 +483,16 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         else if(txtAmountPostpone.getText().toString().matches("")||txtAmountPostpone.getText().toString().matches("\\+")||txtAmountPostpone.getText().toString().matches("-"))
         {
             txtAmountPostpone.setError("Please fill amount");
+            return false;
+        }
+        else if(transactionTypeID.matches("20")&&(Integer.parseInt(txtAmountPostpone.getText().toString())<=employeeScheduleAmount || Integer.parseInt(txtAmountPostpone.getText().toString())>Integer.parseInt(remainingLoan)))
+        {
+            txtAmountPostpone.setError("Please make sure amount between "+new StringConverter().numberFormat(employeeScheduleAmount+"") + " and "+new StringConverter().numberFormat(remainingLoan));
+            return false;
+        }
+        else if(transactionTypeID.matches("30")&&Integer.parseInt(txtAmountPostpone.getText().toString())>=employeeScheduleAmount)
+        {
+            txtAmountPostpone.setError("Please make sure amount lower than or equal "+ new StringConverter().numberFormat(employeeScheduleAmount+"") );
             return false;
         }
         return true;

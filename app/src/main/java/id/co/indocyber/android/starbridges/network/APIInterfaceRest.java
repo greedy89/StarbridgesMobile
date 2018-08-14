@@ -514,7 +514,7 @@ public interface APIInterfaceRest {
 
     @FormUrlEncoded
     @POST("api/Loan/GetSchedule")
-    Call<LoanSchedule>getLoanSchedule(@Field("loanBalanceID") String loanBalanceID);
+    Call<ListLoanSchedule>getLoanSchedule(@Field("loanBalanceID") String loanBalanceID);
 
     @POST("api/Loan/SaveExpeditePostpone")
     Call<MessageReturn>saveExpeditePostpone(@Body RequestBody body,@Query("TransactionStatusLoan") String TransactionStatusLoan);

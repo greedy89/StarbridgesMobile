@@ -8,6 +8,8 @@ import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import id.co.indocyber.android.starbridges.network.StringConverter;
+
 public class ReturnValue implements Serializable, Parcelable
 {
 
@@ -193,4 +195,11 @@ public class ReturnValue implements Serializable, Parcelable
         return  0;
     }
 
+    @Override
+    public String toString() {
+        StringConverter stringConverter=new StringConverter();
+        if(processPeriod==null)
+            return "";
+        return stringConverter.dateFormatMMMMYYYY(processPeriod);
+    }
 }

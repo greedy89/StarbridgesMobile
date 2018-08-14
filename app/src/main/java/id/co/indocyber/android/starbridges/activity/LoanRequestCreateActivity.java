@@ -500,7 +500,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
                             creditAmount="";
                         }
                     }
-                    txtDescriptionCreate.setText(editLoan.getDescription()+"");
+                    txtDescriptionCreate.setText(editLoan.getDescription());
                 } else {
 
                     Toast.makeText(LoanRequestCreateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
