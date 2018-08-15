@@ -42,8 +42,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import id.co.indocyber.android.starbridges.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -84,11 +86,26 @@ public class StartEndDayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_end_day);
+        if (android.os.Build.VERSION.SDK_INT < 17) {
+            setContentView(R.layout.activity_start_end_day_41);
+            mTimeView = (TextView) findViewById(R.id.txt_time);
+            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            Date date2 = new Date();
+            try {
+                mTimeView.setText(df.format(date2));
+            } catch (Exception e) {
+
+            }
+        }
+        else
+        {
+            mTimeView = (TextClock) findViewById(R.id.txt_time);
+            setContentView(R.layout.activity_start_end_day);
+
+        }
         this.setTitle("Attendance");
         long date = System.currentTimeMillis();
         mDateView = (TextView) findViewById(R.id.txt_date);
-        mTimeView = (TextClock) findViewById(R.id.txt_time);
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -443,10 +460,21 @@ public class StartEndDayActivity extends AppCompatActivity {
 
     public void showDetail() {
         String dateValue;
-        String timeValue;
+        String timeValue="";
         String logType;
 
-        timeValue = mTimeView.getText().toString();
+        if (android.os.Build.VERSION.SDK_INT < 17) {
+            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            Date date = new Date();
+            try {
+                timeValue = df.format(date);
+            } catch (Exception e) {
+
+            }
+//            timeValue
+        }
+        else
+            timeValue = mTimeView.getText().toString();
         dateValue = mDateView.getText().toString();
         logType = mShowDetail.getText().toString();
 

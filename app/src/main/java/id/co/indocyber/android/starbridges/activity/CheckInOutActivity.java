@@ -53,8 +53,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import id.co.indocyber.android.starbridges.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -102,7 +104,14 @@ public class CheckInOutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_in_out);
+        if (android.os.Build.VERSION.SDK_INT < 17) {
+            setContentView(R.layout.activity_check_in_out_41);
+        }
+        else
+        {
+            setContentView(R.layout.activity_check_in_out);
+        }
+
 
         this.setTitle("Attendance");
 
@@ -124,7 +133,21 @@ public class CheckInOutActivity extends AppCompatActivity {
 
         long date = System.currentTimeMillis();
         mDateView = (TextView) findViewById(R.id.txt_date);
-        mTimeView = (TextClock) findViewById(R.id.txt_time);
+
+        if (android.os.Build.VERSION.SDK_INT >= 17) {
+            mTimeView = (TextClock) findViewById(R.id.txt_time);
+        }
+        else
+        {
+            mTimeView = (TextView)findViewById(R.id.txt_time);
+            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            Date date2 = new Date();
+            try {
+                mTimeView.setText(df.format(date2));
+            } catch (Exception e) {
+
+            }
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -651,10 +674,22 @@ public class CheckInOutActivity extends AppCompatActivity {
 
     public void showDetail(){
         String dateValue;
-        String timeValue;
+        String timeValue="";
         String logType;
 
-        timeValue = mTimeView.getText().toString();
+        if (android.os.Build.VERSION.SDK_INT < 17) {
+            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            Date date = new Date();
+            try {
+                timeValue = df.format(date);
+            } catch (Exception e) {
+
+            }
+//            timeValue
+        }
+        else
+            timeValue = mTimeView.getText().toString();
+
         dateValue = mDateView.getText().toString();
         logType = mShowDetail.getText().toString();
 
