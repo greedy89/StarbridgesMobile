@@ -99,8 +99,8 @@ public class StartEndDayActivity extends AppCompatActivity {
         }
         else
         {
-            mTimeView = (TextClock) findViewById(R.id.txt_time);
             setContentView(R.layout.activity_start_end_day);
+            mTimeView = (TextClock) findViewById(R.id.txt_time);
 
         }
         this.setTitle("Attendance");
