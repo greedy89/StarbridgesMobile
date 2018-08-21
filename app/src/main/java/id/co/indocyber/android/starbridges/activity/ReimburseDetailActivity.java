@@ -283,6 +283,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
     {
         progressDialog = new ProgressDialog(ReimburseDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         lstReimbursementType= new ArrayList<>();
@@ -422,6 +423,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
         {
             progressDialog= new ProgressDialog(ReimburseDetailActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
         else if(!progressDialog.isShowing())
@@ -489,6 +491,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(ReimburseDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject= new JSONObject();

@@ -94,6 +94,7 @@ public class ListDraftLeaveCancelationActivity extends AppCompatActivity impleme
         apiInterface = APIClient.deleteDraftCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLeaveCancelationActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), lstIdSelected+"");
@@ -135,6 +136,7 @@ public class ListDraftLeaveCancelationActivity extends AppCompatActivity impleme
     public void getListDraftLeaveCancelation(){
         progressDialog = new ProgressDialog(ListDraftLeaveCancelationActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.getListDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
 

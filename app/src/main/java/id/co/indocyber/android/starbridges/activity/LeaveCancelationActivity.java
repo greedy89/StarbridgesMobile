@@ -95,6 +95,7 @@ public class LeaveCancelationActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(LeaveCancelationActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         Call<ListLeaveCancelation> call3 = apiInterface.getLeaveCancelation();

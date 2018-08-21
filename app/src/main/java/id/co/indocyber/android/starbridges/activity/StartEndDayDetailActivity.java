@@ -244,6 +244,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(StartEndDayDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         ReturnValue returnValue=new ReturnValue();
@@ -322,6 +323,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.inputAbsence(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(StartEndDayDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         long date = System.currentTimeMillis();

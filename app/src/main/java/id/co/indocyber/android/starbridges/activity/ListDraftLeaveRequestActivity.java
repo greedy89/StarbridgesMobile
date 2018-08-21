@@ -98,6 +98,7 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
         apiInterface = APIClient.deleteLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLeaveRequestActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), listid);
@@ -140,6 +141,7 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
         apiInterface = APIClient.getListDraftLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLeaveRequestActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");

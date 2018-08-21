@@ -59,6 +59,7 @@ public class LoanHistoryActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LoanHistoryActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         apiInterface.getListLoanHistory(loanBalanceID).enqueue(new Callback<ListLoanHistory>() {

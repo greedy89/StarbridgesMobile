@@ -94,6 +94,7 @@ public class ListDraftReimburseActivity extends AppCompatActivity implements Ada
     public void getListDraftReimbursement(){
         progressDialog = new ProgressDialog(ListDraftReimburseActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.getListDraftReimbursement(GlobalVar.getToken()).create(APIInterfaceRest.class);
 
@@ -238,6 +239,7 @@ public class ListDraftReimburseActivity extends AppCompatActivity implements Ada
         apiInterface = APIClient.deleteDraftCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftReimburseActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), lstIdSelected+"");

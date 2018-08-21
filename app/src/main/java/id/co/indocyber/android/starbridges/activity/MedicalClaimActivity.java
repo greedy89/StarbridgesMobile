@@ -98,6 +98,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         Call<ListMedicalClaim> call3 = apiInterface.getListMedicalClaim();
@@ -144,6 +145,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         //progressDialog.show();
 
         Call<GetMedicalSupport> call3 = apiInterface.getMedicalSupport();

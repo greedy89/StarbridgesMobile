@@ -101,6 +101,7 @@ public class DraftCorrectionListActivity extends AppCompatActivity implements Ad
 
         progressDialog = new ProgressDialog(DraftCorrectionListActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getListDraftCorrection(GlobalVar.getToken()).create(APIInterfaceRest.class);
         Call<ListDraftCorrection> call3 = apiInterface.getListDraftCorrection();
@@ -239,6 +240,7 @@ public class DraftCorrectionListActivity extends AppCompatActivity implements Ad
 
         progressDialog = new ProgressDialog(DraftCorrectionListActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getListDraftCorrection(GlobalVar.getToken()).create(APIInterfaceRest.class);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),idSelected);

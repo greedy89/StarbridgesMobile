@@ -293,6 +293,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         if(progressDialog==null||!progressDialog.isShowing()) {
             progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -326,6 +327,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         if(progressDialog==null||!progressDialog.isShowing()) {
             progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
@@ -393,6 +395,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
 
         progressDialog= new ProgressDialog(LoanRequestCreateActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         boolean fullAccess=true;
         String accessibilityAttribute="";
@@ -476,6 +479,7 @@ public class LoanRequestCreateActivity extends AppCompatActivity {
         if(progressDialog==null||!progressDialog.isShowing()) {
             progressDialog = new ProgressDialog(LoanRequestCreateActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);

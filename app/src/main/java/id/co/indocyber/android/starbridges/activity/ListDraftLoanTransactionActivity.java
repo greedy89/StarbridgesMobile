@@ -113,6 +113,7 @@ public class ListDraftLoanTransactionActivity extends AppCompatActivity implemen
     {
         progressDialog= new ProgressDialog(ListDraftLoanTransactionActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         apiInterface.getListDraftLoanTransaction(loanBalanceID).enqueue(new Callback<ListDraftTransactionLoan>() {
@@ -234,6 +235,7 @@ public class ListDraftLoanTransactionActivity extends AppCompatActivity implemen
         apiInterface = APIClient.deleteLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLoanTransactionActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), listid);

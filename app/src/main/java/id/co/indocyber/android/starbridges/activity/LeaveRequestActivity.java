@@ -99,6 +99,7 @@ public class LeaveRequestActivity extends AppCompatActivity {
         apiInterface = APIClient.getListLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");

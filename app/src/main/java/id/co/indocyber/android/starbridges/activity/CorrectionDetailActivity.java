@@ -518,6 +518,7 @@ public class CorrectionDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(CorrectionDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         valueCorrectionDetail.setID("");
@@ -590,6 +591,7 @@ public class CorrectionDetailActivity extends AppCompatActivity {
     public void initSpinnerLoc() {
         progressDialog = new ProgressDialog(CorrectionDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         listReturnValue= new ArrayList<>();

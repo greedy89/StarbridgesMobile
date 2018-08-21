@@ -92,6 +92,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
     public void deleteDraftMedical(){
         progressDialog = new ProgressDialog(ListDraftMedicalActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         final APIInterfaceRest apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -135,6 +136,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
 
         progressDialog = new ProgressDialog(ListDraftMedicalActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         final APIInterfaceRest apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);

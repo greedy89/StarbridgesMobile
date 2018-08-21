@@ -102,6 +102,7 @@ public class ListDraftOvertimeActivity extends AppCompatActivity implements Adap
         apiInterface = APIClient.getListDraftOvertime(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftOvertimeActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");
@@ -230,6 +231,7 @@ public class ListDraftOvertimeActivity extends AppCompatActivity implements Adap
         apiInterface = APIClient.deleteDraftCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftOvertimeActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), listid);

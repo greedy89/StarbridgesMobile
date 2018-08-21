@@ -102,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
         apiInterface = APIClient.getImage(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         // khusus logType di hardcode -> LogType -> Start Day

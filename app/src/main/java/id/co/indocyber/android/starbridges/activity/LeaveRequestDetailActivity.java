@@ -227,6 +227,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 
         progressDialog2 = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog2.setTitle("Load Data");
+        progressDialog.setCancelable(false);
         progressDialog2.show();
 
         // get session
@@ -580,6 +581,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         employeeID = Integer.parseInt(GlobalVar.getEmployeeId());
@@ -749,6 +751,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.editLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
 
@@ -855,6 +858,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.saveLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
 

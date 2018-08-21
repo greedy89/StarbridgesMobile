@@ -414,6 +414,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         {
             progressDialog= new ProgressDialog(LeaveCancelationDetailActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
         else if(!progressDialog.isShowing())
@@ -544,6 +545,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
     {
         progressDialog = new ProgressDialog(LeaveCancelationDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject= new JSONObject();
@@ -714,6 +716,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(LeaveCancelationDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject= new JSONObject();
@@ -809,6 +812,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(LeaveCancelationDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject= new JSONObject();
@@ -904,6 +908,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LeaveCancelationDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);

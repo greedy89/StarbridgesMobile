@@ -102,6 +102,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(ShiftExchangeDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         txtDateShiftEx = (EditText) findViewById(R.id.txtDateShiftEx);
         txtNotesShiftEx = (EditText) findViewById(R.id.txtNotesShiftEx);
@@ -535,6 +536,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject = new JSONObject();

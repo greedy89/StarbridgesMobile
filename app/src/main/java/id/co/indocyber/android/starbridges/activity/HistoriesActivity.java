@@ -64,6 +64,7 @@ public class HistoriesActivity extends AppCompatActivity {
         apiInterface = APIClient.getHistory(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(HistoriesActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         // khusus logType di hardcode -> LogType -> Start Day
         Call<History> call3 = apiInterface.getHistory(DateFrom, DateTo);

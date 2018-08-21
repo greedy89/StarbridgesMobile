@@ -58,6 +58,7 @@ public class LoanScheduleActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LoanScheduleActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         apiInterface.getListLoanSchedule(loanBalanceID).enqueue(new Callback<ListLoanSchedule>() {

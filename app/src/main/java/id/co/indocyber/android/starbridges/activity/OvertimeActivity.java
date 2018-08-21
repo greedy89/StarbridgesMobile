@@ -118,6 +118,7 @@ public class OvertimeActivity extends AppCompatActivity {
         apiInterface = APIClient.getListOvertime(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(OvertimeActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");

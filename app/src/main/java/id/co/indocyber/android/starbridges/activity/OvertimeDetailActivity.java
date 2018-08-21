@@ -339,6 +339,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
     public void getData(String id) {
         progressDialog = new ProgressDialog(OvertimeDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -484,6 +485,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(OvertimeDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject = new JSONObject();
@@ -569,6 +571,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(OvertimeDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         JSONObject paramObject = new JSONObject();

@@ -271,6 +271,7 @@ public class StartEndDayActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(StartEndDayActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         id.co.indocyber.android.starbridges.model.OLocation.ReturnValue returnValue=new id.co.indocyber.android.starbridges.model.OLocation.ReturnValue();
@@ -490,6 +491,7 @@ public class StartEndDayActivity extends AppCompatActivity {
         apiInterface = APIClient.getHistory(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(StartEndDayActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         // khusus logType di hardcode -> LogType -> Start Day
         Call<History> call3 = apiInterface.getHistory(DateFrom, DateTo);

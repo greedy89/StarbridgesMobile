@@ -98,6 +98,7 @@ public class LoanTransactionMainActivity extends AppCompatActivity implements Ad
 
         progressDialog= new ProgressDialog(LoanTransactionMainActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
         apiInterface.getListTransactionInformation2().enqueue(new Callback<ListTransactionInformation>() {

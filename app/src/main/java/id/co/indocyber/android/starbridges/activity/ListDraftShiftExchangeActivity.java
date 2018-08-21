@@ -94,6 +94,7 @@ public class ListDraftShiftExchangeActivity extends AppCompatActivity implements
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getListDraftShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
         Call<ListDraftShiftExchange> call3 = apiInterface.getListDraftShiftExchange();
@@ -231,6 +232,7 @@ public class ListDraftShiftExchangeActivity extends AppCompatActivity implements
     public void deleteDraftShiftEx() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.deleteShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),idSelected);

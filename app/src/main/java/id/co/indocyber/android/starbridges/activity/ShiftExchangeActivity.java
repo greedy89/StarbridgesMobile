@@ -59,6 +59,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getListShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
         Call<ListShiftExchange> call3 = apiInterface.getListShiftExchange();

@@ -73,6 +73,7 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LoanMainHistoryActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);

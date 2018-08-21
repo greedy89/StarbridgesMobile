@@ -586,6 +586,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
         progressDialog = new ProgressDialog(CheckInOutDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         ReturnValue returnValue=new ReturnValue();
@@ -704,6 +705,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         {
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");

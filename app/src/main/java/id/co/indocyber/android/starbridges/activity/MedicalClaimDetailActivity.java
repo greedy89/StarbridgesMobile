@@ -455,6 +455,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         {
             progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
             progressDialog.setTitle("Initialize Medical Support");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
@@ -502,6 +503,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         {
             progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
             progressDialog.setTitle("Initialize Medical Support");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
         listClaimPolicyReturnValue = new ArrayList<>();
@@ -555,6 +557,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
     public void initSpinnerEmployeeFamily(){
         progressDialog.setTitle("Initialize Family");
         progressDialog.show();
+        progressDialog.setCancelable(false);
         listEmployeeReturnValue = new ArrayList<>();
         id.co.indocyber.android.starbridges.model.getemployeefamily.ReturnValue returnValue1 = new id.co.indocyber.android.starbridges.model.getemployeefamily.ReturnValue();
         returnValue1.setID("");
@@ -604,6 +607,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
     public void initSpinnerMedicalPolicy(){
         progressDialog.setTitle("Initialize Policy");
         progressDialog.show();
+        progressDialog.setCancelable(false);
         listPolicyReturnValue = new ArrayList<>();
         ReturnValue returnValue = new ReturnValue();
         returnValue.setID("");
@@ -722,6 +726,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         // get Data
@@ -844,6 +849,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
     public void editMedical(String id){
         progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         // get token
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
@@ -925,6 +931,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         // get Data

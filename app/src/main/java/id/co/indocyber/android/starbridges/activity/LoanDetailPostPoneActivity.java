@@ -241,6 +241,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LoanDetailPostPoneActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         lstLoanTransactionType=new ArrayList<>();
@@ -297,6 +298,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         {
             progressDialog= new ProgressDialog(LoanDetailPostPoneActivity.this);
             progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
@@ -365,6 +367,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
 
         progressDialog= new ProgressDialog(LoanDetailPostPoneActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         boolean fullAccess=true;
         String accessibilityAttribute="";
@@ -433,6 +436,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
     {
         progressDialog= new ProgressDialog(LoanDetailPostPoneActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);

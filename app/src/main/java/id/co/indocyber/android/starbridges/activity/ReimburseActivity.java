@@ -103,6 +103,7 @@ public class ReimburseActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(ReimburseActivity.this);
         progressDialog.setTitle("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getReimburse(GlobalVar.getToken()).create(APIInterfaceRest.class);
         Call<Reimbursement> call3 = apiInterface.getReimburse();
