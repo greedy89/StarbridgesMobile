@@ -159,4 +159,49 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         }
         return month;
     }
+
+    public String getHour(String time)
+    {
+        String hour="";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+//            System.out.println(dateObj);
+//            System.out.println(new SimpleDateFormat("K:mm a").format(dateObj));
+            hour=new SimpleDateFormat("K").format(dateObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hour;
+    }
+
+    public String getMinute(String time)
+    {
+        String minute="";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+//            System.out.println(dateObj);
+//            System.out.println(new SimpleDateFormat("K:mm a").format(dateObj));
+            minute=new SimpleDateFormat("mm").format(dateObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return minute;
+    }
+
+    public String get12HourFormat(String time)
+    {
+        String hourFormat="";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+//            System.out.println(dateObj);
+//            System.out.println(new SimpleDateFormat("a").format(dateObj));
+            hourFormat=new SimpleDateFormat("a").format(dateObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hourFormat;
+    }
 }
