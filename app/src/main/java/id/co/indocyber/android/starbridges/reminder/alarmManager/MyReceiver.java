@@ -9,6 +9,7 @@ import id.co.indocyber.android.starbridges.R;
 
 import java.util.Calendar;
 
+import id.co.indocyber.android.starbridges.reminder.notificationchannels.NotificationUtils;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
 
 public class MyReceiver extends BroadcastReceiver {
@@ -22,8 +23,15 @@ public class MyReceiver extends BroadcastReceiver {
             Boolean hasil = today.before(alarm);
             if(hasil==true){
                 String message = context.getString(R.string.reminder_pesan_masuk);
-                String tittle = context.getString(R.string.reminder_title);
-                Notification.deliverNotification(context, tittle, message);
+                String title = context.getString(R.string.reminder_title);
+                if(android.os.Build.VERSION.SDK_INT < 26)
+                    Notification.deliverNotification(context, title, message);
+                else
+                {
+                    new NotificationUtils(context).showPMNotification(message, title);
+//                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
+                }
+
                 Log.d("myTag", "notif AlarmMasuk di jalankan karena jam masih akan datang");
             }else{
                 Log.d("myTag", "notif AlarmMasuk tidak di jalankan karena jam sudah terlewat");

@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,6 +98,8 @@ public class LoginActivity extends AppCompatActivity {
     SessionManagement session;
     SharedPreferences pref;
     TextView txtFooter;
+    CheckBox chcRememberMe;
+    String username,password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameView = (EditText) findViewById(R.id.txt_username);
         mPasswordView = (EditText) findViewById(R.id.txt_password);
         txtFooter = (TextView) findViewById(R.id.txtFooter);
+        chcRememberMe = (CheckBox)findViewById(R.id.chc_remember_me);
 
         Date date = new Date();
 
@@ -125,15 +130,36 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionManagement(getApplicationContext());
 
-        mUsernameView.setText("");
-        mPasswordView.setText("");
-        checkIMEIPermission();
+        username = SharedPreferenceUtils.getSetting(getApplicationContext(),"username","");
+        if (!username.equalsIgnoreCase("")){
+            mUsernameView.setText(username);
+            password = SharedPreferenceUtils.getSetting(getApplicationContext(),"password","");
+            mPasswordView.setText(password);
+            chcRememberMe.setChecked(true);
+        }else {
+            mUsernameView.setText("");
+            mPasswordView.setText("");
+        }
 
+//        mUsernameView.setText("");
+//        mPasswordView.setText("");
+
+        checkIMEIPermission();
 
         Button mSignInButton = (Button) findViewById(R.id.btn_sign_in);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(chcRememberMe.isChecked())
+                {
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"username", mUsernameView.getText().toString());
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"password", mPasswordView.getText().toString());
+                }
+                else
+                {
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"username", "");
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"password", "");
+                }
                 validateLogin();
             }
         });
@@ -338,7 +364,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
 
         boolean cancel = false;
@@ -391,6 +417,7 @@ public class LoginActivity extends AppCompatActivity {
                         GlobalVar.setLocation(locationName);
                         GlobalVar.setLocationId(locationId);
                         GlobalVar.setAttendancePrivilege(attendancePrivilege);
+
 
                         startActivity(home);
                         finish();
@@ -549,9 +576,8 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="865684032897881";
 //        IMEI="863263034362087"; // Dhaba
 //        IMEI="868042031440079";// Dhaba new
-//        IMEI="866941024390260";// Pak rio
+        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
-
     }
 
     public void checkIMEIPermission() {

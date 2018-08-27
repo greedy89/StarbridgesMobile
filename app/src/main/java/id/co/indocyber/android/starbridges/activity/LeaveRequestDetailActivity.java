@@ -227,7 +227,6 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 
         progressDialog2 = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog2.setTitle("Load Data");
-        progressDialog.setCancelable(false);
         progressDialog2.show();
 
         // get session

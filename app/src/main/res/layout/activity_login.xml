@@ -77,8 +77,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:text="dhaba.widhikari" />
+                    android:paddingTop="10dp" />
 
                 <android.support.v4.widget.Space
                     android:layout_width="match_parent"
@@ -95,15 +94,22 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:text="Pass123." />
+                    android:paddingTop="10dp" />
+
+                <CheckBox
+                    android:id="@+id/chc_remember_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    style="@style/MyCheckBoxStyle"
+                    android:text="Remember Me?" />
 
                 <Button
                     android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_btn"
                     android:text="@string/action_sign_in"
                     android:textColor="@android:color/white"

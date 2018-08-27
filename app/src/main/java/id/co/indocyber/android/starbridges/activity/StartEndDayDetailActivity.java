@@ -81,6 +81,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mSubmit.setEnabled(false);
                 SubmitData();
             }
         });
@@ -177,10 +178,12 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     });
 
                     alert.show();
+                    mSubmit.setEnabled(true);
                 }
                 else
                 {
                     callInputAbsence();
+
                 }
             }
         });
@@ -194,6 +197,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
             if(mLocationNameView.getText().toString().matches(""))
             {
                 mLocationNameView.setError("Please fill the location");
+                mSubmit.setEnabled(true);
             }
             else
             {
@@ -207,6 +211,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         }
         else
             getLocation();
+
 
     }
 
@@ -343,6 +348,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
             if(mLocationNameView.getText().toString().matches(""))
             {
                 mLocationNameView.setError("Please fill the location");
+                mSubmit.setEnabled(true);
             }
             else
             {
@@ -390,6 +396,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                             Toast.makeText(StartEndDayDetailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
+                    mSubmit.setEnabled(true);
 
                 }
 
@@ -398,6 +405,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                     call.cancel();
+                    mSubmit.setEnabled(true);
                 }
             });
         }
