@@ -39,8 +39,8 @@
 
     <!-- Strings reminder -->
     <string name="reminder_title">StarBridges</string>
-    <string name="reminder_pesan_masuk">Jam kerja dimulai, Pastikan sudah melakukan absensi masuk  !!!</string>
-    <string name="reminder_pesan_pulang">Jam kerja berakhir, Pastikan melakukan absensi pulang !!!</string>
+    <string name="reminder_pesan_masuk">Your working hours has been started, please make sure your "Start Day"</string>
+    <string name="reminder_pesan_pulang">Your working hours has been stopped, please make sure your "End Day"</string>
     <string name="attention_cant_get_location">Something went wrong on your phone, can not get your location.\n\nPlease try again when you get your location, or setting your GPS setting to battery saving or device only manually to speed up location search process</string>
     <string name="failed_to_process">Failed to process</string>
     <string name="setting">Settings</string>

@@ -157,7 +157,6 @@
                 android:background="#174c7e"
                 android:orientation="vertical">
 
-
                 <TextView
                     android:id="@+id/txtFooter"
                     android:layout_width="match_parent"

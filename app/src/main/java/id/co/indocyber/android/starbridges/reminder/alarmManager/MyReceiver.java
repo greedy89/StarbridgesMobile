@@ -36,15 +36,18 @@ public class MyReceiver extends BroadcastReceiver {
         {
             ReturnValue employeeShiftScheduleToday = gson.fromJson(employeeShiftScheduleLogin, ReturnValue.class);
 
-            if (DateFormat.is24HourFormat(context)) {
-                checkOutTime2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(new StringConverter().getHour(employeeShiftScheduleToday.getLoginTime())) );
-            } else {
-                checkOutTime2.set(Calendar.HOUR, Integer.parseInt(new StringConverter().getHour12(employeeShiftScheduleToday.getLoginTime())));
-                checkOutTime2.set(Calendar.AM_PM, new StringConverter().get12HourFormat(employeeShiftScheduleToday.getLoginTime()));
+            if(employeeShiftScheduleToday!=null&&employeeShiftScheduleToday.getLoginTime()!=null)
+            {
+                if (DateFormat.is24HourFormat(context)) {
+                    checkOutTime2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(new StringConverter().getHour(employeeShiftScheduleToday.getLoginTime())) );
+                } else {
+                    checkOutTime2.set(Calendar.HOUR, Integer.parseInt(new StringConverter().getHour12(employeeShiftScheduleToday.getLoginTime())));
+                    checkOutTime2.set(Calendar.AM_PM, new StringConverter().get12HourFormat(employeeShiftScheduleToday.getLoginTime()));
+                }
+                checkOutTime2.set(Calendar.MINUTE, Integer.parseInt(new StringConverter().getMinute(employeeShiftScheduleToday.getLoginTime())));
+                checkOutTime2.set(Calendar.SECOND, 10);
+                checkOutTime2.set(Calendar.MILLISECOND, 0);
             }
-            checkOutTime2.set(Calendar.MINUTE, Integer.parseInt(new StringConverter().getMinute(employeeShiftScheduleToday.getLoginTime())));
-            checkOutTime2.set(Calendar.SECOND, 10);
-            checkOutTime2.set(Calendar.MILLISECOND, 0);
 
             if(!employeeShiftScheduleToday.getIsWeekend()&&!employeeShiftScheduleToday.getIsHoliday()&&!employeeShiftScheduleToday.getIsLeave())
             {

@@ -65,9 +65,13 @@ public class AlarmManagerMasuk {
                     SharedPreferenceUtils.setSetting(ctx,"employeeShiftScheduleLogin", gson.toJson(employeeShiftScheduleLogin) );
                     break;
                 }
+                else
+                {
+                    SharedPreferenceUtils.setSetting(ctx,"employeeShiftScheduleLogin", "" );
+                }
             }
 //            Calendar checkOutTime2 = Calendar.getInstance();
-            if (employeeShiftScheduleLogin.getLoginTime() != null) {
+            if (employeeShiftScheduleLogin != null && employeeShiftScheduleLogin.getLoginTime()!=null) {
                 if (DateFormat.is24HourFormat(ctx)) {
                     checkOutTime2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(new StringConverter().getHour(employeeShiftScheduleLogin.getLoginTime())));
                 } else {
@@ -77,10 +81,11 @@ public class AlarmManagerMasuk {
                 checkOutTime2.set(Calendar.MINUTE, Integer.parseInt(new StringConverter().getMinute(employeeShiftScheduleLogin.getLoginTime())));
                 checkOutTime2.set(Calendar.SECOND, 10);
                 checkOutTime2.set(Calendar.MILLISECOND, 0);
-            }
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, checkOutTime2.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
-        }
 
+            }
+
+        }
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, checkOutTime2.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
 //        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, GlobalVar.jamMasuk(ctx).getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
     }
 
