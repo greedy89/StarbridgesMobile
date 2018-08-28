@@ -112,7 +112,11 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
 
                     // call list draft
                     //getListDraftMedical();
-                } else {
+                } else if(data.getMessage()!=null&&data.getMessage()!="") {
+                    Toast.makeText(ListDraftMedicalActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                else
+                {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(ListDraftMedicalActivity.this, jObjError.toString(), Toast.LENGTH_LONG).show();

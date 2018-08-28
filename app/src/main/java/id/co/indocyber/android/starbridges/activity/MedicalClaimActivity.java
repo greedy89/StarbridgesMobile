@@ -107,7 +107,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
             public void onResponse(Call<ListMedicalClaim> call, Response<ListMedicalClaim> response) {
                 progressDialog.dismiss();
                 ListMedicalClaim data = response.body();
-                if (data != null) {
+                if (data != null && data.getIsSucceed()) {
 
                     // pass context and data to the custom adapter
                     adapter = new MedicalAdapter(MedicalClaimActivity.this, data.getReturnValue());
@@ -120,7 +120,10 @@ public class MedicalClaimActivity extends AppCompatActivity {
 
                     //viewAdapter = new HistoryAdapter(HistoriesActivity.this, data.getReturnValue());
                     //recyclerView.setAdapter(viewAdapter);
-                } else {
+                } else if (data.getMessage()!=null&&data.getMessage()!="") {
+                    Toast.makeText(MedicalClaimActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                else{
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(MedicalClaimActivity.this, jObjError.toString(), Toast.LENGTH_LONG).show();

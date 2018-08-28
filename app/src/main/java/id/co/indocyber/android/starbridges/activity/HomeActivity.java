@@ -15,21 +15,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import id.co.indocyber.android.starbridges.R;
 
 import java.net.Inet4Address;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.getimage.GetImage;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -93,6 +101,7 @@ public class HomeActivity extends AppCompatActivity {
         mUsernameView.setText("Hello,\n"+fullname);
 
         loadingImage();
+        getEmployeeSchedule();
 
     }
 
@@ -144,7 +153,72 @@ public class HomeActivity extends AppCompatActivity {
 //                finish();
             }
         });
+    }
+
+    public void getEmployeeSchedule()
+    {
+        apiInterface = APIClient.getImage(GlobalVar.getToken()).create(APIInterfaceRest.class);
+//        progressDialog = new ProgressDialog(HomeActivity.this);
+//        progressDialog.setTitle("Loading");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+
+        // khusus logType di hardcode -> LogType -> Start Day
+
+        JSONObject paramObject= new JSONObject();
+        try {
+
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            Date date=new Date();
+            Date date7=new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DATE, 7);
+            date7 = c.getTime();
+            String startDate="";
+            String endDate="";
+            try
+            {
+                startDate=sdf.format(date);
+                endDate=sdf.format(date7);
+            }catch (Exception e)
+            {
+
+            }
+            paramObject.put("StartDate",startDate);
+            paramObject.put("EndDate",endDate);
+
+        }catch (Exception e)
+        {
+
         }
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
+
+        Call<EmployeeShiftSchedule> call3 = apiInterface.getEmployeeShiftSchedule(body);
+        call3.enqueue(new Callback<EmployeeShiftSchedule>() {
+
+            @Override
+            public void onResponse(Call<EmployeeShiftSchedule> call, Response<EmployeeShiftSchedule> response) {
+
+                if(response.isSuccessful())
+                {
+                    Gson gson=new Gson();
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", gson.toJson(response.body()) );
+                }
+//                    progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<EmployeeShiftSchedule> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, getString(R.string.error_connection), Toast.LENGTH_LONG).show();
+//                progressDialog.dismiss();
+//                session.logoutUser();
+//                finish();
+            }
+        });
+    }
 
     public void showStartEndDate(View view) {
 //        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){

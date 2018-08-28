@@ -4,8 +4,20 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
+import android.util.Log;
 
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
+import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
+import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -34,7 +46,42 @@ public class AlarmManagerMasuk {
         final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
                 (ctx.getApplicationContext(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, GlobalVar.jamMasuk(ctx).getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
+        Calendar today = Calendar.getInstance();
+        String employeeSchedule = SharedPreferenceUtils.getSetting(ctx,"employeeSchedule","");
+        Gson gson=new Gson();
+        Log.d("employeeSchedule", employeeSchedule);
+        Calendar checkOutTime2 = Calendar.getInstance();
+        if(employeeSchedule!=null&&employeeSchedule!="") {
+            EmployeeShiftSchedule employeeShiftSchedule = gson.fromJson(employeeSchedule, EmployeeShiftSchedule.class);
+            Log.d("employeeShiftSchedule", gson.toJson(employeeShiftSchedule.getReturnValue()));
+            Date dateEmployee;
+            Date dateToday = new Date();
+            ReturnValue employeeShiftScheduleLogin = null;
+            for (ReturnValue returnValue : employeeShiftSchedule.getReturnValue()) {
+                dateEmployee = new StringConverter().dateToDate(returnValue.getDate());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                if (sdf.format(dateEmployee).equals(sdf.format(dateToday))) {
+                    employeeShiftScheduleLogin = returnValue;
+                    SharedPreferenceUtils.setSetting(ctx,"employeeShiftScheduleLogin", gson.toJson(employeeShiftScheduleLogin) );
+                    break;
+                }
+            }
+//            Calendar checkOutTime2 = Calendar.getInstance();
+            if (employeeShiftScheduleLogin.getLoginTime() != null) {
+                if (DateFormat.is24HourFormat(ctx)) {
+                    checkOutTime2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(new StringConverter().getHour(employeeShiftScheduleLogin.getLoginTime())));
+                } else {
+                    checkOutTime2.set(Calendar.HOUR, Integer.parseInt(new StringConverter().getHour12(employeeShiftScheduleLogin.getLoginTime())));
+                    checkOutTime2.set(Calendar.AM_PM, new StringConverter().get12HourFormat(employeeShiftScheduleLogin.getLoginTime()));
+                }
+                checkOutTime2.set(Calendar.MINUTE, Integer.parseInt(new StringConverter().getMinute(employeeShiftScheduleLogin.getLoginTime())));
+                checkOutTime2.set(Calendar.SECOND, 10);
+                checkOutTime2.set(Calendar.MILLISECOND, 0);
+            }
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, checkOutTime2.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
+        }
+
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, GlobalVar.jamMasuk(ctx).getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
     }
 
 }

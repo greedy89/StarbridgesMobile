@@ -13,6 +13,7 @@ import id.co.indocyber.android.starbridges.model.EditLeaveCancelation.EditLeaveC
 import id.co.indocyber.android.starbridges.model.EditOvertime.EditOvertime;
 import id.co.indocyber.android.starbridges.model.EditReimbursement.EditReimbursement;
 import id.co.indocyber.android.starbridges.model.EditShiftExchange.EditShiftExchange;
+import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.LeaveCancelationTransaction.LeaveCancelationTransaction;
 import id.co.indocyber.android.starbridges.model.ListAttendanceCorrection.ListAttendanceCorrection;
 import id.co.indocyber.android.starbridges.model.ListDraftCorrection.ListDraftCorrection;
@@ -531,4 +532,6 @@ public interface APIInterfaceRest {
     @POST("api/Loan/EditDraft")
     Call<EditDraftLoan> editDraftLoan(@Query("id") String id);
 
+    @POST("api/Attendance/GetEmployeesShiftSchedule")
+    Call<EmployeeShiftSchedule> getEmployeeShiftSchedule(@Body RequestBody body);
 }
