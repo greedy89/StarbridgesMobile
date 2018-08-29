@@ -206,6 +206,10 @@ public class HomeActivity extends AppCompatActivity {
                     Gson gson=new Gson();
                     SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", gson.toJson(response.body()) );
                 }
+                else
+                {
+                    SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", "" );
+                }
 //                    progressDialog.dismiss();
 
             }
@@ -221,22 +225,22 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showStartEndDate(View view) {
-//        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-//            alert.setTitle("Alert");
-//            alert.setTitle("You do not have privilege to access this menu");
-//            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                }
-//            });
-//
-//            alert.show();
-//        } else {
+        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
+            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+            alert.setTitle("Alert");
+            alert.setTitle("You do not have privilege to access this menu");
+            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            alert.show();
+        } else {
             Intent startEndDay = new Intent(this, StartEndDayActivity.class);
             startActivity(startEndDay);
-//        }
+        }
     }
 
     public void showCheckInOut(View view) {

@@ -31,6 +31,8 @@ import retrofit2.Response;
 public class SplashScreenActivity extends AppCompatActivity{
     private boolean versionEqual;
     private SessionManagement session;
+    private int resultVersionCode;
+    private int finalVersionCodeI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +67,16 @@ public class SplashScreenActivity extends AppCompatActivity{
         final Call<Versioning> call3 = apiInterface.checkAppVerion();
         final String finalVersionCode = versionCode;
         final String finalVersionName = versionName;
-        final int finalVersionCodeI=versionCodeI;
+        if(finalVersionCodeI==0)
+            finalVersionCodeI=versionCodeI;
         call3.enqueue(new Callback<Versioning>() {
             @Override
             public void onResponse(Call<Versioning> call, Response<Versioning> response) {
 //                Versioning data = response.body();
                 if(response.isSuccessful())
                 {
+                    resultVersionCode=Integer.parseInt(response.body().getReturnValue().getVersionCode());
+
                     String versionCodeAPi = response.body().getReturnValue().getVersionCode().toString();
                     String versionNameApi = response.body().getReturnValue().getVersionName().toString();
 //                    if (versionCodeAPi.equalsIgnoreCase(String.valueOf(finalVersionCode)) &&
@@ -93,7 +98,7 @@ public class SplashScreenActivity extends AppCompatActivity{
                             finish();
                         }
                     } else {
-                        alertNotif("", "your version is out of date, please update ");
+                        alertNotif(getString(R.string.update_available), getString(R.string.notify_update));
                     }
                 }
                 else
@@ -118,7 +123,7 @@ public class SplashScreenActivity extends AppCompatActivity{
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle(title);
         alert.setMessage(message);
-        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getString(R.string.update), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Uri starBridges = Uri.parse("https://play.google.com/store/apps/details?id=id.co.indocyber.android.starbridges");
@@ -126,10 +131,17 @@ public class SplashScreenActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        alert.setNegativeButton(getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finalVersionCodeI=resultVersionCode+1;
+            }
+        });
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                finish();
+//                finish();
+                finalVersionCodeI=resultVersionCode+1;
             }
         });
         alert.show();
