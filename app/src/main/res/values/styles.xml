@@ -22,6 +22,28 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="Theme.AppCompat.WithBar" parent="Base.Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="actionBarTheme">@style/MyApp.ActionBarTheme</item>
+    </style>
+
+    <style name="MyApp.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- THIS is where you can color the arrow! -->
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="MyApp.ActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="elevation">0dp</item>
+        <!-- style for actionBar title -->
+        <!--
+        the actionBarTheme doesn't use the colorControlNormal attribute
+        <item name="colorControlNormal">@color/my_awesome_color</item>
+         -->
+    </style>
+
     <style name="MyCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:textColor">@color/md_grey_900</item>
         <item name="buttonTint">@android:color/holo_blue_light</item>

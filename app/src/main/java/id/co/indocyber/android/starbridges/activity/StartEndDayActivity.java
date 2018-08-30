@@ -1,6 +1,7 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,17 +10,25 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +51,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import id.co.indocyber.android.starbridges.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +84,9 @@ public class StartEndDayActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private List<ReturnValue> value;
     private HistoryAdapter viewAdapter;
-    private String dateString, dateString2;
+    private String dateString, dateString2, sPhoto;
+    static final int REQUEST_ACCESS_LOCATION = 101;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ReturnValue latestReturnValue;
     List<id.co.indocyber.android.starbridges.model.OLocation.ReturnValue> listReturnValueLocation = new ArrayList<>();;
@@ -81,7 +95,8 @@ public class StartEndDayActivity extends AppCompatActivity {
     private GoogleApiClient googleApiClient;
     final static int REQUEST_LOCATION = 199;
 
-    static final int REQUEST_ACCESS_LOCATION = 101;
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +121,8 @@ public class StartEndDayActivity extends AppCompatActivity {
         this.setTitle("Attendance");
         long date = System.currentTimeMillis();
         mDateView = (TextView) findViewById(R.id.txt_date);
+
+        checkStoragePermission();
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -331,16 +348,33 @@ public class StartEndDayActivity extends AppCompatActivity {
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
-
-
-
+//                    sLatitude = null;
+//                    sLongitude = null;
                 }
                 if(sLatitude==null&&sLongitude==null)
                 {
                     AlertDialog.Builder alert = new AlertDialog.Builder(StartEndDayActivity.this);
                     alert.setTitle(getString(R.string.failed_to_process));
-                    alert.setMessage(getString(R.string.attention_cant_get_location));
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    alert.setMessage(getString(R.string.attention_cant_get_location_attendance));
+                    alert.setPositiveButton(getString(R.string.take_photo), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                                ActivityCompat.requestPermissions(StartEndDayActivity.this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+                            }
+                            else
+                                dispatchTakePictureIntent();
+                        }
+                    });
+                    alert.setNegativeButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });
+
+                    alert.setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -397,11 +431,17 @@ public class StartEndDayActivity extends AppCompatActivity {
             }
         }
 
-        Call<Attendence> call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, "End Day", null, sNotes, sEvent, timeZoneOffset);
+        final ProgressDialog progressDialog2 = new ProgressDialog(StartEndDayActivity.this);
+        progressDialog2.setTitle("Loading");
+        progressDialog2.setCancelable(false);
+        progressDialog2.show();
+
+        Call<Attendence> call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, "End Day", sPhoto, sNotes, sEvent, timeZoneOffset);
         call3.enqueue(new Callback<Attendence>() {
             @Override
             public void onResponse(Call<Attendence> call, Response<Attendence> response) {
                 Attendence data = response.body();
+                progressDialog2.dismiss();
 
                 if (data != null && data.getIsSucceed()) {
                     Toast.makeText(StartEndDayActivity.this, "Data Submitted", Toast.LENGTH_LONG).show();
@@ -423,6 +463,7 @@ public class StartEndDayActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Attendence> call, Throwable t) {
+                progressDialog2.dismiss();
                 Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
@@ -489,9 +530,12 @@ public class StartEndDayActivity extends AppCompatActivity {
 
     public void getAttendaceLog(String DateFrom, String DateTo) {
         apiInterface = APIClient.getHistory(GlobalVar.getToken()).create(APIInterfaceRest.class);
-        progressDialog = new ProgressDialog(StartEndDayActivity.this);
-        progressDialog.setTitle("Loading");
-        progressDialog.setCancelable(false);
+        if(progressDialog==null)
+        {
+            progressDialog = new ProgressDialog(StartEndDayActivity.this);
+            progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
+        }
         progressDialog.show();
         // khusus logType di hardcode -> LogType -> Start Day
         Call<History> call3 = apiInterface.getHistory(DateFrom, DateTo);
@@ -554,5 +598,133 @@ public class StartEndDayActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_ACCESS_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation();
+                } else {
+                    Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MY_CAMERA_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                    //dispatchTakePictureIntent();
+
+                } else {
+
+                    Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    /*
+    private void dispatchTakePictureIntent() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //mImageView.setImageBitmap(imageBitmap);
+            //final Uri imageUri = data.getData();
+            //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            sPhoto = encodeImage(imageBitmap);
+            callInputAbsence();
+        }
+    }
+    */
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("starbridges").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "forStarBridges";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image =new File(storageDir, imageFileName + ".jpg");
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //mImageView.setImageBitmap(imageBitmap);
+            //final Uri imageUri = data.getData();
+            //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            File imgFile = new  File(mCurrentPhotoPath);
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(myBitmap);
+            callInputAbsence();
+        }
+    }
+
+    private String encodeImage(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+
+    public void checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            Toast.makeText(this, "Storage permission granted", Toast.LENGTH_LONG).show();
+        }
     }
 }

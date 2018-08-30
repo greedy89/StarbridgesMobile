@@ -11,12 +11,15 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.SyncStateContract;
@@ -25,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -57,9 +61,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import id.co.indocyber.android.starbridges.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +86,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CheckInOutDetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    private static final int CAMERA_REQUEST = 1888;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_ACCESS_LOCATION = 101;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -370,31 +378,82 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
     }
 
-    private void dispatchTakePictureIntent() {
 
+//    private void dispatchTakePictureIntent() {
+//        Intent cameraIntent = new
+//                Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+////        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+////            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+////        }
+//    }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("starbridges").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "forStarBridges";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image =new File(storageDir, imageFileName + ".jpg");
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
             //mImageView.setImageBitmap(imageBitmap);
             //final Uri imageUri = data.getData();
             //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            sPhoto = encodeImage(imageBitmap);
+            File imgFile = new  File(mCurrentPhotoPath);
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(myBitmap);
             callInputAbsence();
         }
     }
 
+
     private String encodeImage(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] b = baos.toByteArray();
         String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 
@@ -402,7 +461,6 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     }
 
     public void SubmitData() {
-
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_LOCATION);
@@ -519,6 +577,8 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
+//                    sLatitude=null;
+//                    sLongitude=null;
 
                     if (sLogType.equals("Check In")) {
                         dispatchTakePictureIntent();
@@ -551,7 +611,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 //                    locationChecker(mGoogleApiClient, CheckInOutDetailActivity.this);
 
 
-
+                    /*
                     if(sLatitude==null&&sLongitude==null)
                     {
                         AlertDialog.Builder alert = new AlertDialog.Builder(CheckInOutDetailActivity.this);
@@ -576,7 +636,8 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
                     {
                         callInputAbsence();
                     }
-
+                    */
+                    callInputAbsence();
                 }
             }
         });
@@ -722,8 +783,11 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
                 {
 
                 }
-
-                Call<Attendence> call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, "Start Day", null, sNotes, sEvent,timeZoneOffset);
+                Call<Attendence> call3;
+                if(sLongitude==null&&sLatitude==null)
+                    call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, "Start Day", sPhoto, sNotes, sEvent,timeZoneOffset);
+                else
+                    call3 = apiInterface.inputAbsence(sUsername, sEmployeeID, sBussinessGroupID, dateString, sTime, sBeaconID, sLocationID, sLocationName, sLocationAddress, sLongitude, sLatitude, "Start Day", null, sNotes, sEvent,timeZoneOffset);
                 call3.enqueue(new Callback<Attendence>() {
                     @Override
                     public void onResponse(Call<Attendence> call, Response<Attendence> response) {

@@ -45,6 +45,7 @@
             android:name=".activity.CheckInOutActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
+            android:theme="@style/Theme.AppCompat.WithBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CheckInOutDetailActivity"
@@ -55,6 +56,7 @@
             android:name=".activity.StartEndDayActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
+            android:theme="@style/Theme.AppCompat.WithBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.StartEndDayDetailActivity"
@@ -285,6 +287,16 @@
             android:parentActivityName=".activity.LoanTransactionMainActivity"
             android:theme="@style/TranslucentTheme"
             ></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
 
     </application>
 
