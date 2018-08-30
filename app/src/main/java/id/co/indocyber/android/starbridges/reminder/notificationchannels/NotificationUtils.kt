@@ -37,6 +37,7 @@ class NotificationUtils(private val context: Context) {
                 .setSmallIcon(R.mipmap.ic_icon)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setAutoCancel(true)
                 .setContentIntent(contentPendingIntent)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message))

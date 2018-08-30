@@ -64,13 +64,13 @@ public class MyReceiverPulang extends BroadcastReceiver {
 //                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
                     }
 
-                    Log.d("myTag", "notif AlarmMasuk di jalankan karena jam masih akan datang");
+                    Log.d("myTag", "notif Alarm pulang di jalankan karena jam masih akan datang");
                 }else{
-                    Log.d("myTag", "notif AlarmMasuk tidak di jalankan karena jam sudah terlewat");
+                    Log.d("myTag", "notif Alarm pulang tidak di jalankan karena jam sudah terlewat");
                 }
             }
             else {
-                Log.d("myTag", "notif AlarmMasuk tidak di jalankan karena bukan hari kerja");
+                Log.d("myTag", "notif Alarm pulang tidak di jalankan karena bukan hari kerja");
             }
         }
 
