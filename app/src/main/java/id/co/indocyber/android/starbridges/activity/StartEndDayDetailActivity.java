@@ -198,7 +198,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                         }
                     });
 
-                    alert.setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    alert.setNeutralButton(getString(R.string.dismiss), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
