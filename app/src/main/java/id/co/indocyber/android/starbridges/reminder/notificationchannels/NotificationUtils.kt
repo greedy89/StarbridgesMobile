@@ -38,6 +38,8 @@ class NotificationUtils(private val context: Context) {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(contentPendingIntent)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message))

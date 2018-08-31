@@ -52,8 +52,12 @@ public class MyReceiverPulang extends BroadcastReceiver {
             {
                 today.add(Calendar.MINUTE,-3);
                 Calendar alarm =  checkOutTime2;
-                Boolean hasil = today.before(alarm);
+                Boolean hasil = today.after(alarm);
                 if(hasil==true){
+
+
+                    Log.d("myTag", "notif Alarm pulang tidak dijalankan karena jam masih akan datang");
+                }else{
                     String message = context.getString(R.string.reminder_pesan_pulang);
                     String title = context.getString(R.string.reminder_title);
                     if(android.os.Build.VERSION.SDK_INT < 26)
@@ -63,10 +67,7 @@ public class MyReceiverPulang extends BroadcastReceiver {
                         new NotificationUtils(context).showPMNotification(message, title);
 //                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
                     }
-
-                    Log.d("myTag", "notif Alarm pulang di jalankan karena jam masih akan datang");
-                }else{
-                    Log.d("myTag", "notif Alarm pulang tidak di jalankan karena jam sudah terlewat");
+                    Log.d("myTag", "notif Alarm pulang dijalankan karena jam sudah terlewat");
                 }
             }
             else {

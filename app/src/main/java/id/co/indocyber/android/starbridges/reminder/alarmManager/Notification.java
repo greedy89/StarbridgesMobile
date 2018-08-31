@@ -15,6 +15,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public final class Notification {
     static NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 0;
+    private static final String PRIVATE_MESSAGES_CHANNEL_ID = "private_messages";
 
     public static void deliverNotification(Context context, String title, String message) {
             mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -22,13 +23,15 @@ public final class Notification {
             PendingIntent contentPendingIntent = PendingIntent.getActivity
                     (context, NOTIFICATION_ID, contentIntent, 0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher2_round)
+//                    .setSmallIcon(R.mipmap.ic_launcher2_round)
+                    .setSmallIcon(R.mipmap.ic_icon)
                     .setContentTitle(title)
                     .setContentText(message)
                     .setContentIntent(contentPendingIntent)
                     .setAutoCancel(true)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setChannelId(PRIVATE_MESSAGES_CHANNEL_ID)
                     .setStyle(new NotificationCompat.BigTextStyle()
                     .bigText(message));
             mNotificationManager.notify(NOTIFICATION_ID, builder.build());
