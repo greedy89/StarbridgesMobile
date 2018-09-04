@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -110,6 +111,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     GoogleApiClient mGoogleApiClient;
     Location myCurrentLocation;
     LocationRequest locationRequest;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     @Override
     public void onLocationChanged(Location location) {
@@ -379,15 +381,15 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     }
 
 
-//    private void dispatchTakePictureIntent() {
-//        Intent cameraIntent = new
-//                Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-////        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-////            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-////        }
-//    }
+    private void dispatchTakePictureIntent() {
+        Intent cameraIntent = new
+                Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+    }
 
     String mCurrentPhotoPath;
 
@@ -409,51 +411,115 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         return image;
     }
 
-    static final int REQUEST_TAKE_PHOTO = 1;
+//    private class dispatchTakePictureIntent extends AsyncTask<Void, Void, Void>
+//    {
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//    //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            // Ensure that there's a camera activity to handle the intent
+//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                // Create the File where the photo should go
+//                File photoFile = null;
+//                try {
+//                    photoFile = createImageFile();
+//                } catch (IOException ex) {
+//                    // Error occurred while creating the File
+//                }
+//                // Continue only if the File was successfully created
+//                if (photoFile != null) {
+//                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+//                            "com.example.android.fileprovider",
+//                            photoFile);
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//                }
+//            }
+//            return null;
+//        }
+//    }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//            }
+//            // Continue only if the File was successfully created
+//            if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+//                        "com.example.android.fileprovider",
+//                        photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//    }
 
+
+    //full
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            new encodeImage().execute(mCurrentPhotoPath);
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
             //mImageView.setImageBitmap(imageBitmap);
             //final Uri imageUri = data.getData();
             //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            File imgFile = new  File(mCurrentPhotoPath);
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            sPhoto = encodeImage(myBitmap);
+//            File imgFile = new  File(mCurrentPhotoPath);
+//            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
         }
     }
 
+    private class encodeImage extends AsyncTask<String, Void, String>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ProgressDialog progressDialog3=new ProgressDialog(CheckInOutDetailActivity.this);
+            progressDialog3.setMessage("Encoding Image");
+            progressDialog3.show();
+        }
+
+        @Override
+        protected String doInBackground(String... s) {
+            File imgFile = new  File(s[0]);
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] b = baos.toByteArray();
+            String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+//            setsPhoto(encImage);
+            return encImage;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            setsPhoto(s);
+            progressDialog.dismiss();
+
+        }
+    }
+
+    public void setsPhoto(String sPhoto) {
+        this.sPhoto = sPhoto;
+        callInputAbsence();
+    }
 
     private String encodeImage(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
         String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 
@@ -637,7 +703,8 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
                         callInputAbsence();
                     }
                     */
-                    callInputAbsence();
+                    dispatchTakePictureIntent();
+//                    callInputAbsence();
                 }
             }
         });

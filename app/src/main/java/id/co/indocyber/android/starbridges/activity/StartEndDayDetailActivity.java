@@ -215,8 +215,6 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     public void SubmitData() {

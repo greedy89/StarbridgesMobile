@@ -47,7 +47,7 @@
     <string name="reminder_pesan_masuk">Your working hours has been started, please make sure your attendance</string>
     <string name="reminder_pesan_pulang">Your working hours has ended, please pay attention to your attendance</string>
     <string name="attention_cant_get_location">Something went wrong on your phone, can not get your location.\n\nPlease try again when you get your location, or setting your GPS setting to battery saving or device only manually to speed up location search process</string>
-    <string name="attention_cant_get_location_attendance">Something went wrong on your phone, can not get your location.\n\nPlease try again when you get your location, or setting your GPS setting to battery saving or device only manually to speed up location search process,\n\nor you can take a photo to continue this process, but make sure you have fast internet connection</string>
+    <string name="attention_cant_get_location_attendance">Something went wrong on your phone, can not get your location.\n\nPlease try again when you get your location, or setting your GPS setting to battery saving or device only manually to speed up location search process,\n\nor you can take a photo to continue this process, but make sure you have fast internet connection and enough memory for a photo</string>
     <string name="failed_to_process">Failed to process</string>
     <string name="setting">Settings</string>
     <string name="pm_channel_name">Private messages</string>
