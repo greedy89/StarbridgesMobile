@@ -135,6 +135,7 @@ public class SplashScreenActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finalVersionCodeI=resultVersionCode+1;
+                checkAppVersion();
             }
         });
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
