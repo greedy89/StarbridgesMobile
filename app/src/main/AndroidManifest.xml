@@ -298,6 +298,27 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
+        <receiver
+            android:name=".reminder.alarmManager.StartAlarm"
+            android:enabled="true"
+            android:stopWithTask="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"
+                    android:stopWithTask="false"
+                    />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".reminder.alarmManager.GeoReceiver"
+            android:enabled="true"
+            android:stopWithTask="false"
+            android:exported="false">
+        </receiver>
+
     </application>
 
 </manifest>

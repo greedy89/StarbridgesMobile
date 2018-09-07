@@ -52,7 +52,7 @@ public class MyReceiverPulang extends BroadcastReceiver {
             {
                 today.add(Calendar.MINUTE,-3);
                 Calendar alarm =  checkOutTime2;
-                Boolean hasil = today.after(alarm);
+                Boolean hasil = today.before(alarm);
                 if(hasil==true){
 
 

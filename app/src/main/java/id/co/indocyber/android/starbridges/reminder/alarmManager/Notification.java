@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import id.co.indocyber.android.starbridges.R;
-
 import id.co.indocyber.android.starbridges.activity.LoginActivity;
 
 import static android.content.Context.NOTIFICATION_SERVICE;

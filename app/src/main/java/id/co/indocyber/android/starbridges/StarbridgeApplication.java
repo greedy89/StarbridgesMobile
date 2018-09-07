@@ -13,6 +13,7 @@ public class StarbridgeApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+        startService(new Intent(this, StarbridgeService.class));
     }
 
     @Override
