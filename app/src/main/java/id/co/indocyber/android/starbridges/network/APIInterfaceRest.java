@@ -5,6 +5,7 @@ import java.util.List;
 
 import id.co.indocyber.android.starbridges.model.Attendence;
 import id.co.indocyber.android.starbridges.model.Authentication;
+import id.co.indocyber.android.starbridges.model.BeaconData.BeaconData;
 import id.co.indocyber.android.starbridges.model.CorrectionDetail.CorrectionDetail;
 import id.co.indocyber.android.starbridges.model.DecisionNumber.DecisionNumber;
 import id.co.indocyber.android.starbridges.model.DeleteShiftExchange.DeleteShiftExchange;
@@ -534,4 +535,7 @@ public interface APIInterfaceRest {
 
     @POST("api/Attendance/GetEmployeesShiftSchedule")
     Call<EmployeeShiftSchedule> getEmployeeShiftSchedule(@Body RequestBody body);
+
+    @GET("api/Attendance/GetBeaconData")
+    Call<BeaconData> getBeaconData();
 }

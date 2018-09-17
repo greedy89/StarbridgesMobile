@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import id.co.indocyber.android.starbridges.R;
+import id.co.indocyber.android.starbridges.activity.BeaconDetailActivity;
 import id.co.indocyber.android.starbridges.activity.LoginActivity;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -35,4 +36,27 @@ public final class Notification {
                     .bigText(message));
             mNotificationManager.notify(NOTIFICATION_ID, builder.build());
     }
+
+    public static void showBeaconNotification(Context context, String title, String message, String beaconFindedString) {
+        mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        Intent contentIntent = new Intent(context, BeaconDetailActivity.class);
+        contentIntent.putExtra("beaconFindedString", beaconFindedString);
+        PendingIntent contentPendingIntent = PendingIntent.getActivity
+                (context, NOTIFICATION_ID, contentIntent, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+//                    .setSmallIcon(R.mipmap.ic_launcher2_round)
+                .setSmallIcon(R.mipmap.ic_icon)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setContentIntent(contentPendingIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setChannelId(PRIVATE_MESSAGES_CHANNEL_ID)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message));
+        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+
 }

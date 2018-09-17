@@ -2,16 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.co.indocyber.android.starbridges">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <meta-data
+        android:name="disable_hardware_filtering"
+        android:value="true" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -25,6 +31,10 @@
         android:roundIcon="@mipmap/ic_launcher2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".service.StarbridgeService"
+            android:enabled="true" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation"
@@ -45,8 +55,8 @@
             android:name=".activity.CheckInOutActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
-            android:theme="@style/Theme.AppCompat.WithBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.WithBar" />
         <activity
             android:name=".activity.CheckInOutDetailActivity"
             android:configChanges="orientation"
@@ -56,8 +66,8 @@
             android:name=".activity.StartEndDayActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
-            android:theme="@style/Theme.AppCompat.WithBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.WithBar" />
         <activity
             android:name=".activity.StartEndDayDetailActivity"
             android:configChanges="orientation"
@@ -184,10 +194,10 @@
         <receiver
             android:name=".reminder.alarmManager.MyReceiver"
             android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.example.android.starbridges.ACTION_NOTIFY_MASUK"/>
+                <action android:name="com.example.android.starbridges.ACTION_NOTIFY_MASUK" />
 
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
@@ -195,11 +205,10 @@
         <receiver
             android:name=".reminder.alarmManager.MyReceiverPulang"
             android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.example.android.starbridges.ACTION_NOTIFY_PULANG"/>
-
+                <action android:name="com.example.android.starbridges.ACTION_NOTIFY_PULANG" />
 
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
@@ -207,16 +216,36 @@
         <receiver
             android:name=".reminder.alarmManager.StartAlarmService"
             android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"
-                    android:stopWithTask="false"
-                    />
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED"
+                    android:stopWithTask="false" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!-- <receiver -->
+        <!-- android:name=".reminder.alarmManager.StartAlarm" -->
+        <!-- android:enabled="true" -->
+        <!-- android:stopWithTask="false" -->
+        <!-- android:exported="false"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED" -->
+        <!-- android:stopWithTask="false" -->
+        <!-- /> -->
+        <!-- <action android:name="android.intent.action.TIME_SET" /> -->
+        <!-- <action android:name="android.intent.action.TIMEZONE_CHANGED" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+
+        <receiver
+            android:name=".reminder.alarmManager.GeoReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false" />
 
         <activity
             android:name=".activity.CorrectionListActivity"
@@ -237,56 +266,56 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoanMainHistoryActivity"
+        <activity
+            android:name=".activity.LoanMainHistoryActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.LoanHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoanHistoryActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanMainHistoryActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.LoanScheduleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoanScheduleActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanMainHistoryActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoanSelectorActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/TranslucentTheme" />
-        <activity android:name=".activity.LoanTransactionMainActivity"
+        <activity
+            android:name=".activity.LoanTransactionMainActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.LoanTransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoanTransactionActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanTransactionMainActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.ListDraftLoanTransactionApprovedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ListDraftLoanTransactionApprovedActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanTransactionMainActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.ListDraftLoanTransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ListDraftLoanTransactionActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanTransactionActivity"
-            android:screenOrientation="portrait"
-            ></activity>
-        <activity android:name=".activity.LoanDetailPostPoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoanDetailPostPoneActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanTransactionActivity"
-            android:theme="@style/TranslucentTheme"
-            ></activity>
-        <activity android:name=".activity.LoanRequestCreateActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".activity.LoanRequestCreateActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.LoanTransactionMainActivity"
-            android:theme="@style/TranslucentTheme"
-            ></activity>
+            android:theme="@style/TranslucentTheme" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -295,30 +324,19 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver
-            android:name=".reminder.alarmManager.StartAlarm"
-            android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"
-                    android:stopWithTask="false"
-                    />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".reminder.alarmManager.GeoReceiver"
-            android:enabled="true"
-            android:stopWithTask="false"
-            android:exported="false">
-        </receiver>
-
+        <activity
+            android:name=".activity.BeaconActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".activity.BeaconDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

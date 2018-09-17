@@ -329,4 +329,9 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(shiftExchange);
     }
 
+    public void showBeacon(View view){
+        Intent beacon = new Intent(this, BeaconActivity.class);
+        startActivity(beacon);
+    }
+
 }

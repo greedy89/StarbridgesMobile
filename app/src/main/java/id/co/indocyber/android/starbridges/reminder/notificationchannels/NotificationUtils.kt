@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import id.co.indocyber.android.starbridges.R
+import id.co.indocyber.android.starbridges.activity.BeaconDetailActivity
 import id.co.indocyber.android.starbridges.activity.LoginActivity
 
 class NotificationUtils(private val context: Context) {
@@ -43,6 +44,29 @@ class NotificationUtils(private val context: Context) {
                 .setContentIntent(contentPendingIntent)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message))
+                /**
+                 * further customizations, like sound, light color, vibration pattern etc
+                 */
+                .setChannelId(PRIVATE_MESSAGES_CHANNEL_ID)
+                .build()
+        notificationManager.notify(PM_NOTIFICATION_ID, notification)
+    }
+
+    fun showBeaconNotification(message: String, title: String, beaconFindedString: String) {
+        val contentIntent = Intent(context, BeaconDetailActivity::class.java)
+        contentIntent.putExtra("beaconFindedString", beaconFindedString)
+        val contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, 0)
+        val notification = NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_icon)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentIntent(contentPendingIntent)
+//                .setStyle(NotificationCompat.BigTextStyle()
+//                        .bigText(message))
+                .setSubText(message)
                 /**
                  * further customizations, like sound, light color, vibration pattern etc
                  */

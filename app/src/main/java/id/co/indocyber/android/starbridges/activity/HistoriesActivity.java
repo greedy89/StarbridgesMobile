@@ -3,6 +3,7 @@ package id.co.indocyber.android.starbridges.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -94,5 +95,10 @@ public class HistoriesActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 }

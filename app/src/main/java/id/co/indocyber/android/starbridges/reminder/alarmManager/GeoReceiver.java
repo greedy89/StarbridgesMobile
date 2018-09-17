@@ -27,7 +27,7 @@ public class GeoReceiver extends BroadcastReceiver {
     @SuppressLint("MissingPermission")
     public void getLocation(final Context context) {
 //        Toast.makeText(context, "run gps location", Toast.LENGTH_LONG).show();
-        client = LocationServices.getFusedLocationProviderClient(context.getApplicationContext());
+        client = LocationServices.getFusedLocationProviderClient(context);
 
         client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override

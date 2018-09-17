@@ -9,5 +9,6 @@ public class StartAlarmService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         AlarmManagerMasuk.start(context);
         AlarmManagerPulang.start(context);
+        AlarmGetGeoLocation.start(context);
     }
 }

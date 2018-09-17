@@ -8,6 +8,7 @@ import android.app.AppOpsManager;
 import android.app.ProgressDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,12 +40,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.estimote.coresdk.common.config.Flags;
+import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
+import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
+import com.estimote.coresdk.service.BeaconManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -58,6 +62,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Where;
+import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
+import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
 import id.co.indocyber.android.starbridges.R;
 
@@ -68,16 +80,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
+import id.co.indocyber.android.starbridges.StarbridgeApplication;
 import id.co.indocyber.android.starbridges.adapter.HistoryAdapter;
 import id.co.indocyber.android.starbridges.model.Attendence;
+import id.co.indocyber.android.starbridges.model.BeaconData.BeaconData;
+import id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue_Table;
 import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.model.history.History;
 import id.co.indocyber.android.starbridges.model.history.ReturnValue;
@@ -85,7 +100,7 @@ import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.SQLCipherHelperImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -114,10 +129,36 @@ public class CheckInOutActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=99;
+    private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH=101;
+    private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH_ADMIN=102;
+    private static final int REQUEST_ENABLE_BLUETOOTH=103;
+
+    //beacon
+    BeaconManager beaconManager;
+    private BeaconRegion region;
+
+    private Button btnSyncBeacon;
+
+    private <T> DatabaseConfig getConfig(Class<T> databaseClazz) {
+        return new DatabaseConfig.Builder(databaseClazz)
+                .openHelper(new DatabaseConfig.OpenHelperCreator() {
+                    @Override
+                    public OpenHelper createHelper(DatabaseDefinition databaseDefinition, DatabaseHelperListener helperListener) {
+                        return new SQLCipherHelperImpl(databaseDefinition, helperListener);
+                    }
+                }).build();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        PrefManager.newInstance(this);
+//        FlowManager.init(this);
+        FlowManager.init(new FlowConfig.Builder(this)
+                .addDatabaseConfig(getConfig(StarbridgeApplication.class))
+                .openDatabasesOnInit(true)
+                .build());
+
         if (android.os.Build.VERSION.SDK_INT < 17) {
             setContentView(R.layout.activity_check_in_out_41);
         }
@@ -143,13 +184,14 @@ public class CheckInOutActivity extends AppCompatActivity {
             //Toast.makeText(CheckInOutActivity.this, "GPS true", Toast.LENGTH_LONG).show();
         }
 
-        checkStoragePermission();
+        checkPermission();
 
         long date = System.currentTimeMillis();
         mDateView = (TextView) findViewById(R.id.txt_date);
 
         if (android.os.Build.VERSION.SDK_INT >= 17) {
             mTimeView = (TextClock) findViewById(R.id.txt_time);
+            btnSyncBeacon=(Button)findViewById(R.id.btn_sync_beacon);
         }
         else
         {
@@ -162,6 +204,13 @@ public class CheckInOutActivity extends AppCompatActivity {
 
             }
         }
+
+        btnSyncBeacon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getBeaconData();
+            }
+        });
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -180,6 +229,7 @@ public class CheckInOutActivity extends AppCompatActivity {
         mShowDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final LocationManager manager = (LocationManager) CheckInOutActivity.this.getSystemService(Context.LOCATION_SERVICE);
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(CheckInOutActivity.this)) {
 //            Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
@@ -243,7 +293,7 @@ public class CheckInOutActivity extends AppCompatActivity {
                     //Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
                 }
 
-
+//                activateBeaconScanner();
             }
         });
 
@@ -259,6 +309,216 @@ public class CheckInOutActivity extends AppCompatActivity {
 
         Log.d("cekMock", isMockLocationOn(location, CheckInOutActivity.this)+"");
         Log.d("cekMockList", getListOfFakeLocationApps(CheckInOutActivity.this)+"");
+
+        //beacon
+//        activateBeaconScanner();
+
+    }
+
+    private boolean activateBluetooth()
+    {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "device does not support bluetooth", Toast.LENGTH_LONG).show();
+        }
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
+            return false;
+        }
+        return true;
+
+    }
+
+    private void activateBeaconScanner()
+    {
+        checkPermissionLocation();
+        boolean statusBluettoth= activateBluetooth();
+
+        if(statusBluettoth==false)
+        {
+            Toast.makeText(CheckInOutActivity.this, "bluetooth disabled", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            final ProgressDialog progressDialog2 = new ProgressDialog(CheckInOutActivity.this);
+            progressDialog2.setTitle("Loading");
+            progressDialog2.setCancelable(false);
+            progressDialog2.show();
+            Flags.DISABLE_BATCH_SCANNING.set(true);
+            Flags.DISABLE_HARDWARE_FILTERING.set(true);
+
+            beaconManager = new BeaconManager(this);
+
+            region = new BeaconRegion("rangedregion4",null, null, null);
+            // add this below:
+
+            beaconManager.setBackgroundScanPeriod(TimeUnit.SECONDS.toMillis(5), 0);
+            beaconManager.setForegroundScanPeriod(TimeUnit.SECONDS.toMillis(5), 0);
+
+            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    beaconManager.startRanging(region);
+                }
+            });
+
+            beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
+                @Override
+                public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<com.estimote.coresdk.recognition.packets.Beacon> beacons) {
+                    if (!beacons.isEmpty()) {
+                        progressDialog2.dismiss();
+//                            com.estimote.coresdk.recognition.packets.Beacon nearestBeacon = beacons.get(0);
+//                            List<String> places = placesNearBeacon(nearestBeacon);
+//                            // TODO: update the UI here
+//                            Log.d("Airport", "Nearest places: " + places);
+                        List<String> beaconsInfo = getValueBeacon(beacons);
+
+
+                        Log.d("beaconInfo", beaconsInfo+"");
+
+                        id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue beaconFinded=new id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue();
+
+                        for(com.estimote.coresdk.recognition.packets.Beacon beacon: beacons)
+                        {
+                            beaconFinded=SQLite.select().from(id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue.class)
+                                    .where(ReturnValue_Table.uUID.is(beacon.getProximityUUID()+"")).querySingle();
+                        }
+
+                        Log.d("beaconInfoFinded", beaconFinded.getLocationAddress()+"");
+
+
+                        stopScanningBeacon();
+                    }
+                }
+            });
+
+//        beaconManager.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
+//            @Override
+//            public void onEnteredRegion(BeaconRegion beaconRegion, List<com.estimote.coresdk.recognition.packets.Beacon> beacons) {
+//                if (!beacons.isEmpty()) {
+////                            com.estimote.coresdk.recognition.packets.Beacon nearestBeacon = beacons.get(0);
+////                            List<String> places = placesNearBeacon(nearestBeacon);
+////                            // TODO: update the UI here
+////                            Log.d("Airport", "Nearest places: " + places);
+//                    List<String> beaconsInfo = getValueBeacon(beacons);
+//                    Log.d("beaconInfo", beaconsInfo+"");
+//                }
+//                else
+//                    Log.d("beaconInfo", "no beacon found");
+//            }
+//
+//            @Override
+//            public void onExitedRegion(BeaconRegion beaconRegion) {
+//                Log.d("beaconInfo", "no beacon found");
+//            }
+//        });
+        }
+
+
+    }
+
+    private void getBeaconData()
+    {
+        if(progressDialog==null||!progressDialog.isShowing())
+        {
+            progressDialog = new ProgressDialog(CheckInOutActivity.this);
+            progressDialog.setTitle("Loading");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface.getBeaconData().enqueue(new Callback<BeaconData>() {
+            @Override
+            public void onResponse(Call<BeaconData> call, Response<BeaconData> response) {
+
+                if (response.isSuccessful()) {
+
+                    syncronBeaconData(response.body().getReturnValue());
+
+                } else {
+
+                    Toast.makeText(CheckInOutActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<BeaconData> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(CheckInOutActivity.this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void syncronBeaconData(List<id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue> beaconDatas)
+    {
+        try {
+            SQLite.delete().from(id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue.class).execute();
+            for(id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue returnValue:beaconDatas)
+            {
+                returnValue.save();
+            }
+
+//            File databaseFile = getDatabasePath(StarbridgeApplication.DATABASE_NAME+".db");
+//            databaseFile.mkdirs();
+//            databaseFile.delete();
+//            SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null);
+//            database.execSQL("create table t1(a, b)");
+//            database.execSQL("insert into t1(a, b) values(?, ?)", new Object[]{"one for the money",
+//                    "two for the show"});
+
+            Toast.makeText(CheckInOutActivity.this, "Success sync data", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(CheckInOutActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+//        try{
+//            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+//                @Override
+//                public void onServiceReady() {
+//                    beaconManager.stopRanging(region);
+//                }
+//            });
+//        } finally {
+//
+//        }
+        super.onPause();
+    }
+
+    private void stopScanningBeacon()
+    {
+        try{
+            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    beaconManager.stopRanging(region);
+                }
+            });
+        } finally {
+
+        }
+    }
+
+    private List<String> getValueBeacon(List<com.estimote.coresdk.recognition.packets.Beacon> beacons)
+    {
+        List<String> returnBeacon=new ArrayList<>();
+        for(com.estimote.coresdk.recognition.packets.Beacon beacon:beacons)
+        {
+            returnBeacon.add(beacon.getProximityUUID()+" " + beacon.getMajor()+" " + beacon.getMinor()+" ");
+        }
+        return returnBeacon;
     }
 
     private boolean hasGPSDevice(Context context) {
@@ -719,6 +979,18 @@ public class CheckInOutActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getAttendaceLog(dateString2, dateString2);
+
+
+
+        //beacon
+//        SystemRequirementsChecker.checkWithDefaultDialogs(this);
+
+//        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+//            @Override
+//            public void onServiceReady() {
+//                beaconManager.startRanging(region);
+//            }
+//        });
     }
 
     public void showDetail(){
@@ -944,12 +1216,28 @@ public class CheckInOutActivity extends AppCompatActivity {
         }
     }
 
-    public void checkStoragePermission() {
+    public void checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             Toast.makeText(this, "Storage permission granted", Toast.LENGTH_LONG).show();
         }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH)
+                == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+            Toast.makeText(this, "Bluetooth permission granted", Toast.LENGTH_LONG).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN)
+                == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH_ADMIN);
+            Toast.makeText(this, "Bluetooth permission granted", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 }
