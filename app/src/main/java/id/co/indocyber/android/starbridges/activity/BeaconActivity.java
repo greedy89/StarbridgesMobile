@@ -16,7 +16,13 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
+import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +34,7 @@ import id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SQLCipherHelperImpl;
 import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import retrofit2.Call;
@@ -44,10 +51,25 @@ public class BeaconActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BLUETOOTH=103;
     private SessionManagement session;
 
+    private <T> DatabaseConfig getConfig(Class<T> databaseClazz) {
+        return new DatabaseConfig.Builder(databaseClazz)
+                .openHelper(new DatabaseConfig.OpenHelperCreator() {
+                    @Override
+                    public OpenHelper createHelper(DatabaseDefinition databaseDefinition, DatabaseHelperListener helperListener) {
+                        return new SQLCipherHelperImpl(databaseDefinition, helperListener);
+                    }
+                }).build();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beacon);
+
+        FlowManager.init(new FlowConfig.Builder(this)
+                .addDatabaseConfig(getConfig(StarbridgeApplication.class))
+                .openDatabasesOnInit(true)
+                .build());
 
         swtBeacon=(Switch)findViewById(R.id.swtBeacon);
         parentView=(View)findViewById(android.R.id.content);

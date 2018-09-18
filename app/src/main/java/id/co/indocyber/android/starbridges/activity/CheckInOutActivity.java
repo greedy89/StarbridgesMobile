@@ -75,6 +75,7 @@ import id.co.indocyber.android.starbridges.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -196,7 +197,7 @@ public class CheckInOutActivity extends AppCompatActivity {
         else
         {
             mTimeView = (TextView)findViewById(R.id.txt_time);
-            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            DateFormat df = new SimpleDateFormat("HH:mm:ss");
             Date date2 = new Date();
             try {
                 mTimeView.setText(df.format(date2));
@@ -205,12 +206,12 @@ public class CheckInOutActivity extends AppCompatActivity {
             }
         }
 
-        btnSyncBeacon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getBeaconData();
-            }
-        });
+//        btnSyncBeacon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getBeaconData();
+//            }
+//        });
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -973,26 +974,6 @@ public class CheckInOutActivity extends AppCompatActivity {
 
     }
 
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getAttendaceLog(dateString2, dateString2);
-
-
-
-        //beacon
-//        SystemRequirementsChecker.checkWithDefaultDialogs(this);
-
-//        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-//            @Override
-//            public void onServiceReady() {
-//                beaconManager.startRanging(region);
-//            }
-//        });
-    }
-
     public void showDetail(){
         String dateValue;
         String timeValue="";
@@ -1141,9 +1122,30 @@ public class CheckInOutActivity extends AppCompatActivity {
         return image;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAttendaceLog(dateString2, dateString2);
+
+
+
+        //beacon
+//        SystemRequirementsChecker.checkWithDefaultDialogs(this);
+
+//        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+//            @Override
+//            public void onServiceReady() {
+//                beaconManager.startRanging(region);
+//            }
+//        });
+    }
+
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    private static final int TAKE_PHOTO_CODE = 1;
+
     private void dispatchTakePictureIntent() {
+        /*
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -1164,10 +1166,25 @@ public class CheckInOutActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
+        */
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(getTempFile(this)));
+        startActivityForResult(intent, TAKE_PHOTO_CODE);
+    }
+
+    private File getTempFile(Context context) {
+        final File path = new File(Environment.getExternalStorageDirectory(),
+                context.getPackageName());
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        return new File(path, "myImage.png");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 //            Bundle extras = data.getExtras();
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -1179,6 +1196,22 @@ public class CheckInOutActivity extends AppCompatActivity {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             sPhoto = encodeImage(myBitmap);
             callInputAbsence();
+        }
+        */
+        if (requestCode == TAKE_PHOTO_CODE) {
+            final File file = getTempFile(this);
+            try {
+                Uri uri = Uri.fromFile(file);
+                Bitmap captureBmp = MediaStore.Images.Media.getBitmap(getContentResolver(),
+                        uri);
+//                image.setImageBitmap(captureBmp);
+                sPhoto = encodeImage(captureBmp);
+                callInputAbsence();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

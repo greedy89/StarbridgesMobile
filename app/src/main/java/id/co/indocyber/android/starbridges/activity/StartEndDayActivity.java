@@ -104,7 +104,7 @@ public class StartEndDayActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT < 17) {
             setContentView(R.layout.activity_start_end_day_41);
             mTimeView = (TextView) findViewById(R.id.txt_time);
-            DateFormat df = new SimpleDateFormat("hh:mm:ss");
+            DateFormat df = new SimpleDateFormat("HH:mm:ss");
             Date date2 = new Date();
             try {
                 mTimeView.setText(df.format(date2));

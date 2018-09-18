@@ -342,6 +342,19 @@ public class BeaconDetailActivity extends AppCompatActivity {
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
+
+                    //distance between 2 coordinate
+//                    Location locatioNow=new Location("");
+//                    locatioNow.setLatitude(Double.parseDouble(sLatitude));
+//                    locatioNow.setLongitude(Double.parseDouble(sLongitude));
+//
+//                    Location locationBeacon=new Location("");
+//                    locationBeacon.setLatitude(Double.parseDouble(beaconFinded.getLatitude()));
+//                    locationBeacon.setLongitude(Double.parseDouble(beaconFinded.getLongitude()));
+//
+//                    float distance=locatioNow.distanceTo(locationBeacon);
+//
+//                    Log.d("distance", distance+"");
 //                    sLatitude=null;
 //                    sLongitude=null;
 

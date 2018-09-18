@@ -63,6 +63,7 @@ import id.co.indocyber.android.starbridges.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -381,14 +382,32 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     }
 
 
+    private static final int TAKE_PHOTO_CODE = 1;
+
     private void dispatchTakePictureIntent() {
+        /*
         Intent cameraIntent = new
                 Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        */
 //        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 //            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 //        }
+
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(getTempFile(this)));
+        startActivityForResult(intent, TAKE_PHOTO_CODE);
+    }
+
+    private File getTempFile(Context context) {
+        final File path = new File(Environment.getExternalStorageDirectory(),
+                context.getPackageName());
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        return new File(path, "myImage.png");
     }
 
     String mCurrentPhotoPath;
@@ -466,6 +485,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     //full
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 //            new encodeImage().execute(mCurrentPhotoPath);
             Bundle extras = data.getExtras();
@@ -478,6 +498,22 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 //            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
+        }
+        */
+        if (requestCode == TAKE_PHOTO_CODE) {
+            final File file = getTempFile(this);
+            try {
+                Uri uri = Uri.fromFile(file);
+                Bitmap captureBmp = MediaStore.Images.Media.getBitmap(getContentResolver(),
+                        uri);
+//                image.setImageBitmap(captureBmp);
+                sPhoto = encodeImage(captureBmp);
+                callInputAbsence();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -519,7 +555,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
     private String encodeImage(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] b = baos.toByteArray();
         String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 

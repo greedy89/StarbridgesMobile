@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -100,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtFooter;
     CheckBox chcRememberMe;
     String username,password;
+    TextInputLayout mUsernameLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,18 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.txt_password);
         txtFooter = (TextView) findViewById(R.id.txtFooter);
         chcRememberMe = (CheckBox)findViewById(R.id.chc_remember_me);
+        mUsernameLayout=(TextInputLayout)findViewById(R.id.etUsernameLayout);
+
+//        mUsernameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (b) {
+//                    mUsernameLayout.setHint(null);
+//                } else {
+//                    mUsernameLayout.setHint("Username");
+//                }
+//            }
+//        });
 
         Date date = new Date();
 
