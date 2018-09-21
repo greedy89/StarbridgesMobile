@@ -410,7 +410,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     spnSearchLocation.setAdapter(adapter);
                 } else {
 
-                    Toast.makeText(StartEndDayDetailActivity.this, "Failed to get data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartEndDayDetailActivity.this, "Failed toget data", Toast.LENGTH_SHORT).show();
                 }
 
                 session = new SessionManagement(getApplicationContext());

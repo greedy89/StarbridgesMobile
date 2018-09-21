@@ -8,69 +8,90 @@
     android:padding="20dp"
     tools:context="id.co.indocyber.android.starbridges.activity.CheckInOutActivity">
 
-    <TextView
-        android:id="@+id/txt_date"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text=""
-        android:textSize="20sp" />
-
-    <TextClock
-        android:id="@+id/txt_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_clock_txt"
-        android:format12Hour="kk:mm:ss"
-        android:format24Hour="kk:mm:ss"
-        android:gravity="center_horizontal"
-        android:paddingHorizontal="20dp"
-        android:textSize="35sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_show_detail"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_btn"
-            android:text="Check In"
-            android:textColor="@android:color/background_light" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_sync_beacon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:background="@drawable/rounded_btn"
-            android:text="Sync Beacon"
-            android:textColor="@android:color/background_light" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text=""
+                android:textSize="20sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:padding="10dp">
+            <TextClock
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_clock_txt"
+                android:format12Hour="kk:mm:ss"
+                android:format24Hour="kk:mm:ss"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="20dp"
+                android:textSize="35sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TODAY"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/StartDayList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btn_show_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_btn"
+                    android:text="Check In"
+                    android:textColor="@android:color/background_light" />
+
+                <Button
+                    android:id="@+id/btn_sync_beacon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:background="@drawable/rounded_btn"
+                    android:text="Sync Beacon"
+                    android:textColor="@android:color/background_light" />
+
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    tools:context=".MapsActivity" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TODAY" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/StartDayList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

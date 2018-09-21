@@ -1,12 +1,16 @@
 package id.co.indocyber.android.starbridges.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -52,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     SessionManagement session;
     Button btnSignOut;
     Button AttendanceButton;
+    static final int REQUEST_ACCESS_LOCATION = 101;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,25 +230,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showStartEndDate(View view) {
-        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
-            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-            alert.setTitle("Alert");
-            alert.setTitle("You do not have privilege to access this menu");
-            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-
-            alert.show();
-        } else {
-            Intent startEndDay = new Intent(this, StartEndDayActivity.class);
-            startActivity(startEndDay);
-        }
-    }
-
-    public void showCheckInOut(View view) {
 //        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
 //            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
 //            alert.setTitle("Alert");
@@ -257,8 +243,32 @@ public class HomeActivity extends AppCompatActivity {
 //
 //            alert.show();
 //        } else {
+            Intent startEndDay = new Intent(this, StartEndDayActivity.class);
+            startActivity(startEndDay);
+//        }
+    }
+
+    public void showCheckInOut(View view) {
+
+//        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
+//            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+//            alert.setTitle("Alert");
+//            alert.setTitle("You do not have privilege to access this menu");
+//            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                }
+//            });
+//
+//            alert.show();
+//        } else {
+        if(checkPermissionLocation())
+        {
             Intent checkInOut = new Intent(this, CheckInOutActivity.class);
             startActivity(checkInOut);
+        }
+
 //        }
     }
 
@@ -332,6 +342,16 @@ public class HomeActivity extends AppCompatActivity {
     public void showBeacon(View view){
         Intent beacon = new Intent(this, BeaconActivity.class);
         startActivity(beacon);
+    }
+
+    public boolean checkPermissionLocation()
+    {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_LOCATION);
+            return false;
+        }
+        return true;
     }
 
 }

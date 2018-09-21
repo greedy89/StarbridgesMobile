@@ -159,23 +159,26 @@ public class LoginActivity extends AppCompatActivity {
 //        mUsernameView.setText("");
 //        mPasswordView.setText("");
 
-        checkIMEIPermission();
+//        checkIMEIPermission();
 
         Button mSignInButton = (Button) findViewById(R.id.btn_sign_in);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(chcRememberMe.isChecked())
+                if(checkPermissionLocationIMEI())
                 {
-                    SharedPreferenceUtils.setSetting(getApplicationContext(),"username", mUsernameView.getText().toString());
-                    SharedPreferenceUtils.setSetting(getApplicationContext(),"password", mPasswordView.getText().toString());
+                    if(chcRememberMe.isChecked())
+                    {
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"username", mUsernameView.getText().toString());
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"password", mPasswordView.getText().toString());
+                    }
+                    else
+                    {
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"username", "");
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"password", "");
+                    }
+                    validateLogin();
                 }
-                else
-                {
-                    SharedPreferenceUtils.setSetting(getApplicationContext(),"username", "");
-                    SharedPreferenceUtils.setSetting(getApplicationContext(),"password", "");
-                }
-                validateLogin();
             }
         });
 
@@ -183,7 +186,11 @@ public class LoginActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerIMEI();
+                if(checkPermissionLocationIMEI())
+                {
+                    registerIMEI();
+                }
+
             }
         });
 
@@ -590,19 +597,34 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="352875087316146";// maryuri
 //        IMEI="865684032897881"; //gangzar
 //        IMEI="863263034362087"; // Dhaba
-//        IMEI="868042031440079";// Dhaba new
+        IMEI="868042031440079";// Dhaba new
 //        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
     }
 
-    public void checkIMEIPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED) {
-            getIMEI(this);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+    public boolean checkPermissionLocationIMEI()
+    {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+            return false;
         }
+        getIMEI(this);
+        return true;
+    }
+
+    public boolean requestPermissionImei(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_PHONE_STATE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getIMEI(this);
+                return true;
+            } else {
+                Toast.makeText(LoginActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override

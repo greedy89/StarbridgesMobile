@@ -89,7 +89,7 @@ import retrofit2.Response;
 
 public class CheckInOutDetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int CAMERA_REQUEST = 1888;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
     static final int REQUEST_ACCESS_LOCATION = 101;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private FusedLocationProviderClient client;
@@ -112,7 +112,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     GoogleApiClient mGoogleApiClient;
     Location myCurrentLocation;
     LocationRequest locationRequest;
-    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_TAKE_PHOTO = 3;
 
     @Override
     public void onLocationChanged(Location location) {
@@ -395,10 +395,41 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 //            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 //        }
 
-        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(getTempFile(this)));
-        startActivityForResult(intent, TAKE_PHOTO_CODE);
+        try
+        {
+            final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(getTempFile(this)));
+            startActivityForResult(intent, TAKE_PHOTO_CODE);
+        } catch (Exception e)
+        {
+//            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                            "com.example.android.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
+            }
+        }
+
     }
 
     private File getTempFile(Context context) {
@@ -485,22 +516,21 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     //full
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 //            new encodeImage().execute(mCurrentPhotoPath);
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
             //mImageView.setImageBitmap(imageBitmap);
             //final Uri imageUri = data.getData();
             //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
             //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-//            File imgFile = new  File(mCurrentPhotoPath);
-//            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            File imgFile = new  File(mCurrentPhotoPath);
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
         }
-        */
-        if (requestCode == TAKE_PHOTO_CODE) {
+        else if (requestCode == TAKE_PHOTO_CODE) {
             final File file = getTempFile(this);
             try {
                 Uri uri = Uri.fromFile(file);
@@ -936,16 +966,13 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
                     if (data != null && data.getIsSucceed()) {
                         Toast.makeText(CheckInOutDetailActivity.this, "Data Submitted", Toast.LENGTH_LONG).show();
                         finish();
-                    } else if(data != null && data.getMessage() =="Please Check Your Time And Date Settings"){
+                    } else if(data.getMessage()!=null)
+                    {
                         Toast.makeText(CheckInOutDetailActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }else {
-                        try {
-                            //JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(CheckInOutDetailActivity.this, "Failed to Submit", Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(CheckInOutDetailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(CheckInOutDetailActivity.this, "failed to submit", Toast.LENGTH_LONG).show();
                     }
 
                 }

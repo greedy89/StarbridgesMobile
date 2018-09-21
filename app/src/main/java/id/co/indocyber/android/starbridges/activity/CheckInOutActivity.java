@@ -61,6 +61,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
@@ -106,7 +113,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CheckInOutActivity extends AppCompatActivity {
+public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private TextView mDateView;
     private TextView mTimeView;
@@ -133,6 +140,8 @@ public class CheckInOutActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH=101;
     private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH_ADMIN=102;
     private static final int REQUEST_ENABLE_BLUETOOTH=103;
+    private GoogleMap mMap;
+    private History data;
 
     //beacon
     BeaconManager beaconManager;
@@ -186,6 +195,7 @@ public class CheckInOutActivity extends AppCompatActivity {
         }
 
         checkPermission();
+        enableGoogleMaps();
 
         long date = System.currentTimeMillis();
         mDateView = (TextView) findViewById(R.id.txt_date);
@@ -232,6 +242,20 @@ public class CheckInOutActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 final LocationManager manager = (LocationManager) CheckInOutActivity.this.getSystemService(Context.LOCATION_SERVICE);
+                // Todo Location Already on  ... end
+
+                if (!hasGPSDevice(CheckInOutActivity.this)) {
+                    Toast.makeText(CheckInOutActivity.this, "Gps not Supported", Toast.LENGTH_SHORT).show();
+                }
+
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(CheckInOutActivity.this)) {
+                    Log.e("Starbridges", "Gps already enabled");
+                    Toast.makeText(CheckInOutActivity.this, "Gps not enabled", Toast.LENGTH_SHORT).show();
+                    enableLoc();
+                } else {
+                    Log.e("Starbridges", "Gps already enabled");
+                    //Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
+                }
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(CheckInOutActivity.this)) {
 //            Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
                     List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, 0);
@@ -279,20 +303,6 @@ public class CheckInOutActivity extends AppCompatActivity {
                     else
                         showDetail();
                 }
-                // Todo Location Already on  ... end
-
-                if (!hasGPSDevice(CheckInOutActivity.this)) {
-                    Toast.makeText(CheckInOutActivity.this, "Gps not Supported", Toast.LENGTH_SHORT).show();
-                }
-
-                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(CheckInOutActivity.this)) {
-                    Log.e("Starbridges", "Gps already enabled");
-                    Toast.makeText(CheckInOutActivity.this, "Gps not enabled", Toast.LENGTH_SHORT).show();
-                    enableLoc();
-                } else {
-                    Log.e("Starbridges", "Gps already enabled");
-                    //Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
-                }
 
 //                activateBeaconScanner();
             }
@@ -314,6 +324,75 @@ public class CheckInOutActivity extends AppCompatActivity {
         //beacon
 //        activateBeaconScanner();
 
+
+
+    }
+
+    private void enableGoogleMaps()
+    {
+        checkPermissionLocation();
+        getCoordinateForGoogleMaps();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+
+        if(data!=null)
+        {
+            for(ReturnValue history: data.getReturnValue())
+            {
+                if(history.getLatitude()!=null&&history.getLongitude()!=null)
+                {
+                    LatLng coordinateActivity = new LatLng(Double.parseDouble(history.getLatitude()), Double.parseDouble(history.getLongitude()));
+                    String title=history.getLogType()+"\nat "+history.getLocationName()+"\non "+history.getDisplayTime();
+                    mMap.addMarker(new MarkerOptions().position(coordinateActivity).title(title));
+                }
+
+            }
+        }
+
+//        LatLng sydney = new LatLng(-6, 106);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(14.4f));
+//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//                Toast.makeText(getApplicationContext(),
+//                        latLng.latitude + ", " + latLng.longitude,
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+
+        LatLng coordinate = new LatLng( -6.176288299702181, 106.82628370821476);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10);
+        mMap.animateCamera(yourLocation);
+
+//        if(sLongitude==null&&sLatitude==null)
+//        {
+//            LatLng coordinate = new LatLng( -6.176288299702181, 106.82628370821476);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+//            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10);
+//            mMap.animateCamera(yourLocation);
+//        }
+//        else
+//        {
+//            LatLng coordinate = new LatLng(Double.parseDouble(sLatitude), Double.parseDouble(sLongitude));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+//            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 14.4f);
+//            mMap.animateCamera(yourLocation);
+//        }
+
+        mMap.setMyLocationEnabled(true);
     }
 
     private boolean activateBluetooth()
@@ -647,6 +726,28 @@ public class CheckInOutActivity extends AppCompatActivity {
         }
     }
 
+    public void getCoordinateForGoogleMaps() {
+        checkPermissionLocation();
+
+        client = LocationServices.getFusedLocationProviderClient(this);
+        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    sLatitude = String.valueOf(location.getLatitude());
+                    sLongitude = String.valueOf(location.getLongitude());
+//                    sLatitude=null;
+//                    sLongitude=null;
+
+
+                }
+
+            }
+        });
+    }
+
+
+
     public void getCoordinate()
     {
         checkPermissionLocation();
@@ -766,16 +867,13 @@ public class CheckInOutActivity extends AppCompatActivity {
                     Toast.makeText(CheckInOutActivity.this, "Data Submitted", Toast.LENGTH_LONG).show();
                     finish();
                     startActivity(getIntent());
-                } else if(data != null && data.getMessage() =="Please Check Your Time And Date Settings"){
+                } else if(data.getMessage()!=null)
+                {
                     Toast.makeText(CheckInOutActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
-
-                }else {
-                    try {
-                        //JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(CheckInOutActivity.this, "Failed to Submit", Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(CheckInOutActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                }
+                else
+                {
+                    Toast.makeText(CheckInOutActivity.this, "failed to submit", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -1021,7 +1119,7 @@ public class CheckInOutActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<History> call, Response<History> response) {
                 progressDialog.dismiss();
-                History data = response.body();
+                data = response.body();
                 if (data != null && data.getIsSucceed()) {
 
                     for(ReturnValue x: data.getReturnValue())
@@ -1061,16 +1159,24 @@ public class CheckInOutActivity extends AppCompatActivity {
                         Toast.makeText(CheckInOutActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
+                //enable google maps
+
+                enableGoogleMaps();
 
             }
 
             @Override
             public void onFailure(Call<History> call, Throwable t) {
+                //enable google maps
+
+                enableGoogleMaps();
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });
+
+
     }
 
     @Override
@@ -1126,6 +1232,7 @@ public class CheckInOutActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getAttendaceLog(dateString2, dateString2);
+        enableGoogleMaps();
 
 
 
@@ -1230,7 +1337,7 @@ public class CheckInOutActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_ACCESS_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
+//                    getLocation();
                 } else {
                     Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show();
                 }
