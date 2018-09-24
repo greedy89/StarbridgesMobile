@@ -47,6 +47,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import id.co.indocyber.android.starbridges.R;
@@ -75,7 +82,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StartEndDayActivity extends AppCompatActivity {
+public class StartEndDayActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private TextView mDateView, mTimeView;
     private Button mShowDetail;
@@ -97,6 +104,8 @@ public class StartEndDayActivity extends AppCompatActivity {
 
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=99;
+    private GoogleMap mMap;
+    private History data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +132,7 @@ public class StartEndDayActivity extends AppCompatActivity {
         mDateView = (TextView) findViewById(R.id.txt_date);
 
         checkStoragePermission();
+        enableGoogleMaps();
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM dd, yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
@@ -214,6 +224,93 @@ public class StartEndDayActivity extends AppCompatActivity {
         });
 
         //getAttendaceLog(dateString2, dateString2);
+    }
+
+    private void enableGoogleMaps()
+    {
+        checkPermissionLocation();
+        getCoordinateForGoogleMaps();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+
+        if(data!=null)
+        {
+            for(ReturnValue history: data.getReturnValue())
+            {
+                if(history.getLatitude()!=null&&history.getLongitude()!=null)
+                {
+                    LatLng coordinateActivity = new LatLng(Double.parseDouble(history.getLatitude()), Double.parseDouble(history.getLongitude()));
+                    String title=history.getLogType()+"\nat "+history.getLocationName()+"\non "+history.getDisplayTime();
+                    mMap.addMarker(new MarkerOptions().position(coordinateActivity).title(title));
+                }
+
+            }
+        }
+
+//        LatLng sydney = new LatLng(-6, 106);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(14.4f));
+//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//                Toast.makeText(getApplicationContext(),
+//                        latLng.latitude + ", " + latLng.longitude,
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+
+        LatLng coordinate = new LatLng( -6.176288299702181, 106.82628370821476);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10);
+        mMap.animateCamera(yourLocation);
+
+//        if(sLongitude==null&&sLatitude==null)
+//        {
+//            LatLng coordinate = new LatLng( -6.176288299702181, 106.82628370821476);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+//            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10);
+//            mMap.animateCamera(yourLocation);
+//        }
+//        else
+//        {
+//            LatLng coordinate = new LatLng(Double.parseDouble(sLatitude), Double.parseDouble(sLongitude));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
+//            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 14.4f);
+//            mMap.animateCamera(yourLocation);
+//        }
+
+        mMap.setMyLocationEnabled(true);
+    }
+
+    public void getCoordinateForGoogleMaps() {
+        checkPermissionLocation();
+
+        client = LocationServices.getFusedLocationProviderClient(this);
+        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    sLatitude = String.valueOf(location.getLatitude());
+                    sLongitude = String.valueOf(location.getLongitude());
+//                    sLatitude=null;
+//                    sLongitude=null;
+
+
+                }
+
+            }
+        });
     }
 
     private boolean hasGPSDevice(Context context) {
@@ -543,7 +640,7 @@ public class StartEndDayActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<History> call, Response<History> response) {
                 progressDialog.dismiss();
-                History data = response.body();
+                data = response.body();
                 if (data != null && data.getIsSucceed()) {
                     if(data.getReturnValue().size()>0)
                     {
@@ -588,7 +685,7 @@ public class StartEndDayActivity extends AppCompatActivity {
                         Toast.makeText(StartEndDayActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
-
+                enableGoogleMaps();
             }
 
             @Override

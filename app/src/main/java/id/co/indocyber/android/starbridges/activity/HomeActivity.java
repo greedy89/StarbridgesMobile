@@ -243,8 +243,12 @@ public class HomeActivity extends AppCompatActivity {
 //
 //            alert.show();
 //        } else {
-            Intent startEndDay = new Intent(this, StartEndDayActivity.class);
-            startActivity(startEndDay);
+            if(checkPermissionLocation())
+            {
+                Intent startEndDay = new Intent(this, StartEndDayActivity.class);
+                startActivity(startEndDay);
+            }
+
 //        }
     }
 

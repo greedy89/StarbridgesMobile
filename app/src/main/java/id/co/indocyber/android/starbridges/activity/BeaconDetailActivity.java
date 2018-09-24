@@ -165,6 +165,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
                 showSingleChoiceDialog();
             }
         });
+
     }
 
     public void getAttendaceLog(String DateFrom, String DateTo) {
@@ -223,9 +224,9 @@ public class BeaconDetailActivity extends AppCompatActivity {
                     }
                     else
                     {
+                        btnSubmit.setBackground(ContextCompat.getDrawable(BeaconDetailActivity.this, R.drawable.rounded_btn_disabled));
                         btnSubmit.setEnabled(false);
                         btnSubmit.setText("End Day");
-                        btnSubmit.setBackground(ContextCompat.getDrawable(BeaconDetailActivity.this, R.drawable.rounded_btn_disabled));
                     }
 
                 } else {
@@ -522,7 +523,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
                     history.putExtra("to", dateString3);
                     startActivity(history);
 
-                } else if(data != null && data.getMessage() =="Please Check Your Time And Date Settings"){
+                } else if(data != null){
                     Toast.makeText(BeaconDetailActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
 
                 }else {

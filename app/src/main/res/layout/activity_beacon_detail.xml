@@ -90,7 +90,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_btn"
-                android:backgroundTint="@android:color/holo_blue_light"
                 android:text="Submit"
                 android:textColor="@android:color/white" />
 

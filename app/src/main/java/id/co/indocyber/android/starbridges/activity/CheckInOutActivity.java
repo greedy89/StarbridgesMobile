@@ -372,6 +372,13 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
 
 
 
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+
+            }
+        });
+
         LatLng coordinate = new LatLng( -6.176288299702181, 106.82628370821476);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
         CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10);
@@ -1274,11 +1281,38 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
         */
-        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(getTempFile(this)));
-        startActivityForResult(intent, TAKE_PHOTO_CODE);
+        try
+        {
+            final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(getTempFile(this)));
+            startActivityForResult(intent, TAKE_PHOTO_CODE);
+        } catch (Exception e) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                            "com.example.android.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
+            }
+        }
+
     }
+
+
 
     private File getTempFile(Context context) {
         final File path = new File(Environment.getExternalStorageDirectory(),
@@ -1305,7 +1339,20 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
             callInputAbsence();
         }
         */
-        if (requestCode == TAKE_PHOTO_CODE) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+//            new encodeImage().execute(mCurrentPhotoPath);
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //mImageView.setImageBitmap(imageBitmap);
+            //final Uri imageUri = data.getData();
+            //final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+            //final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            File imgFile = new  File(mCurrentPhotoPath);
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(imageBitmap);
+            callInputAbsence();
+        }
+        else if (requestCode == TAKE_PHOTO_CODE) {
             final File file = getTempFile(this);
             try {
                 Uri uri = Uri.fromFile(file);
