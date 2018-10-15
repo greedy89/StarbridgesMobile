@@ -4,7 +4,7 @@ package id.co.indocyber.android.starbridges.model.LoanLoanSchedule;
 import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

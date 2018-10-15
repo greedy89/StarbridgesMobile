@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "id.co.indocyber.android.starbridges"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 18
-        versionName "1.15"
+        versionCode 25
+        versionName "1.16.4"
         testInstrumentationRunner "android.support.ReceiverMasuk.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -20,6 +20,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        release {
+            storeFile file("D:/Project/StarbridgeDoc/Documetation/StarbridgesKey.jks")
+            storePassword "0okmnhy6*123"
+            keyAlias "keyStarBridges"
+            keyPassword "0okmnhy6*123"
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }

@@ -4,7 +4,6 @@ package id.co.indocyber.android.starbridges.model.LeaveCancelationTransaction;
 import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public class CustomField implements Serializable, Parcelable
 {

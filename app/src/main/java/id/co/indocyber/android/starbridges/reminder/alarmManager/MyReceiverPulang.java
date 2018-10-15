@@ -10,16 +10,12 @@ import com.google.gson.Gson;
 
 import id.co.indocyber.android.starbridges.R;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.reminder.notificationchannels.NotificationUtils;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 
 public class MyReceiverPulang extends BroadcastReceiver {
 
@@ -54,10 +50,9 @@ public class MyReceiverPulang extends BroadcastReceiver {
                 Calendar alarm =  checkOutTime2;
                 Boolean hasil = today.before(alarm);
                 if(hasil==true){
-
-
-                    Log.d("myTag", "notif Alarm pulang tidak dijalankan karena jam masih akan datang");
+                    Log.d("myTag", "notif Alarm pulang dijalankan karena jam sudah terlewat");
                 }else{
+                    Log.d("myTag", "notif Alarm pulang tidak dijalankan karena jam masih akan datang");
                     String message = context.getString(R.string.reminder_pesan_pulang);
                     String title = context.getString(R.string.reminder_title);
                     if(android.os.Build.VERSION.SDK_INT < 26)
@@ -67,7 +62,6 @@ public class MyReceiverPulang extends BroadcastReceiver {
                         new NotificationUtils(context).showPMNotification(message, title);
 //                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
                     }
-                    Log.d("myTag", "notif Alarm pulang dijalankan karena jam sudah terlewat");
                 }
             }
             else {

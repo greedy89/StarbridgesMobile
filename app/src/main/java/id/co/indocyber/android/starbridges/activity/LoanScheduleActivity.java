@@ -9,14 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.adapter.LoanMainHistoryAdapter;
 import id.co.indocyber.android.starbridges.adapter.LoanScheduleAdapter;
 import id.co.indocyber.android.starbridges.model.ListLoanSchedule.ListLoanSchedule;
-import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ListTransactionInformation;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

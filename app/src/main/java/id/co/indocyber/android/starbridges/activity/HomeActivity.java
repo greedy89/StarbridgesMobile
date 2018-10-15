@@ -25,7 +25,6 @@ import org.json.JSONObject;
 
 import id.co.indocyber.android.starbridges.R;
 
-import java.net.Inet4Address;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,9 +37,9 @@ import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeS
 import id.co.indocyber.android.starbridges.model.getimage.GetImage;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -230,26 +229,26 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showStartEndDate(View view) {
-//        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-//            alert.setTitle("Alert");
-//            alert.setTitle("You do not have privilege to access this menu");
-//            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                }
-//            });
-//
-//            alert.show();
-//        } else {
+        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
+            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+            alert.setTitle("Alert");
+            alert.setTitle("You do not have privilege to access this menu");
+            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            alert.show();
+        } else {
             if(checkPermissionLocation())
             {
                 Intent startEndDay = new Intent(this, StartEndDayActivity.class);
                 startActivity(startEndDay);
             }
 
-//        }
+        }
     }
 
     public void showCheckInOut(View view) {

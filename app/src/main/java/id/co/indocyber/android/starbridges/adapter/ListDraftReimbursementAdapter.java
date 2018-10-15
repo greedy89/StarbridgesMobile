@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.model.ListDraftReimbursement.ReturnValue;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 
 public class ListDraftReimbursementAdapter extends ArrayAdapter<ReturnValue> {
     private final Context context;

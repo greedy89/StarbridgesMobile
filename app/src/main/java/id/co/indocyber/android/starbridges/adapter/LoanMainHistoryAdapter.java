@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;

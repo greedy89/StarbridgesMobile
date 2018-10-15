@@ -15,7 +15,7 @@ import java.util.Date;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 
 /**
  * reminderJobService to be scheduled by the JobScheduler.

@@ -1,21 +1,17 @@
 package id.co.indocyber.android.starbridges.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.activity.LoanHistoryActivity;
-import id.co.indocyber.android.starbridges.activity.LoanScheduleActivity;
 import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
 

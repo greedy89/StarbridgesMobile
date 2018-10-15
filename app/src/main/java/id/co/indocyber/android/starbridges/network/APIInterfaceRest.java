@@ -34,7 +34,6 @@ import id.co.indocyber.android.starbridges.model.ListShift.ListShift;
 import id.co.indocyber.android.starbridges.model.ListShiftExchange.ListShiftExchange;
 import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ListTransactionInformation;
 import id.co.indocyber.android.starbridges.model.LoanPolicy.LoanPolicy;
-import id.co.indocyber.android.starbridges.model.LoanSchedule.LoanSchedule;
 import id.co.indocyber.android.starbridges.model.LoanSettingLimit.LoanSettingLimit;
 import id.co.indocyber.android.starbridges.model.LoanTransactionType.LoanTransactionType;
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;

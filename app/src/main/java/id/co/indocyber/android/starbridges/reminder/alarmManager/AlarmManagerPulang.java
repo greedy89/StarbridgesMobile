@@ -16,8 +16,7 @@ import java.util.Date;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -84,7 +83,16 @@ public class AlarmManagerPulang {
         }
         alarmManager2.setInexactRepeating(AlarmManager.RTC_WAKEUP, checkOutTime2.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent2);
 //        alarmManager2.setInexactRepeating(AlarmManager.RTC_WAKEUP, GlobalVar.jamPulang(ctx).getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent2);
-
+//        long start=System.currentTimeMillis();
+//        if(checkOutTime2.before(Calendar.getInstance())) {
+//            int remain = 0;
+//            remain = (int) start + remain * 60 * 1000;// convert it to milisecond and plus it to current time;
+//
+//            AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(ctx, MyReceiverPulang.class);
+//            PendingIntent pi = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+//            am.set(AlarmManager.RTC_WAKEUP, remain, pi);
+//        }
     }
 
 }

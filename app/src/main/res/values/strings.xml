@@ -55,4 +55,5 @@
     <string name="new_activity_channel_name">New likes or comments</string>
     <string name="google_maps_key">AIzaSyD0TAAaGNawtuKgpGx-j-kD6Y4hdyHekHk</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps2">Map</string>
 </resources>

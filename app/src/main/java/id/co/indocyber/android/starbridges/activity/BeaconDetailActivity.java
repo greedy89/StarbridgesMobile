@@ -10,15 +10,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -53,21 +50,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.StarbridgeApplication;
-import id.co.indocyber.android.starbridges.adapter.HistoryAdapter;
+import id.co.indocyber.android.starbridges.StarbridgesApplication;
 import id.co.indocyber.android.starbridges.model.Attendence;
 import id.co.indocyber.android.starbridges.model.history.History;
-import id.co.indocyber.android.starbridges.model.history.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.AlertDialogManager;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,7 +113,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beacon_detail);
-        setTitle("ATTENDANCE");
+        setTitle("Attendance");
         Toast.makeText(BeaconDetailActivity.this, "Automatic Beacon Scanner Off", Toast.LENGTH_SHORT).show();
         assignView();
 
@@ -147,7 +141,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
 
 
         SharedPreferenceUtils.setSetting(getApplicationContext(),"beaconScanner", "" );
-        StarbridgeApplication.stopScanningBeacon();
+        StarbridgesApplication.stopScanningBeacon();
 
         assignAction();
 
@@ -440,7 +434,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                        "com.example.android.fileprovider",
+                        "com.example.android.fileproviderbeacon",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);

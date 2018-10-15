@@ -60,4 +60,9 @@
         <item name="colorAccent">@android:color/holo_blue_light</item>
     </style>
 
+
+    <style name="AppTheme.Fullscreen" parent="AppTheme">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

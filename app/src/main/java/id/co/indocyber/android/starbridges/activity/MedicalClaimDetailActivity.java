@@ -32,10 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,8 +46,8 @@ import id.co.indocyber.android.starbridges.model.medicalrequestconfirmation.Medi
 import id.co.indocyber.android.starbridges.model.medicalsavedetail.MedicalSaveDetail;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;

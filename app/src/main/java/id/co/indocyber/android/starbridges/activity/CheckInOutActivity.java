@@ -46,7 +46,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.coresdk.common.config.Flags;
-import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.service.BeaconManager;
 import com.google.android.gms.common.ConnectionResult;
@@ -74,7 +73,6 @@ import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.sql.language.Where;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
@@ -96,7 +94,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import id.co.indocyber.android.starbridges.StarbridgeApplication;
+import id.co.indocyber.android.starbridges.StarbridgesApplication;
 import id.co.indocyber.android.starbridges.adapter.HistoryAdapter;
 import id.co.indocyber.android.starbridges.model.Attendence;
 import id.co.indocyber.android.starbridges.model.BeaconData.BeaconData;
@@ -106,9 +104,9 @@ import id.co.indocyber.android.starbridges.model.history.History;
 import id.co.indocyber.android.starbridges.model.history.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SQLCipherHelperImpl;
+import id.co.indocyber.android.starbridges.reminder.utility.AlertDialogManager;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SQLCipherHelperImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -165,7 +163,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
 //        PrefManager.newInstance(this);
 //        FlowManager.init(this);
         FlowManager.init(new FlowConfig.Builder(this)
-                .addDatabaseConfig(getConfig(StarbridgeApplication.class))
+                .addDatabaseConfig(getConfig(StarbridgesApplication.class))
                 .openDatabasesOnInit(true)
                 .build());
 
@@ -552,7 +550,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
                 returnValue.save();
             }
 
-//            File databaseFile = getDatabasePath(StarbridgeApplication.DATABASE_NAME+".db");
+//            File databaseFile = getDatabasePath(StarbridgesApplication.DATABASE_NAME+".db");
 //            databaseFile.mkdirs();
 //            databaseFile.delete();
 //            SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null);

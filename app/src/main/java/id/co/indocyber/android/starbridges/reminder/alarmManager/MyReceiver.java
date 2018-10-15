@@ -10,18 +10,12 @@ import com.google.gson.Gson;
 
 import id.co.indocyber.android.starbridges.R;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
 import id.co.indocyber.android.starbridges.reminder.notificationchannels.NotificationUtils;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
-
-import static java.util.Calendar.AM;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 
 public class MyReceiver extends BroadcastReceiver {
     @Override

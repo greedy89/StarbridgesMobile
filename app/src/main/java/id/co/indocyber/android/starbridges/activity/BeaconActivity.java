@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -20,7 +19,6 @@ import com.raizlabs.android.dbflow.config.DatabaseConfig;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
@@ -28,15 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.StarbridgeApplication;
+import id.co.indocyber.android.starbridges.StarbridgesApplication;
 import id.co.indocyber.android.starbridges.model.BeaconData.BeaconData;
 import id.co.indocyber.android.starbridges.model.BeaconData.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SQLCipherHelperImpl;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SQLCipherHelperImpl;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,7 +65,7 @@ public class BeaconActivity extends AppCompatActivity {
         setContentView(R.layout.activity_beacon);
 
         FlowManager.init(new FlowConfig.Builder(this)
-                .addDatabaseConfig(getConfig(StarbridgeApplication.class))
+                .addDatabaseConfig(getConfig(StarbridgesApplication.class))
                 .openDatabasesOnInit(true)
                 .build());
 
@@ -93,13 +91,13 @@ public class BeaconActivity extends AppCompatActivity {
             if(swtBeacon.isChecked())
             {
                 Toast.makeText(BeaconActivity.this, "Automatic Beacon Scanner On", Toast.LENGTH_SHORT).show();
-                StarbridgeApplication.startScanningBeacon();
+                StarbridgesApplication.startScanningBeacon();
                 SharedPreferenceUtils.setSetting(getApplicationContext(),"beaconScanner", "1" );
             }
             else
             {
                 Toast.makeText(BeaconActivity.this, "Automatic Beacon Scanner Off", Toast.LENGTH_SHORT).show();
-                StarbridgeApplication.stopScanningBeacon();
+                StarbridgesApplication.stopScanningBeacon();
                 SharedPreferenceUtils.setSetting(getApplicationContext(),"beaconScanner", "" );
             }
         }
@@ -112,13 +110,13 @@ public class BeaconActivity extends AppCompatActivity {
                 {
                     checkPermissionLocation();
                     checkActivateBluetooth();
-                    StarbridgeApplication.startScanningBeacon();
+                    StarbridgesApplication.startScanningBeacon();
                     SharedPreferenceUtils.setSetting(getApplicationContext(),"beaconScanner", "1" );
                     Toast.makeText(BeaconActivity.this, "Automatic Beacon Scanner On", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    StarbridgeApplication.stopScanningBeacon();
+                    StarbridgesApplication.stopScanningBeacon();
                     SharedPreferenceUtils.setSetting(getApplicationContext(),"beaconScanner", "" );
                     Toast.makeText(BeaconActivity.this, "Automatic Beacon Scanner Off", Toast.LENGTH_SHORT).show();
                 }
@@ -218,7 +216,7 @@ public class BeaconActivity extends AppCompatActivity {
                 returnValue.save();
             }
 
-//            File databaseFile = getDatabasePath(StarbridgeApplication.DATABASE_NAME+".db");
+//            File databaseFile = getDatabasePath(StarbridgesApplication.DATABASE_NAME+".db");
 //            databaseFile.mkdirs();
 //            databaseFile.delete();
 //            SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null);

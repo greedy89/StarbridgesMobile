@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
+import id.co.indocyber.android.starbridges.reminder.utility.AlertDialogManager;
 
 public class TimeChangedReceiver extends BroadcastReceiver {
     AlertDialogManager alertDialogManager;

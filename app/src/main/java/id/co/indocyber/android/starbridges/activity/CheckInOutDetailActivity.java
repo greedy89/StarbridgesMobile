@@ -1,12 +1,9 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -22,8 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -51,7 +46,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
@@ -68,7 +62,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +73,8 @@ import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.model.OLocation.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.GpsLocationTracker;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,6 +84,8 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     static final int REQUEST_IMAGE_CAPTURE = 2;
     static final int REQUEST_ACCESS_LOCATION = 101;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
+    private static final int REQUEST_FILE_PHOTO_LOCATION = 110;
+
     private FusedLocationProviderClient client;
     private LocationManager locationManager;
 
@@ -273,7 +267,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         mLocationNameView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                setEnableSpinnerAndEditTextLocation();
+//                setEnableSpinnerAndEditTextLocation();
             }
 
             @Override
@@ -395,40 +389,64 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 //            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 //        }
 
-        try
+
+        if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
+                android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            // only for gingerbread and newer versions
+            Intent cameraEvent = new Intent(CheckInOutDetailActivity.this, CameraActivity.class);
+            startActivityForResult(cameraEvent, REQUEST_FILE_PHOTO_LOCATION);
+        }
+        else
         {
-            final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(getTempFile(this)));
-            startActivityForResult(intent, TAKE_PHOTO_CODE);
-        } catch (Exception e)
-        {
+            try
+            {
+                final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(getTempFile(this)));
+                startActivityForResult(intent, TAKE_PHOTO_CODE);
+            }
+            catch (Exception e)
+            {
 //            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 //                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 //            }
 
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            // Ensure that there's a camera activity to handle the intent
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                // Create the File where the photo should go
-                File photoFile = null;
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
                 try {
-                    photoFile = createImageFile();
-                } catch (IOException ex) {
-                    // Error occurred while creating the File
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                                    "com.example.android.fileprovider",
+                                    photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                        }
+                    }
                 }
-                // Continue only if the File was successfully created
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                            "com.example.android.fileprovider",
-                            photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                catch (Exception f)
+                {
+
                 }
+
             }
         }
+
+//            catch (Exception f)
+//            {
+
+//            }
+//        }
 
     }
 
@@ -544,6 +562,13 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        else if(requestCode == REQUEST_FILE_PHOTO_LOCATION && resultCode == RESULT_OK)
+        {
+            File imgFile = new  File(data.getStringExtra("filePath"));
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(imageBitmap);
+            callInputAbsence();
         }
     }
 
@@ -991,23 +1016,24 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
     public void setEnableSpinnerAndEditTextLocation()
     {
-
-        if(spnSearchLocation.getSelectedItem().toString().matches("--other--"))
+        if(spnSearchLocation.getSelectedItem().toString()!=null)
         {
-            mLocationNameView.setEnabled(true);
-        }
-        else if(!spnSearchLocation.getSelectedItem().toString().matches("--other--"))
-        {
-            mLocationNameView.setEnabled(false);
-        }
+            if(spnSearchLocation.getSelectedItem().toString().matches("--other--"))
+            {
+                mLocationNameView.setEnabled(true);
+            }
+            else if(!spnSearchLocation.getSelectedItem().toString().matches("--other--"))
+            {
+                mLocationNameView.setEnabled(false);
+            }
 
-        if(mLocationNameView.getText().toString().matches(""))
-        {
-            spnSearchLocation.setEnabled(true);
+            if(mLocationNameView.getText().toString().matches(""))
+            {
+                spnSearchLocation.setEnabled(true);
+            }
+            else
+                spnSearchLocation.setEnabled(false);
         }
-        else
-            spnSearchLocation.setEnabled(false);
-
     }
 
 

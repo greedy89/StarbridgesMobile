@@ -4,7 +4,7 @@ package id.co.indocyber.android.starbridges.model.BeaconData;
 import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -12,9 +12,9 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import id.co.indocyber.android.starbridges.StarbridgeApplication;
+import id.co.indocyber.android.starbridges.StarbridgesApplication;
 
-@Table(database = StarbridgeApplication.class)
+@Table(database = StarbridgesApplication.class)
 @org.parceler.Parcel(analyze = ReturnValue.class)
 public class ReturnValue extends BaseModel implements Serializable, Parcelable
 {

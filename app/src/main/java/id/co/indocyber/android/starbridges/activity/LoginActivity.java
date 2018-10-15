@@ -6,19 +6,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -40,13 +37,12 @@ import id.co.indocyber.android.starbridges.model.Authentication;
 import id.co.indocyber.android.starbridges.model.AuthenticationError.AuthenticationError;
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.model.OPost;
-import id.co.indocyber.android.starbridges.model.versioning.Versioning;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerMasuk;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerPulang;
-import id.co.indocyber.android.starbridges.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -64,18 +60,14 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.Annotation;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
-import okhttp3.ResponseBody;
+import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter;
 import retrofit2.Response;
 
 /**
@@ -593,13 +585,17 @@ public class LoginActivity extends AppCompatActivity {
     public void getIMEI(Activity activity) {
         TelephonyManager telephonyManager = (TelephonyManager) activity
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI = telephonyManager.getDeviceId();
-        IMEI="352875087316146";// maryuri
+        if(telephonyManager.getDeviceId()!=null)
+            IMEI = telephonyManager.getDeviceId();
+        else
+            IMEI = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+//        IMEI="352875087316146";// maryuri
 //        IMEI="865684032897881"; //gangzar
 //        IMEI="863263034362087"; // Dhaba
 //        IMEI="868042031440079";// Dhaba new
 //        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
+//        IMEI="865759030207422";
     }
 
     public boolean checkPermissionLocationIMEI()

@@ -1,6 +1,5 @@
 package id.co.indocyber.android.starbridges.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -23,7 +22,7 @@ import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerMasuk;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerPulang;
-import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
