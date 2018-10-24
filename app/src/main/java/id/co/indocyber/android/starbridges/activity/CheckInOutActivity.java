@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -146,6 +147,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
     private BeaconRegion region;
 
     private Button btnSyncBeacon;
+    private long lastClickTime = 0;
 
     private <T> DatabaseConfig getConfig(Class<T> databaseClazz) {
         return new DatabaseConfig.Builder(databaseClazz)
@@ -238,7 +240,11 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
         mShowDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
+                    return;
+                }
 
+                lastClickTime = SystemClock.elapsedRealtime();
                 final LocationManager manager = (LocationManager) CheckInOutActivity.this.getSystemService(Context.LOCATION_SERVICE);
                 // Todo Location Already on  ... end
 

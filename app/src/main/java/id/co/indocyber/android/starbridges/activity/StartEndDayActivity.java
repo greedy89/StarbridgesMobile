@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -106,6 +107,7 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=99;
     private GoogleMap mMap;
     private History data;
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,11 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
         mShowDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
+                    return;
+                }
+
+                lastClickTime = SystemClock.elapsedRealtime();
                 final LocationManager manager = (LocationManager) StartEndDayActivity.this.getSystemService(Context.LOCATION_SERVICE);
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(StartEndDayActivity.this)) {
 //            Toast.makeText(LoginActivity.this, "Gps already enabled", Toast.LENGTH_SHORT).show();
