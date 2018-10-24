@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -107,6 +108,8 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
     Location myCurrentLocation;
     LocationRequest locationRequest;
     static final int REQUEST_TAKE_PHOTO = 3;
+    private long lastClickTime = 0;
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -224,7 +227,14 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // preventing double, using threshold of 1000 ms
+                if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
+                    return;
+                }
+
+                lastClickTime = SystemClock.elapsedRealtime();
                 SubmitData();
+
             }
         });
 

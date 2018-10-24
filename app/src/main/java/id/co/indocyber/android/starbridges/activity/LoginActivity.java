@@ -596,6 +596,7 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
 //        IMEI="865759030207422";
+//        IMEI="868203036880509"; //melata
     }
 
     public boolean checkPermissionLocationIMEI()
