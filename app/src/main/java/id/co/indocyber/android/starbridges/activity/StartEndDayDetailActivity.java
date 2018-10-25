@@ -104,6 +104,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                 }
 
                 lastClickTime = SystemClock.elapsedRealtime();
+                mSubmit.setEnabled(false);
                 SubmitData();
             }
         });
@@ -468,6 +469,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        mSubmit.setEnabled(true);
         long date = System.currentTimeMillis();
 
         String sEvent = mEventView.getText().toString();

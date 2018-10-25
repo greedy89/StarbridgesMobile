@@ -8,8 +8,8 @@ android {
         applicationId "id.co.indocyber.android.starbridges"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 25
-        versionName "1.16.4"
+        versionCode 26
+        versionName "1.16.5"
         testInstrumentationRunner "android.support.ReceiverMasuk.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
