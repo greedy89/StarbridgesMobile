@@ -10,6 +10,7 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <color name="colorButtonNormal">#D6D7D7</color>
     <color name="colorRed">#fb0000</color>
     <color name="colorGreen">#11fb00</color>
+    <color name="backgroundHome">#2D7ABE</color>
 
     <!--reds-->
     <color name="md_red_50">#FFEBEE</color>
