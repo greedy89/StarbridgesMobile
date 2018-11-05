@@ -226,8 +226,15 @@ public class HomeActivity extends AppCompatActivity {
 
                 if(response.isSuccessful())
                 {
-                    Gson gson=new Gson();
-                    SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", gson.toJson(response.body()) );
+                    if(response.body().getIsSucceed())
+                    {
+                        Gson gson=new Gson();
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", gson.toJson(response.body()) );
+                    }
+                    else
+                    {
+                        SharedPreferenceUtils.setSetting(getApplicationContext(),"employeeSchedule", "" );
+                    }
                 }
                 else
                 {

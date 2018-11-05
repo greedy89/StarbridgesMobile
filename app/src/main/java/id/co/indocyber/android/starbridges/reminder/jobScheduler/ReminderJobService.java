@@ -34,7 +34,7 @@ public class ReminderJobService extends JobService{
         Gson gson=new Gson();
         Log.d("employeeSchedule", employeeSchedule);
         Calendar checkOutTime2 = Calendar.getInstance();
-        if(employeeSchedule!=null||employeeSchedule!="") {
+        if(employeeSchedule!=null||employeeSchedule.equalsIgnoreCase("")) {
             EmployeeShiftSchedule employeeShiftSchedule = gson.fromJson(employeeSchedule, EmployeeShiftSchedule.class);
             Log.d("employeeShiftSchedule", gson.toJson(employeeShiftSchedule.getReturnValue()));
             Date dateEmployee;
