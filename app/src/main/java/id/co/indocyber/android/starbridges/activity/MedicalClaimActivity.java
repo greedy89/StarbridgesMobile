@@ -62,7 +62,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
 
         // run api Get List Medical
         getListMedical();
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

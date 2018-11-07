@@ -88,7 +88,7 @@ public class CorrectionActivity extends AppCompatActivity {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
         getAttendaceCorrectionLog(sdf.format(firstDateOfThisYear), sdf.format(today));
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

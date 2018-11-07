@@ -63,7 +63,7 @@ public class ListDraftLeaveRequestActivity extends AppCompatActivity implements 
         setTitle("Draft Leave Request");
 //        getListDraftLeaveRequest();
         FloatingActionButton tambahDraft = (FloatingActionButton) findViewById(R.id.fabAddListDraftLeaveRequest);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

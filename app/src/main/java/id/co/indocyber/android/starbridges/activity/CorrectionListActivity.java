@@ -134,7 +134,7 @@ public class CorrectionListActivity extends AppCompatActivity implements Adapter
 
         getAttendaceCorrectionLog(sDateFrom, sDateTo);
 //        getAttendaceCorrectionLog(sdf.format(firstDateOfThisYear), sdf.format(today));
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

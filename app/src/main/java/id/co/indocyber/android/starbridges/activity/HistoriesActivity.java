@@ -60,7 +60,7 @@ public class HistoriesActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         getAttendaceLog(sDateFrom, sDateTo);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

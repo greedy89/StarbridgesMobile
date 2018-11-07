@@ -233,7 +233,7 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
         });
 
         //getAttendaceLog(dateString2, dateString2);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

@@ -89,7 +89,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
                 view.setBackgroundColor(Color.WHITE);
             }
         });
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

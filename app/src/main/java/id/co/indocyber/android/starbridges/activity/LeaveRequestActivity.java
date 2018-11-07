@@ -56,7 +56,7 @@ public class LeaveRequestActivity extends AppCompatActivity {
         //listView.setAdapter(adapter);
 
         getListLeaveRequest();
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

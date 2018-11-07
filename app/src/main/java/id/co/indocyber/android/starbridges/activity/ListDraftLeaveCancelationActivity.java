@@ -90,7 +90,7 @@ public class ListDraftLeaveCancelationActivity extends AppCompatActivity impleme
                 startActivity(intent);
             }
         });
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }

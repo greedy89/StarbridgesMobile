@@ -330,7 +330,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
         //beacon
 //        activateBeaconScanner();
 
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
     }
