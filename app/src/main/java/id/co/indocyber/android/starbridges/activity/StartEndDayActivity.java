@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -97,6 +98,7 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
     private String dateString, dateString2, sPhoto;
     static final int REQUEST_ACCESS_LOCATION = 101;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_FILE_PHOTO_LOCATION = 110;
 
     private ReturnValue latestReturnValue;
     List<id.co.indocyber.android.starbridges.model.OLocation.ReturnValue> listReturnValueLocation = new ArrayList<>();;
@@ -570,7 +572,7 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
                     Toast.makeText(StartEndDayActivity.this, "Data Submitted", Toast.LENGTH_LONG).show();
                     finish();
                     startActivity(getIntent());
-                } else if(data != null && data.getMessage() =="Please Check Your Time And Date Settings"){
+                } else if(data != null && data.getMessage() != null){
                     Toast.makeText(StartEndDayActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
 
                 }else {
@@ -798,7 +800,13 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
+                android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            // only for gingerbread and newer versions
+            Intent cameraEvent = new Intent(StartEndDayActivity.this, CameraActivity.class);
+            startActivityForResult(cameraEvent, REQUEST_FILE_PHOTO_LOCATION);
+        }
+        else if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -829,6 +837,13 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
             File imgFile = new  File(mCurrentPhotoPath);
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             sPhoto = encodeImage(myBitmap);
+            callInputAbsence();
+        }
+        else if(requestCode == REQUEST_FILE_PHOTO_LOCATION && resultCode == RESULT_OK)
+        {
+            File imgFile = new  File(data.getStringExtra("filePath"));
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
         }
     }

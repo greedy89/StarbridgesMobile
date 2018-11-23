@@ -13,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -62,6 +63,7 @@ import retrofit2.Response;
 public class StartEndDayDetailActivity extends AppCompatActivity {
     static final int REQUEST_ACCESS_LOCATION = 101;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_FILE_PHOTO_LOCATION = 110;
     private FusedLocationProviderClient client;
 
     private EditText mEventView, mDateView, mTimeView, mLocationNameView, mNotesView;
@@ -324,7 +326,13 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
+                android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            // only for gingerbread and newer versions
+            Intent cameraEvent = new Intent(StartEndDayDetailActivity.this, CameraActivity.class);
+            startActivityForResult(cameraEvent, REQUEST_FILE_PHOTO_LOCATION);
+        }
+        else if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -355,6 +363,13 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
             File imgFile = new  File(mCurrentPhotoPath);
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             sPhoto = encodeImage(myBitmap);
+            callInputAbsence();
+        }
+        else if(requestCode == REQUEST_FILE_PHOTO_LOCATION && resultCode == RESULT_OK)
+        {
+            File imgFile = new  File(data.getStringExtra("filePath"));
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
         }
     }
@@ -523,7 +538,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                     if (data != null && data.getIsSucceed()) {
                         Toast.makeText(StartEndDayDetailActivity.this, "Data Submitted", Toast.LENGTH_LONG).show();
                         finish();
-                    }else if(data != null && data.getMessage() =="Please Check Your Time And Date Settings"){
+                    }else if(data != null && data.getMessage() !=null ){
                         Toast.makeText(StartEndDayDetailActivity.this, data.getMessage(), Toast.LENGTH_LONG).show();
 
                     } else {

@@ -175,6 +175,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         TextView mRegisterButton = (TextView) findViewById(R.id.lbl_register_imei);
+
+        String isEverLogin = SharedPreferenceUtils.getSetting(getApplicationContext(), "isEverLogin","");
+        if(isEverLogin!=null && isEverLogin.equalsIgnoreCase("true"))
+        {
+            mRegisterButton.setVisibility(View.INVISIBLE);
+        }
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -349,6 +355,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.body().getIsSucceed()) {
                         showProgress(false);
                         Toast.makeText(LoginActivity.this, "Register succesful. Now you can login", Toast.LENGTH_LONG).show();
+                        SharedPreferenceUtils.setSetting(getApplicationContext(), "isEverLogin","true");
                     } else {
                         showProgress(false);
                         Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -431,7 +438,7 @@ public class LoginActivity extends AppCompatActivity {
                         GlobalVar.setLocationId(locationId);
                         GlobalVar.setAttendancePrivilege(attendancePrivilege);
 
-
+                        SharedPreferenceUtils.setSetting(getApplicationContext(), "isEverLogin","true");
                         startActivity(home);
                         finish();
                     }
@@ -591,7 +598,7 @@ public class LoginActivity extends AppCompatActivity {
 //        IMEI="352875087316146";// maryuri
 //        IMEI="865684032897881"; //gangzar
 //        IMEI="863263034362087"; // Dhaba
-        IMEI="868042031440079";// Dhaba new
+//        IMEI="868042031440079";// Dhaba new
 //        IMEI="866941024390260";// Pak rio
 //        IMEI="861558031284990"; //Bang rizal
 //        IMEI="865759030207422";

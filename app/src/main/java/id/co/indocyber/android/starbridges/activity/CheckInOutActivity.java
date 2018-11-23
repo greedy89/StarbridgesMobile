@@ -1373,7 +1373,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
             sPhoto = encodeImage(imageBitmap);
             callInputAbsence();
         }
-        else if (requestCode == TAKE_PHOTO_CODE) {
+        else if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
             final File file = getTempFile(this);
             try {
                 Uri uri = Uri.fromFile(file);
