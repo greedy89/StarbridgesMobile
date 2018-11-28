@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -125,7 +126,9 @@ public class HomeActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(getColor(R.color.backgroundHome));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.setStatusBarColor(getColor(R.color.backgroundHome));
+        }
     }
 
     void loadingImage(){
@@ -380,6 +383,18 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    //pindah ke halaman transportreimbursement
+    public void showTransportReimbursement(View view) {
+//        startActivity(new Intent(this,TransportReimbursementActivity.class));
+    }
+    //pindah ke halaman overtimereimbursement
+    public void showOvertimeReimbursement(View view) {
+        startActivity(new Intent(this,OvertimeReimbursementActivity.class));
+    }
+    //pindah ke halaman entertainreimbursement
+    public void showEntertainReimbursement(View view) {
+        startActivity(new Intent(this,EntertainReimbursementActivity.class));
     }
 
 }

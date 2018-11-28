@@ -40,6 +40,7 @@ public class ListDraftLeaveRequestAdapter2 extends ArrayAdapter<ReturnValue> {
         mSelectedItemsIds = new SparseBooleanArray();
         inflater = LayoutInflater.from(context);
     }
+
     private class ViewHolder {
         TextView requestType;
         TextView leave;
