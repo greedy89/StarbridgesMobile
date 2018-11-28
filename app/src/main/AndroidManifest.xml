@@ -20,13 +20,13 @@
         android:name="disable_hardware_filtering"
         android:value="true" />
 
-     <uses-feature
-     android:name="android.hardware.camera"
-     android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
-    <!--<uses-feature-->
-        <!--android:name="android.hardware.camera2"-->
-        <!--android:required="true" />-->
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera2" -->
+    <!-- android:required="true" /> -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -359,6 +359,27 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Fullscreen" />
+        <activity
+            android:name=".activity.OvertimeReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ListDraftOvertimeReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.OvertimeReimbursementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OvertimeReimbursementDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.OvertimeReimbursementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EntertainReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.ListDraftEntertainReimbursementActivity"></activity>
     </application>
 
 </manifest>

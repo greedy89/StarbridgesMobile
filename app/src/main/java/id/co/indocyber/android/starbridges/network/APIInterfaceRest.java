@@ -18,6 +18,7 @@ import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeS
 import id.co.indocyber.android.starbridges.model.LeaveCancelationTransaction.LeaveCancelationTransaction;
 import id.co.indocyber.android.starbridges.model.ListAttendanceCorrection.ListAttendanceCorrection;
 import id.co.indocyber.android.starbridges.model.ListDraftCorrection.ListDraftCorrection;
+import id.co.indocyber.android.starbridges.model.ListDraftEntertainReimbursement.DraftEntertainReimbursement;
 import id.co.indocyber.android.starbridges.model.ListDraftLeaveCancelation.ListDraftLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.ListDraftOvertime.ListDraftOvertime;
 import id.co.indocyber.android.starbridges.model.ListDraftReimbursement.ListDraftReimbursement;
@@ -25,11 +26,13 @@ import id.co.indocyber.android.starbridges.model.ListDraftShiftExchange.ListDraf
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoan.ListDraftTransactionLoan;
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoanApproved.ListDraftTransactionLoanApproved;
 import id.co.indocyber.android.starbridges.model.ListEmployee.ListEmployee;
+import id.co.indocyber.android.starbridges.model.ListEntertainReimbursement.EntertainReimbursement;
 import id.co.indocyber.android.starbridges.model.ListLeaveCancelation.ListLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.ListLoanHistory.ListLoanHistory;
 import id.co.indocyber.android.starbridges.model.ListLoanSchedule.ListLoanSchedule;
 import id.co.indocyber.android.starbridges.model.ListLoanTransaction.ListLoanTransaction;
 import id.co.indocyber.android.starbridges.model.ListOvertime.Overtime;
+import id.co.indocyber.android.starbridges.model.ListOvertimeReimbursement.OvertimeReimbursement;
 import id.co.indocyber.android.starbridges.model.ListShift.ListShift;
 import id.co.indocyber.android.starbridges.model.ListShiftExchange.ListShiftExchange;
 import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ListTransactionInformation;
@@ -517,6 +520,7 @@ public interface APIInterfaceRest {
     @POST("api/Loan/GetSchedule")
     Call<ListLoanSchedule>getLoanSchedule(@Field("loanBalanceID") String loanBalanceID);
 
+    //contoh send json retrofit
     @POST("api/Loan/SaveExpeditePostpone")
     Call<MessageReturn>saveExpeditePostpone(@Body RequestBody body,@Query("TransactionStatusLoan") String TransactionStatusLoan);
 
@@ -537,4 +541,16 @@ public interface APIInterfaceRest {
 
     @GET("api/Attendance/GetBeaconData")
     Call<BeaconData> getBeaconData();
+
+    @GET("api/OvertimeReimbursement/ListHeader")
+    Call<OvertimeReimbursement>getOvertimeReimbursementData();
+
+    @GET("api/OvertimeReimbursement/ListDraft")
+    Call<OvertimeReimbursement>getOvertimeReimbursementDataDraft();
+
+    @GET("api/EntertainReimbursement/ListHeader")
+    Call<EntertainReimbursement>getEntertainReimbursementData();
+
+    @GET("api/EntertainReimbursement/ListDraft")
+    Call<DraftEntertainReimbursement>getEntertainReimbursementDataDraft();
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblDecisionNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Decision Number" />
+
+        <TextView
+            android:id="@+id/vDecisionNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rei/11/2018/004" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblApprovedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Approved Date" />
+
+        <TextView
+            android:id="@+id/vApprovedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018-11-25T00:00:00" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblProcessPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Process Period" />
+
+        <TextView
+            android:id="@+id/vProcessPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018-11-26T14:22:22" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Type" />
+
+        <TextView
+            android:id="@+id/vType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lembur" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Amount" />
+
+        <TextView
+            android:id="@+id/vAmout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Description" />
+
+        <TextView
+            android:id="@+id/vDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="overtime test 1 dummy" />
+    </LinearLayout>
+
+</LinearLayout>
