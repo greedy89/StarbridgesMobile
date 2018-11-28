@@ -20,13 +20,13 @@
         android:name="disable_hardware_filtering"
         android:value="true" />
 
-     <uses-feature
-     android:name="android.hardware.camera"
-     android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
-    <!--<uses-feature-->
-        <!--android:name="android.hardware.camera2"-->
-        <!--android:required="true" />-->
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera2" -->
+    <!-- android:required="true" /> -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
