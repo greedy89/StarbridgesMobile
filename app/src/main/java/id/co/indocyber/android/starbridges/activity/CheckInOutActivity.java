@@ -107,9 +107,10 @@ import id.co.indocyber.android.starbridges.model.history.History;
 import id.co.indocyber.android.starbridges.model.history.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.AlertDialogManager;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SQLCipherHelperImpl;
+import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
+import id.co.indocyber.android.starbridges.utility.DialogAdapter;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SQLCipherHelperImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -537,7 +538,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
             progressDialog.show();
         }
 
-        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getBeaconData().enqueue(new Callback<BeaconData>() {
             @Override
             public void onResponse(Call<BeaconData> call, Response<BeaconData> response) {
@@ -716,7 +717,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
         returnValue.setName("");
         listReturnValueLocation.add(returnValue);
 
-        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.postLocation().enqueue(new Callback<OLocation>() {
             @Override
             public void onResponse(Call<OLocation> call, Response<OLocation> response) {
@@ -783,7 +784,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
         client = LocationServices.getFusedLocationProviderClient(this);
         client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
-            public void onSuccess(Location location) {
+            public void onSuccess(final Location location) {
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
@@ -826,11 +827,41 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 else
                 {
-                    callInputAbsence();
+                    if (android.os.Build.VERSION.SDK_INT >= 18) {
+                        if(location.isFromMockProvider())
+                        {
+                            if (location.isFromMockProvider()) {
+                                DialogAdapter.showDialogTwoBtn(CheckInOutActivity.this, null,
+                                        getString(R.string.disable_fake_gps), getString(R.string.out), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finishAffinity();
+                                            }
+                                        },
+                                        "Google Maps", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Uri gmmIntentUri = Uri.parse("geo:"+location.getLatitude()+","+location.getLongitude());
+                                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                mapIntent.setPackage("com.google.android.apps.maps");
+                                                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                                    startActivity(mapIntent);
+                                                }
+                                            }
+                                        }
+                                );
+                            }
+                        }
+                        else
+                        {
+                            callInputAbsence();
+                        }
+                    }
+                    else
+                    {
+                        callInputAbsence();
+                    }
                 }
-
-
-
             }
         });
 
@@ -1132,7 +1163,7 @@ public class CheckInOutActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void getAttendaceLog(String DateFrom, String DateTo) {
-        apiInterface = APIClient.getHistory(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         if(progressDialog==null)
         {
             progressDialog = new ProgressDialog(CheckInOutActivity.this);

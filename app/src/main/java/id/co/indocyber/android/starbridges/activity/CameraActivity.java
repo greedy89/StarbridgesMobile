@@ -22,7 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.reminder.utility.CameraPreview;
+import id.co.indocyber.android.starbridges.utility.CameraPreview;
 
 public class CameraActivity extends AppCompatActivity {
 

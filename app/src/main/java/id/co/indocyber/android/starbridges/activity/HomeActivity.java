@@ -40,9 +40,9 @@ import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeS
 import id.co.indocyber.android.starbridges.model.getimage.GetImage;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -134,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
     void loadingImage(){
 
 
-        apiInterface = APIClient.getImage(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -183,7 +183,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getEmployeeSchedule()
     {
-        apiInterface = APIClient.getImage(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 //        progressDialog = new ProgressDialog(HomeActivity.this);
 //        progressDialog.setTitle("Loading");
 //        progressDialog.setCancelable(false);

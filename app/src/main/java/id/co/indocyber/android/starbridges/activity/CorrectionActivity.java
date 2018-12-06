@@ -27,8 +27,8 @@ import id.co.indocyber.android.starbridges.adapter.CorrectionAdapter;
 import id.co.indocyber.android.starbridges.model.ListAttendanceCorrection.ListAttendanceCorrection;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -114,7 +114,7 @@ public class CorrectionActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final APIInterfaceRest apiInterface = APIClient.getListAttendanceCorrection(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<ListAttendanceCorrection> call3 = apiInterface.getListAttendanceCorrection(dateFrom, dateTo);
         call3.enqueue(new Callback<ListAttendanceCorrection>() {
             @Override

@@ -24,7 +24,7 @@ import id.co.indocyber.android.starbridges.adapter.ListShiftExchangeAdapter;
 import id.co.indocyber.android.starbridges.model.ListShiftExchange.ListShiftExchange;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +61,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final APIInterfaceRest apiInterface = APIClient.getListShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<ListShiftExchange> call3 = apiInterface.getListShiftExchange();
         call3.enqueue(new Callback<ListShiftExchange>() {
             @Override

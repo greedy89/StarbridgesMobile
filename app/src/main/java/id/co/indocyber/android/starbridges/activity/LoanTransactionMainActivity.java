@@ -19,7 +19,7 @@ import id.co.indocyber.android.starbridges.model.ListTransactionInformation.Retu
 import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ListTransactionInformation;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,7 +99,7 @@ public class LoanTransactionMainActivity extends AppCompatActivity implements Ad
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListTransactionInformation2().enqueue(new Callback<ListTransactionInformation>() {
             @Override
             public void onResponse(Call<ListTransactionInformation> call, Response<ListTransactionInformation> response) {

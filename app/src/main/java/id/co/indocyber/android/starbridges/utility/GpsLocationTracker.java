@@ -1,4 +1,4 @@
-package id.co.indocyber.android.starbridges.reminder.utility;
+package id.co.indocyber.android.starbridges.utility;
 
 import android.app.AlertDialog;
 import android.app.Service;

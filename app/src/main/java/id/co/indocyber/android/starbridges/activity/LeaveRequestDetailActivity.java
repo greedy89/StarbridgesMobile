@@ -52,8 +52,8 @@ import id.co.indocyber.android.starbridges.model.requesttype.RequestType;
 import id.co.indocyber.android.starbridges.model.saveLeaveRequest.SaveLeaveRequest;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -577,7 +577,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 
     public void requestConfirmation() {
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -747,7 +747,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 
     public void editLeaveRequest(String ids) {
         // get token
-        apiInterface = APIClient.editLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -854,7 +854,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 //            returnAt = "";
 //            timeDateEnd.setText(null);
 //        } else {
-        apiInterface = APIClient.saveLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -911,7 +911,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         }
 
 
-        apiInterface = APIClient.saveLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithTokenLongerLoading(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<SaveLeaveRequest> call3 = apiInterface.saveLeaveRequest(
                 id, employeeID, roster, requestDate, employeeNIK, employeeName, leaveRequestRuleID, leaveRequestType,
                 employeeLeaveBalanceUID, currentBalance, balanceExpireDate, totalUnit, totalUnitReduce, startLeave,
@@ -956,7 +956,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         returnValue1.setValue("");
         listReturnValue1.add(returnValue1);
 
-        apiInterface = APIClient.getBalanceType(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<BalanceType> call3 = apiInterface.getBalanceType(GlobalVar.getEmployeeId());
         call3.enqueue(new Callback<BalanceType>() {
 
@@ -1002,7 +1002,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         returnValue.setName("");
         listReturnValue.add(returnValue);
 
-        apiInterface = APIClient.getRequestType(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         //String emp = GlobalVar.getEmployeeId();
         Call<RequestType> call3 = apiInterface.getRequestType(GlobalVar.getEmployeeId());
         call3.enqueue(new Callback<RequestType>() {

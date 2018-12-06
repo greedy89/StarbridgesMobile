@@ -47,7 +47,7 @@ import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.model.ReimbursementType.ReimbursementType;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -291,7 +291,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
         returnValue.setText("");
         lstReimbursementType.add(returnValue);
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.editDraftReimbursement(id).enqueue(new Callback<EditReimbursement>() {
             @Override
             public void onResponse(Call<EditReimbursement> call, Response<EditReimbursement> response) {
@@ -434,7 +434,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
         returnValue.setValue(0);
         lstReimbursementType.add(returnValue);
 
-        apiInterface = APIClient.getReimbursementType(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getReimbursementType().enqueue(new Callback<ReimbursementType>() {
             @Override
             public void onResponse(Call<ReimbursementType> call, Response<ReimbursementType> response) {
@@ -532,7 +532,7 @@ public class ReimburseDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<MessageReturn> call3 = apiInterface.saveSubmitDetailReimbursement(body, transactionStatus);
 
         call3.enqueue(new Callback<MessageReturn>() {

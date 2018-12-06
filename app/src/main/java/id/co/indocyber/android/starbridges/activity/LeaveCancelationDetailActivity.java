@@ -48,9 +48,9 @@ import id.co.indocyber.android.starbridges.model.LeaveCancelationTransaction.Lea
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.DatePickerFragment;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.DatePickerFragment;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -425,7 +425,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         returnValue.setDecisionNumber("");
         listDecisionNumber.add(returnValue);
 
-        apiInterface = APIClient.getDecisionNumber(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         String employeeId= GlobalVar.getEmployeeId();
         apiInterface.getDecisionNumber(GlobalVar.getEmployeeId()).enqueue(new Callback<DecisionNumber>() {
             @Override
@@ -606,7 +606,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithTokenLongerLoading(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<LeaveCancelationTransaction> call3 = apiInterface.detailRequestConfirmationCancelation(body, "Save");
 
         call3.enqueue(new Callback<LeaveCancelationTransaction>() {
@@ -777,7 +777,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<MessageReturn> call3 = apiInterface.saveLeaveCancelation(body, transactionType);
 
         call3.enqueue(new Callback<MessageReturn>() {
@@ -873,7 +873,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         }
 
        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.detailRequestConfirmationCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<MessageReturn> call3 = apiInterface.saveLeaveCancelation(body, "Submit");
 
         call3.enqueue(new Callback<MessageReturn>() {
@@ -910,7 +910,7 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.editDraftLeaveCancelation(id).enqueue(new Callback<EditLeaveCancelation>() {
             @Override
             public void onResponse(Call<EditLeaveCancelation> call, Response<EditLeaveCancelation> response) {

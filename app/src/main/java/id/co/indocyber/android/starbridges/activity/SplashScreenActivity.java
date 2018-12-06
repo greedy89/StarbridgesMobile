@@ -22,7 +22,7 @@ import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerMasuk;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerPulang;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +62,7 @@ public class SplashScreenActivity extends AppCompatActivity{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        final APIInterfaceRest apiInterface = APIClient.getClient().create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClient(getApplicationContext()).create(APIInterfaceRest.class);
         final Call<Versioning> call3 = apiInterface.checkAppVerion();
         final String finalVersionCode = versionCode;
         final String finalVersionName = versionName;

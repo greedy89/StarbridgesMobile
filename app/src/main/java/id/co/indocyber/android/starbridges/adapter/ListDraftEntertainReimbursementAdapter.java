@@ -15,7 +15,7 @@ import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.model.ListDraftEntertainReimbursement.ReturnValue;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class ListDraftEntertainReimbursementAdapter extends ArrayAdapter<ReturnValue> {
     private Context ctx;

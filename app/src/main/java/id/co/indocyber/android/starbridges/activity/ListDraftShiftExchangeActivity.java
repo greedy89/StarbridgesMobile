@@ -35,7 +35,7 @@ import id.co.indocyber.android.starbridges.model.ListDraftShiftExchange.ListDraf
 import id.co.indocyber.android.starbridges.model.ListDraftShiftExchange.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,7 +96,7 @@ public class ListDraftShiftExchangeActivity extends AppCompatActivity implements
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final APIInterfaceRest apiInterface = APIClient.getListDraftShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<ListDraftShiftExchange> call3 = apiInterface.getListDraftShiftExchange();
         call3.enqueue(new Callback<ListDraftShiftExchange>() {
             @Override
@@ -234,7 +234,7 @@ public class ListDraftShiftExchangeActivity extends AppCompatActivity implements
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final APIInterfaceRest apiInterface = APIClient.deleteShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),idSelected);
         Call<DeleteShiftExchange> call3 = apiInterface.deleteShiftExchange(body);
         call3.enqueue(new Callback<DeleteShiftExchange>() {

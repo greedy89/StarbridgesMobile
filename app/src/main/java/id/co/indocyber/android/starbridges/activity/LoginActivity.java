@@ -41,8 +41,8 @@ import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerMasuk;
 import id.co.indocyber.android.starbridges.reminder.alarmManager.AlarmManagerPulang;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,7 +65,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -346,7 +346,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             showProgress(true);
             //checkIMEIPermission();
-            APIInterfaceRest regService = APIClient.getClient().create(APIInterfaceRest.class);
+            APIInterfaceRest regService = APIClient.getClient(getApplicationContext()).create(APIInterfaceRest.class);
             Call<OPost> call = regService.postRegisterImei(username, password, IMEI);
             call.enqueue(new Callback<OPost>() {
                 @Override
@@ -407,7 +407,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             showProgress(true);
             //checkIMEIPermission();
-            APIInterfaceRest loginService = APIClient.getClient().create(APIInterfaceRest.class);
+            APIInterfaceRest loginService = APIClient.getClient(getApplicationContext()).create(APIInterfaceRest.class);
             Call<Authentication> call = loginService.getAuthentication("password", username, password, "ngAuthApp", IMEI);
             call.enqueue(new Callback<Authentication>() {
                 @Override
@@ -518,7 +518,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             showProgress(true);
             //checkIMEIPermission();
-            APIInterfaceRest loginService = APIClient.getClient().create(APIInterfaceRest.class);
+            APIInterfaceRest loginService = APIClient.getClient(getApplicationContext()).create(APIInterfaceRest.class);
             Call<MessageReturn> call = loginService.getValidation(username, password, IMEI);
             call.enqueue(new Callback<MessageReturn>() {
                 @Override

@@ -45,7 +45,7 @@ import id.co.indocyber.android.starbridges.model.PersonalOvertime.PersonalOverti
 import id.co.indocyber.android.starbridges.model.PersonalOvertime.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -341,7 +341,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.editOvertime(id).enqueue(new Callback<EditOvertime>() {
             @Override
             public void onResponse(Call<EditOvertime> call, Response<EditOvertime> response) {
@@ -455,7 +455,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
     }
 
     public void getPersonalOverTime() {
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getPersonalOvertime().enqueue(new Callback<PersonalOvertime>() {
             @Override
             public void onResponse(Call<PersonalOvertime> call, Response<PersonalOvertime> response) {
@@ -537,7 +537,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<MessageReturn> call3 = apiInterface.saveDetailOvertime(body);
 
         call3.enqueue(new Callback<MessageReturn>() {
@@ -623,7 +623,7 @@ public class OvertimeDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<MessageReturn> call3 = apiInterface.saveDetailOvertime(body);
 
         call3.enqueue(new Callback<MessageReturn>() {

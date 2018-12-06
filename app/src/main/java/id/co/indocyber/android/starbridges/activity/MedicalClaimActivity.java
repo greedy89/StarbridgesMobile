@@ -24,7 +24,7 @@ import id.co.indocyber.android.starbridges.model.getmedicalsupport.GetMedicalSup
 import id.co.indocyber.android.starbridges.model.listmedicalclaim.ListMedicalClaim;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -117,7 +117,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
     }
 
     public void getListMedical(){
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -167,7 +167,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
 
     public void initMedicalSupport(){
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

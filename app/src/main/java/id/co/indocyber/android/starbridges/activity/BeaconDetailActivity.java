@@ -58,10 +58,10 @@ import id.co.indocyber.android.starbridges.model.Attendence;
 import id.co.indocyber.android.starbridges.model.history.History;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.AlertDialogManager;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.AlertDialogManager;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -163,7 +163,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
     }
 
     public void getAttendaceLog(String DateFrom, String DateTo) {
-        apiInterface = APIClient.getHistory(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         if(progressDialog==null||!progressDialog.isShowing())
         {
             progressDialog = new ProgressDialog(BeaconDetailActivity.this);

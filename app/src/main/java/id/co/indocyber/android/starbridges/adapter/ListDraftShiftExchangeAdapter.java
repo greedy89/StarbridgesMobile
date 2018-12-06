@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.model.ListDraftShiftExchange.ReturnValue;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 /**
  * Created by user on 6/7/2018.

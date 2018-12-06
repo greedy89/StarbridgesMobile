@@ -14,7 +14,7 @@ import id.co.indocyber.android.starbridges.model.ListLoanHistory.ListLoanHistory
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +59,7 @@ public class LoanHistoryActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListLoanHistory(loanBalanceID).enqueue(new Callback<ListLoanHistory>() {
             @Override
             public void onResponse(Call<ListLoanHistory> call, Response<ListLoanHistory> response) {

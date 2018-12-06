@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.model.listdraftmedical.ReturnValue;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 /**
  * Created by user on 6/4/2018.

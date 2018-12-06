@@ -56,4 +56,9 @@
     <string name="google_maps_key">AIzaSyD0TAAaGNawtuKgpGx-j-kD6Y4hdyHekHk</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="link_production">https://starbridges.indocyber.co.id/ESS/</string>
+    <string name="link_test_public">http://116.254.100.222:7000/</string>
+    <string name="link_test_local">http://10.100.10.32:7000/</string>
+    <string name="disable_fake_gps">Please diable your mock location, or check your location in google maps</string>
+    <string name="out">Out</string>
 </resources>

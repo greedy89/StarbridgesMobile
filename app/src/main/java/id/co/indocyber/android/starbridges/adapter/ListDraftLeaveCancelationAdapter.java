@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.model.ListDraftLeaveCancelation.ReturnValue;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class ListDraftLeaveCancelationAdapter extends ArrayAdapter<ReturnValue> {
     private final Context context;

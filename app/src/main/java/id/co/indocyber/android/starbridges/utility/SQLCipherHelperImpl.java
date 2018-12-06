@@ -1,4 +1,4 @@
-package id.co.indocyber.android.starbridges.reminder.utility;
+package id.co.indocyber.android.starbridges.utility;
 
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.sqlcipher.SQLCipherOpenHelper;

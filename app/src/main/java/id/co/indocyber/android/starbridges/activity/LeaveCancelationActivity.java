@@ -24,8 +24,8 @@ import id.co.indocyber.android.starbridges.adapter.LeaveCancelationAdapter;
 import id.co.indocyber.android.starbridges.model.ListLeaveCancelation.ListLeaveCancelation;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,7 +116,7 @@ public class LeaveCancelationActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        final APIInterfaceRest apiInterface = APIClient.getLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<ListLeaveCancelation> call3 = apiInterface.getLeaveCancelation();
         call3.enqueue(new Callback<ListLeaveCancelation>() {
             @Override

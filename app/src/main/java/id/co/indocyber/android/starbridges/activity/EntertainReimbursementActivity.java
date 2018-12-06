@@ -3,16 +3,12 @@ package id.co.indocyber.android.starbridges.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
-import com.estimote.coresdk.common.internal.utils.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +18,7 @@ import id.co.indocyber.android.starbridges.adapter.EntertainReimbursementAdapter
 import id.co.indocyber.android.starbridges.model.ListEntertainReimbursement.EntertainReimbursement;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +38,7 @@ public class EntertainReimbursementActivity extends AppCompatActivity {
     }
 
     private void getDataER() {
-        APIInterfaceRest interfaceRest = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        APIInterfaceRest interfaceRest = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         final ProgressDialog pg = new ProgressDialog(EntertainReimbursementActivity.this);
         pg.setTitle("loading");
         pg.show();

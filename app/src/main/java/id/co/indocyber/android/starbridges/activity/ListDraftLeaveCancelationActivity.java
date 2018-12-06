@@ -35,7 +35,7 @@ import id.co.indocyber.android.starbridges.model.ListDraftLeaveCancelation.Retur
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,7 +110,7 @@ public class ListDraftLeaveCancelationActivity extends AppCompatActivity impleme
     }
 
     public void deleteCheckedDraft(){
-        apiInterface = APIClient.deleteDraftCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLeaveCancelationActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -157,7 +157,7 @@ public class ListDraftLeaveCancelationActivity extends AppCompatActivity impleme
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        apiInterface = APIClient.getListDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");
         Call<ListDraftLeaveCancelation> call3 = apiInterface.getListDraftLeaveCancelation();

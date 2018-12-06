@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -74,8 +75,9 @@ import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.model.OLocation.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.DialogAdapter;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -740,7 +742,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         client = LocationServices.getFusedLocationProviderClient(this);
         client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
-            public void onSuccess(Location location) {
+            public void onSuccess(final Location location) {
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
@@ -749,9 +751,44 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
                     if (sLogType.equals("Check In")) {
                         dispatchTakePictureIntent();
-                    } else {
+                    }
+                    else
+                    {
                         sPhoto=null;
-                        callInputAbsence();
+                        if (android.os.Build.VERSION.SDK_INT >= 18) {
+                            if(location.isFromMockProvider())
+                            {
+                                if (location.isFromMockProvider()) {
+                                    DialogAdapter.showDialogTwoBtn(CheckInOutDetailActivity.this, null,
+                                            getString(R.string.disable_fake_gps), getString(R.string.out), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    finishAffinity();
+                                                }
+                                            },
+                                            "Google Maps", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Uri gmmIntentUri = Uri.parse("geo:"+location.getLatitude()+","+location.getLongitude());
+                                                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                    mapIntent.setPackage("com.google.android.apps.maps");
+                                                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                                        startActivity(mapIntent);
+                                                    }
+                                                }
+                                            }
+                                    );
+                                }
+                            }
+                            else
+                            {
+                                callInputAbsence();
+                            }
+                        }
+                        else
+                        {
+                            callInputAbsence();
+                        }
                     }
 
                 }
@@ -826,7 +863,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
         returnValue.setName("--other--");
         listReturnValue.add(returnValue);
 
-        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.postLocation().enqueue(new Callback<OLocation>() {
             @Override
             public void onResponse(Call<OLocation> call, Response<OLocation> response) {
@@ -888,7 +925,7 @@ public class CheckInOutDetailActivity extends AppCompatActivity implements Googl
 
     public void callInputAbsence() {
 
-        apiInterface = APIClient.inputAbsence(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
 
         long date = System.currentTimeMillis();

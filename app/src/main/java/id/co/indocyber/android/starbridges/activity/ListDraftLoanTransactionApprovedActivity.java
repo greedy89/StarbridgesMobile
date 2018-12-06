@@ -32,7 +32,7 @@ import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoanApprove
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,7 +89,7 @@ public class ListDraftLoanTransactionApprovedActivity extends AppCompatActivity 
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListDraftLoanTransactionApproved().enqueue(new Callback<ListDraftTransactionLoanApproved>() {
             @Override
             public void onResponse(Call<ListDraftTransactionLoanApproved> call, Response<ListDraftTransactionLoanApproved> response) {
@@ -208,7 +208,7 @@ public class ListDraftLoanTransactionApprovedActivity extends AppCompatActivity 
     }
 
     public void deleteCheckedDraft(String listid) {
-        apiInterface = APIClient.deleteLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftLoanTransactionApprovedActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

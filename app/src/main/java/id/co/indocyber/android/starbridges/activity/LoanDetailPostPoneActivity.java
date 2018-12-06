@@ -31,7 +31,7 @@ import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -227,7 +227,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         ReturnValue returnValue=new ReturnValue();
         lstLoanTransactionType.add(returnValue);
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getLoanTransactionType().enqueue(new Callback<LoanTransactionType>() {
             @Override
             public void onResponse(Call<LoanTransactionType> call, Response<LoanTransactionType> response) {
@@ -286,7 +286,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         final id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue returnValue=new id.co.indocyber.android.starbridges.model.ListLoanSchedule.ReturnValue();
         lstLoanSchedule.add(returnValue);
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListLoanSchedule(loanBalanceID).enqueue(new Callback<ListLoanSchedule>() {
             @Override
             public void onResponse(Call<ListLoanSchedule> call, Response<ListLoanSchedule> response) {
@@ -384,7 +384,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),paramObject.toString());
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.saveExpeditePostpone(body, transactionStatus).enqueue(new Callback<MessageReturn>() {
             @Override
             public void onResponse(Call<MessageReturn> call, Response<MessageReturn> response) {
@@ -418,7 +418,7 @@ public class LoanDetailPostPoneActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.editDraftLoan(id).enqueue(new Callback<EditDraftLoan>() {
             @Override
             public void onResponse(Call<EditDraftLoan> call, Response<EditDraftLoan> response) {

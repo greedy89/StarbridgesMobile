@@ -37,7 +37,7 @@ import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -474,7 +474,7 @@ public class DraftDetailCorrectionActivity extends AppCompatActivity {
     public void getAttendaceCorrection(String id) {
 
 
-        final APIInterfaceRest apiInterface = APIClient.getDetailAttendanceCorrection(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<CorrectionDetail> call3 = apiInterface.getDetailDraftAttendanceCorrection(id);
 
         call3.enqueue(new Callback<CorrectionDetail>() {
@@ -525,7 +525,7 @@ public class DraftDetailCorrectionActivity extends AppCompatActivity {
         valueCorrectionDetail.setNotes(txtNotesCDraftDetails.getText().toString());
         valueCorrectionDetail.setLocationID(locationIdSpinner);
 
-        final APIInterfaceRest apiInterface = APIClient.asveSubmitAttendanceCorrection(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),new Gson().toJson(valueCorrectionDetail).toString());
         Call<MessageReturn> call3 = apiInterface.saveSubmitAttendanceCorrection(saveOrSubmit, body);
 
@@ -598,7 +598,7 @@ public class DraftDetailCorrectionActivity extends AppCompatActivity {
         returnValue.setName("");
         listReturnValue.add(returnValue);
 
-        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getLocation().enqueue(new Callback<OLocation>() {
             @Override
             public void onResponse(Call<OLocation> call, Response<OLocation> response) {

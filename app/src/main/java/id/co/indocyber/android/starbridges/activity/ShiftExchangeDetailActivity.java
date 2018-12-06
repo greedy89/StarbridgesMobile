@@ -45,7 +45,7 @@ import id.co.indocyber.android.starbridges.model.ListShift.ListShift;
 import id.co.indocyber.android.starbridges.model.SaveShiftExchange.SaveShiftExchange;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -301,7 +301,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
 
     public void getData(String id) {
 
-        apiInterface = APIClient.editShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.editShiftExchange(id).enqueue(new Callback<EditShiftExchange>() {
             @Override
             public void onResponse(Call<EditShiftExchange> call, Response<EditShiftExchange> response) {
@@ -394,7 +394,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
         returnValue.setFullName("");
         lstEmployee.add(returnValue);
 
-        apiInterface = APIClient.getListEmployee(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListShiftEmployee().enqueue(new Callback<ListEmployee>() {
             @Override
             public void onResponse(Call<ListEmployee> call, Response<ListEmployee> response) {
@@ -493,7 +493,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
         returnValue.setName("");
         lstShift.add(returnValue);
 
-        apiInterface = APIClient.getListShift(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListShift().enqueue(new Callback<ListShift>() {
             @Override
             public void onResponse(Call<ListShift> call, Response<ListShift> response) {
@@ -569,7 +569,7 @@ public class ShiftExchangeDetailActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), paramObject.toString());
-        final APIInterfaceRest apiInterface = APIClient.saveShiftExchange(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<SaveShiftExchange> call3 = apiInterface.saveShiftExchange(body, transactionStatus);
 
         call3.enqueue(new Callback<SaveShiftExchange>() {

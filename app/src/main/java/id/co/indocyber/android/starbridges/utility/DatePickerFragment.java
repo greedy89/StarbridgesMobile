@@ -1,4 +1,4 @@
-package id.co.indocyber.android.starbridges.reminder.utility;
+package id.co.indocyber.android.starbridges.utility;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;

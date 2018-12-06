@@ -34,7 +34,7 @@ import id.co.indocyber.android.starbridges.model.ListDraftReimbursement.ReturnVa
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,7 +96,7 @@ public class ListDraftReimburseActivity extends AppCompatActivity implements Ada
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        apiInterface = APIClient.getListDraftReimbursement(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         //Call<LeaveRequest> call3 = apiInterface.getListLeaveRequest("");
         Call<ListDraftReimbursement> call3 = apiInterface.getListDraftReimbursement();
@@ -236,7 +236,7 @@ public class ListDraftReimburseActivity extends AppCompatActivity implements Ada
     }
 
     public void deleteCheckedDraft(){
-        apiInterface = APIClient.deleteDraftCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(ListDraftReimburseActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

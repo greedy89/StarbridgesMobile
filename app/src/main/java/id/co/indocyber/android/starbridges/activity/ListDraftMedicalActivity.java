@@ -37,7 +37,7 @@ import id.co.indocyber.android.starbridges.model.listdraftmedical.ListDraftMedic
 import id.co.indocyber.android.starbridges.model.listdraftmedical.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -114,7 +114,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        final APIInterfaceRest apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),idSelected);
         Call<DeleteMedical> call3 = apiInterface.deleteMedical(body);
         call3.enqueue(new Callback<DeleteMedical>() {
@@ -162,7 +162,7 @@ public class ListDraftMedicalActivity extends AppCompatActivity implements Adapt
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        final APIInterfaceRest apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         Call<ListDraftMedical> call3 = apiInterface.getListDraftMedical();
         call3.enqueue(new Callback<ListDraftMedical>() {
             @Override

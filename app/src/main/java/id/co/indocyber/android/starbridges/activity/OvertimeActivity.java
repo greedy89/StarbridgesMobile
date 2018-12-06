@@ -21,8 +21,8 @@ import id.co.indocyber.android.starbridges.adapter.ListOvertimeAdapter;
 import id.co.indocyber.android.starbridges.model.ListOvertime.Overtime;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,7 +115,7 @@ public class OvertimeActivity extends AppCompatActivity {
 //    }
 
     public void getListLeaveRequest() {
-        apiInterface = APIClient.getListOvertime(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(OvertimeActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

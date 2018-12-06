@@ -16,7 +16,7 @@ import java.util.List;
 import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoan.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class ListDraftLoanTransactionAdapter extends ArrayAdapter<ReturnValue> {
     private final Context context;

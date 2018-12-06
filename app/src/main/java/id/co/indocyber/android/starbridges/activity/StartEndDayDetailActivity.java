@@ -54,8 +54,9 @@ import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.model.OLocation.ReturnValue;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.DialogAdapter;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -177,7 +178,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
         client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
-            public void onSuccess(Location location) {
+            public void onSuccess(final Location location) {
                 if (location != null) {
                     sLatitude = String.valueOf(location.getLatitude());
                     sLongitude = String.valueOf(location.getLongitude());
@@ -220,8 +221,40 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    callInputAbsence();
-
+                    if (android.os.Build.VERSION.SDK_INT >= 18) {
+                        if(location.isFromMockProvider())
+                        {
+                            if (location.isFromMockProvider()) {
+                                DialogAdapter.showDialogTwoBtn(StartEndDayDetailActivity.this, null,
+                                        getString(R.string.disable_fake_gps), getString(R.string.out), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finishAffinity();
+                                            }
+                                        },
+                                        "Google Maps", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Uri gmmIntentUri = Uri.parse("geo:"+location.getLatitude()+","+location.getLongitude());
+                                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                mapIntent.setPackage("com.google.android.apps.maps");
+                                                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                                    startActivity(mapIntent);
+                                                }
+                                            }
+                                        }
+                                );
+                            }
+                        }
+                        else
+                        {
+                            callInputAbsence();
+                        }
+                    }
+                    else
+                    {
+                        callInputAbsence();
+                    }
                 }
             }
         });
@@ -413,7 +446,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
         returnValue.setName("--other--");
         listReturnValue.add(returnValue);
 
-        apiInterface = APIClient.getLocationValue(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.postLocation().enqueue(new Callback<OLocation>() {
             @Override
             public void onResponse(Call<OLocation> call, Response<OLocation> response) {
@@ -478,7 +511,7 @@ public class StartEndDayDetailActivity extends AppCompatActivity {
 
     public void callInputAbsence() {
         // get token
-        apiInterface = APIClient.inputAbsence(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(StartEndDayDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

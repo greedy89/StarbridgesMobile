@@ -46,8 +46,8 @@ import id.co.indocyber.android.starbridges.model.medicalrequestconfirmation.Medi
 import id.co.indocyber.android.starbridges.model.medicalsavedetail.MedicalSaveDetail;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
-import id.co.indocyber.android.starbridges.reminder.utility.SessionManagement;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.SessionManagement;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -446,7 +446,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
 
     public void initMedicalSupport(){
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         if(progressDialog==null|| !progressDialog.isShowing())
         {
@@ -510,7 +510,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         listClaimPolicyReturnValue.add(returnValue2);
 
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         Call<GetClaimPolicy> call3 = apiInterface.getClaimPolicy(medicalPolicyID);
         call3.enqueue(new Callback<GetClaimPolicy>() {
@@ -562,7 +562,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         listEmployeeReturnValue.add(returnValue1);
 
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         Call<GetEmployeeFamily> call3 = apiInterface.getEmployeeFamily(medicalSupportID);
         call3.enqueue(new Callback<GetEmployeeFamily>() {
@@ -614,7 +614,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         listPolicyReturnValue.add(returnValue);
 
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
 
         Call<GetMedicalPolicy> call3 = apiInterface.getMedicalPolicy(medicalSupportID);
         call3.enqueue(new Callback<GetMedicalPolicy>() {
@@ -720,7 +720,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
 
     public void requestConfirmation(){
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
@@ -849,7 +849,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         //progressDialog.show();
 
         Call<EditMedical> call3 = apiInterface.editMedical(id);
@@ -925,7 +925,7 @@ public class MedicalClaimDetailActivity extends AppCompatActivity {
 
     public void saveMedical(){
         // get token
-        apiInterface = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithTokenLongerLoading(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(MedicalClaimDetailActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);

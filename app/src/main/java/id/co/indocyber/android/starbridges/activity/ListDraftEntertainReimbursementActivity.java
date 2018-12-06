@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,7 +19,7 @@ import id.co.indocyber.android.starbridges.adapter.ListDraftEntertainReimburseme
 import id.co.indocyber.android.starbridges.model.ListDraftEntertainReimbursement.DraftEntertainReimbursement;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +41,7 @@ public class ListDraftEntertainReimbursementActivity extends AppCompatActivity i
     }
 
     private void setListER(){
-        apiInterfaceRest = APIClient.getClient(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterfaceRest = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         final ProgressDialog pg = new ProgressDialog(ListDraftEntertainReimbursementActivity.this);
         pg.show();
         Call<DraftEntertainReimbursement> draftEntertainReimbursementCall = apiInterfaceRest.getEntertainReimbursementDataDraft();

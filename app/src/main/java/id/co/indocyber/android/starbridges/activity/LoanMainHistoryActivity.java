@@ -15,7 +15,7 @@ import id.co.indocyber.android.starbridges.model.LoanSettingLimit.LoanSettingLim
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.network.StringConverter;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,7 +69,7 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getLoanSettingLimit().enqueue(new Callback<LoanSettingLimit>() {
             @Override
             public void onResponse(Call<LoanSettingLimit> call, Response<LoanSettingLimit> response) {
@@ -95,7 +95,7 @@ public class LoanMainHistoryActivity extends AppCompatActivity {
 
     public void getListTransactionInformation()
     {
-        apiInterface = APIClient.editDraftLeaveCancelation(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         apiInterface.getListTransactionInformation2().enqueue(new Callback<ListTransactionInformation>() {
             @Override
             public void onResponse(Call<ListTransactionInformation> call, Response<ListTransactionInformation> response) {

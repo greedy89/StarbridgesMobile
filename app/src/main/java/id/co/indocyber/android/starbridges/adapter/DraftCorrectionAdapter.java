@@ -21,7 +21,7 @@ import java.util.List;
 
 import id.co.indocyber.android.starbridges.activity.DraftDetailCorrectionActivity;
 import id.co.indocyber.android.starbridges.model.ListDraftCorrection.ReturnValue;
-import id.co.indocyber.android.starbridges.reminder.utility.SharedPreferenceUtils;
+import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class DraftCorrectionAdapter extends RecyclerView.Adapter<DraftCorrectionAdapter.ViewHolder> {
 

@@ -21,7 +21,7 @@ import id.co.indocyber.android.starbridges.adapter.LeaveRequestAdapter;
 import id.co.indocyber.android.starbridges.model.leaverequest.LeaveRequest;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
-import id.co.indocyber.android.starbridges.reminder.utility.GlobalVar;
+import id.co.indocyber.android.starbridges.utility.GlobalVar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,7 +115,7 @@ public class LeaveRequestActivity extends AppCompatActivity {
     }
 
     public void getListLeaveRequest() {
-        apiInterface = APIClient.getListLeaveRequest(GlobalVar.getToken()).create(APIInterfaceRest.class);
+        apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
