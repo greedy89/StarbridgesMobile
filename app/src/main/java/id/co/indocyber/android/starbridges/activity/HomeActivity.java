@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -15,10 +17,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +36,12 @@ import id.co.indocyber.android.starbridges.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -59,12 +68,29 @@ public class HomeActivity extends AppCompatActivity {
     Button btnSignOut;
     Button AttendanceButton;
     static final int REQUEST_ACCESS_LOCATION = 101;
+    private List<String> listMenu;
+    private LinearLayout lytHome;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("processMana", "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("processMana", "onResume");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Log.d("processMana", "onCreate");
 
         imageView = (CircleImageView)findViewById(R.id.profile_image);
+        lytHome = (LinearLayout)findViewById(R.id.lytHome);
         session = new SessionManagement(getApplicationContext());
 
         HashMap<String, String> user = session.getUserDetails();
@@ -113,6 +139,164 @@ public class HomeActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             setToolbar();
         }
+
+        listMenu= new ArrayList<>();
+        listMenu.add("attendance");
+        listMenu.add("outOfOffice");
+        listMenu.add("attendanceHistory");
+        listMenu.add("medical");
+        listMenu.add("correction");
+        listMenu.add("leaveRequest");
+        listMenu.add("leaveCancelation");
+        listMenu.add("signOut");
+
+        createDynamicMenu();
+    }
+
+    private void createDynamicMenu()
+    {
+        int c=1;
+        HashMap<Integer, LinearLayout> hshLytHome = new HashMap<>();
+        if(listMenu.size()%3!=0)
+        {
+            for(int i=0;i<listMenu.size()%3;i++)
+            {
+                listMenu.add("");
+            }
+        }
+        for(String string: listMenu)
+        {
+
+            LinearLayout lytForHome= new LinearLayout(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            if((c-1)/3==0)
+                params.setMargins(0,getResources().getDimensionPixelSize(R.dimen.spacing_30dp),0,0);
+            else
+                params.setMargins(0,getResources().getDimensionPixelSize(R.dimen.spacing_10dp),0,0);
+            lytForHome.setLayoutParams(params);
+            lytForHome.setBaselineAligned(false);
+
+            if(c%3==1)
+            {
+
+                if(hshLytHome.get(c/3)==null)
+                    hshLytHome.put(c/3, lytForHome);
+            }
+            if(string.equalsIgnoreCase("attendance"))
+            {
+                addViewToLayoutHome("ATTENDANCE", R.mipmap.ic_attendance4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("outOfOffice"))
+            {
+                addViewToLayoutHome("OUT OF OFFICE", R.mipmap.ic_out_of_office4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("attendanceHistory"))
+            {
+                addViewToLayoutHome("ATTENDANCE HISTORY", R.mipmap.ic_histories4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("medical"))
+            {
+                addViewToLayoutHome("MEDICAL", R.mipmap.ic_medical4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("correction"))
+            {
+                addViewToLayoutHome("CORRECTION", R.mipmap.ic_correction4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("leaveRequest"))
+            {
+                addViewToLayoutHome("LEAVE\nREQUEST", R.mipmap.ic_leave_request4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("leaveCancelation"))
+            {
+                addViewToLayoutHome("LEAVE\nCANCELATION", R.mipmap.ic_leave_cancelation4, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("signOut"))
+            {
+                addViewToLayoutHome("SIGN OUT", R.mipmap.ic_logout2, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase(""))
+            {
+                addViewToLayoutHome("", 0, hshLytHome, c-1, string);
+            }
+            c++;
+        }
+
+        List<Integer> forSort = new ArrayList<>();
+        for(HashMap.Entry<Integer, LinearLayout> hashMap: hshLytHome.entrySet())
+        {
+            forSort.add(hashMap.getKey());
+        }
+        Collections.sort(forSort);
+        for(Integer integer:forSort)
+        {
+            lytHome.addView(hshLytHome.get(integer));
+        }
+    }
+
+    private void addViewToLayoutHome(String title, int icon, HashMap<Integer, LinearLayout> hshLytHome, int c, final String string)
+    {
+        LinearLayout linearLayout=new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(string.equalsIgnoreCase("attendance"))
+                {
+                    showStartEndDate();
+                }
+                else if(string.equalsIgnoreCase("outOfOffice"))
+                {
+                    showCheckInOut();
+                }
+                else if(string.equalsIgnoreCase("attendanceHistory"))
+                {
+                    showHistory();
+                }
+                else if(string.equalsIgnoreCase("medical"))
+                {
+                    showMedicalClaim();
+                }
+                else if(string.equalsIgnoreCase("correction"))
+                {
+                    showCorrection();
+                }
+                else if(string.equalsIgnoreCase("leaveRequest"))
+                {
+                    showLeaveRequest();
+                }
+                else if(string.equalsIgnoreCase("leaveCancelation"))
+                {
+                    showCancelation();
+                }
+                else if(string.equalsIgnoreCase("signOut"))
+                {
+                    signOut();
+                }
+                else if(string.equalsIgnoreCase(""))
+                {
+
+                }
+            }
+        });
+
+        ImageView imageView=new ImageView(this);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.spacing_63dp)));
+        if(icon!=0)
+            imageView.setImageResource(icon);
+
+        TextView textView=new TextView(this);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(title);
+        textView.setTextColor(getResources().getColor(android.R.color.background_light));
+        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+
+        linearLayout.addView(imageView);
+        linearLayout.addView(textView);
+
+        hshLytHome.get(c/3).addView(linearLayout);
     }
 
     private void setToolbar()
@@ -257,7 +441,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void showStartEndDate(View view) {
+    public void showStartEndDate() {
         if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
             AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
             alert.setTitle("Alert");
@@ -279,21 +463,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void showCheckInOut(View view) {
-
-//        if (attendancePrivilege.equals("False")&&attendancePrivilege!=null){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
-//            alert.setTitle("Alert");
-//            alert.setTitle("You do not have privilege to access this menu");
-//            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                }
-//            });
-//
-//            alert.show();
-//        } else {
+    public void showCheckInOut() {
         if(checkPermissionLocation())
         {
             Intent checkInOut = new Intent(this, CheckInOutActivity.class);
@@ -303,16 +473,16 @@ public class HomeActivity extends AppCompatActivity {
 //        }
     }
 
-    public void showHistory(View view) {
+    public void showHistory() {
         Intent histories = new Intent(this, HistoryFilterActivity.class);
         startActivity(histories);
     }
 
-    public void showCorrection(View view){
+    public void showCorrection(){
         Intent correction = new Intent(this, CorrectionFilterActivity.class);
         startActivity(correction);
     }
-    public void signOut(View view){
+    public void signOut(){
         AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
         alert.setTitle("Confirmation");
         alert.setTitle("Are You Sure to Sign Out?");
@@ -334,38 +504,38 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void showOvertime(View view){
+    public void showOvertime(){
         Intent overtime = new Intent(this, OvertimeActivity.class);
         startActivity(overtime);
 
     }
 
-    public void showCancelation(View view){
+    public void showCancelation(){
         Intent cancelation = new Intent(this, LeaveCancelationActivity.class);
         startActivity(cancelation);
     }
 
-    public void showLeaveRequest(View view) {
+    public void showLeaveRequest() {
         Intent leaveRequest = new Intent(this, LeaveRequestActivity.class);
         startActivity(leaveRequest);
     }
 
-    public void showMedicalClaim(View view){
+    public void showMedicalClaim(){
         Intent medicalClaim = new Intent(this, MedicalClaimActivity.class);
         startActivity(medicalClaim);
     }
 
-    public void showReimburse(View view){
+    public void showReimburse(){
         Intent reimburse = new Intent(this, ReimburseActivity.class);
         startActivity(reimburse);
     }
 
-    public void showShiftExchange(View view){
+    public void showShiftExchange(){
         Intent shiftExchange = new Intent(this, ShiftExchangeActivity.class);
         startActivity(shiftExchange);
     }
 
-    public void showLoan(View view){
+    public void showLoan(){
         Intent shiftExchange = new Intent(this, LoanSelectorActivity.class);
         startActivity(shiftExchange);
     }
