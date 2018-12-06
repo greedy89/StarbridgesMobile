@@ -503,10 +503,8 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
                     alert.setNeutralButton(getString(R.string.dismiss), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                         }
                     });
-
                     alert.show();
                 }
                 else
@@ -546,11 +544,8 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
                         callInputAbsence();
                     }
                 }
-
             }
         });
-
-
     }
 
     public void callInputAbsence()
