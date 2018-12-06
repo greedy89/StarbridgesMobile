@@ -379,7 +379,8 @@
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ListDraftEntertainReimbursementActivity"></activity>
+        <activity android:name=".activity.ListDraftEntertainReimbursementActivity" />
+        <activity android:name=".activity.TransportReimbursementActivity"></activity>
     </application>
 
 </manifest>

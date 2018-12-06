@@ -23,3 +23,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
+-keep class net.sqlcipher.** {
+    *;
+}
+
+-keep class net.sqlcipher.database.** {
+    *;
+}
+-keep class javax.servlet.Filter
+-keep class javax.servlet.http.HttpServ
+-keep class javax.annotation.Nullable
+-keep class com.ibm.icu.text.*
+-keep class id.co.acc.www.amos.util.*
+
+-dontwarn org.jasypt.**
+-dontwarn retrofit2.**
+-dontwarn okio.**
+-dontwarn okhttp3.**

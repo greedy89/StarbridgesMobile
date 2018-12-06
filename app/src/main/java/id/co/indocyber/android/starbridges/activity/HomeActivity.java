@@ -386,7 +386,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     //pindah ke halaman transportreimbursement
     public void showTransportReimbursement(View view) {
-//        startActivity(new Intent(this,TransportReimbursementActivity.class));
+        startActivity(new Intent(this,TransportReimbursementActivity.class));
     }
     //pindah ke halaman overtimereimbursement
     public void showOvertimeReimbursement(View view) {
