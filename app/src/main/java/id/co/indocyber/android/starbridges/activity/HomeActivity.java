@@ -71,23 +71,11 @@ public class HomeActivity extends AppCompatActivity {
     private List<String> listMenu;
     private LinearLayout lytHome;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("processMana", "onStart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("processMana", "onResume");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Log.d("processMana", "onCreate");
 
         imageView = (CircleImageView)findViewById(R.id.profile_image);
         lytHome = (LinearLayout)findViewById(R.id.lytHome);
@@ -148,6 +136,8 @@ public class HomeActivity extends AppCompatActivity {
         listMenu.add("correction");
         listMenu.add("leaveRequest");
         listMenu.add("leaveCancelation");
+        listMenu.add("transportReimburse");
+        listMenu.add("overtimeReimburse");
         listMenu.add("signOut");
 
         createDynamicMenu();
@@ -214,6 +204,14 @@ public class HomeActivity extends AppCompatActivity {
             {
                 addViewToLayoutHome("SIGN OUT", R.mipmap.ic_logout2, hshLytHome, c-1, string);
             }
+            else if(string.equalsIgnoreCase("transportReimburse"))
+            {
+                addViewToLayoutHome("TRANSPORT\nREIMBURSEMENT", R.mipmap.ic_reimburse2, hshLytHome, c-1, string);
+            }
+            else if(string.equalsIgnoreCase("overtimeReimburse"))
+            {
+                addViewToLayoutHome("OVERTIME\nREIMBURSEMENT", R.mipmap.ic_reimburse2, hshLytHome, c-1, string);
+            }
             else if(string.equalsIgnoreCase(""))
             {
                 addViewToLayoutHome("", 0, hshLytHome, c-1, string);
@@ -276,6 +274,14 @@ public class HomeActivity extends AppCompatActivity {
                 else if(string.equalsIgnoreCase(""))
                 {
 
+                }
+                else if(string.equalsIgnoreCase("transportReimburse"))
+                {
+                    showTransportReimbursement();
+                }
+                else if(string.equalsIgnoreCase("overtimeReimburse"))
+                {
+                    showOvertimeReimbursement();
                 }
             }
         });
@@ -555,11 +561,11 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
     //pindah ke halaman transportreimbursement
-    public void showTransportReimbursement(View view) {
+    public void showTransportReimbursement() {
         startActivity(new Intent(this,TransportReimbursementActivity.class));
     }
     //pindah ke halaman overtimereimbursement
-    public void showOvertimeReimbursement(View view) {
+    public void showOvertimeReimbursement() {
         startActivity(new Intent(this,OvertimeReimbursementActivity.class));
     }
     //pindah ke halaman entertainreimbursement

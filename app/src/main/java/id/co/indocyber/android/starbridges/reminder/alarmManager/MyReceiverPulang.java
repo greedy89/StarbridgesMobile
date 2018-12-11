@@ -10,7 +10,9 @@ import com.google.gson.Gson;
 
 import id.co.indocyber.android.starbridges.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
@@ -19,6 +21,30 @@ import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class MyReceiverPulang extends BroadcastReceiver {
 
+    private void resetAlarmSetting(Context context) {
+        Date dateToday = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String todayStringDate = sdf.format(dateToday);
+
+        String dateCheckPulang = SharedPreferenceUtils.getSetting(context, "dateCheckPulang", "");
+        if (dateCheckPulang == null || dateCheckPulang.equalsIgnoreCase("")) {
+            SharedPreferenceUtils.setSetting(context, "dateCheckPulang", todayStringDate);
+            SharedPreferenceUtils.setSetting(context, "counterAlarmPulang", "0");
+        }
+        else
+        {
+            if (!dateCheckPulang.equalsIgnoreCase(todayStringDate))
+            {
+                SharedPreferenceUtils.setSetting(context, "dateCheckPulang", "");
+                SharedPreferenceUtils.setSetting(context, "counterAlarmPulang", "0");
+            }
+            else
+            {
+                SharedPreferenceUtils.setSetting(context, "dateCheckPulang", todayStringDate);
+            }
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Calendar today = Calendar.getInstance();
@@ -26,6 +52,7 @@ public class MyReceiverPulang extends BroadcastReceiver {
         Gson gson=new Gson();
         Log.d("employeeShiftSchedule", employeeShiftScheduleLogout);
         Calendar checkOutTime2 = Calendar.getInstance();
+        resetAlarmSetting(context);
 
         if(employeeShiftScheduleLogout!=null&&employeeShiftScheduleLogout!="")
         {
@@ -48,20 +75,41 @@ public class MyReceiverPulang extends BroadcastReceiver {
             {
                 today.add(Calendar.MINUTE,-3);
                 Calendar alarm =  checkOutTime2;
-                Boolean hasil = today.before(alarm);
+                Boolean hasil = today.after(alarm);
                 if(hasil==true){
                     Log.d("myTag", "notif Alarm pulang dijalankan karena jam sudah terlewat");
                 }else{
                     Log.d("myTag", "notif Alarm pulang tidak dijalankan karena jam masih akan datang");
                     String message = context.getString(R.string.reminder_pesan_pulang);
                     String title = context.getString(R.string.reminder_title);
-                    if(android.os.Build.VERSION.SDK_INT < 26)
-                        Notification.deliverNotification(context, title, message);
+
+
+                    String counterAlarmPulang = SharedPreferenceUtils.getSetting(context, "counterAlarmPulang","");
+                    int intCAlarmPulang;
+                    if(counterAlarmPulang == null || counterAlarmPulang.equalsIgnoreCase(""))
+                    {
+                        intCAlarmPulang = 0;
+                    }
                     else
                     {
-                        new NotificationUtils(context).showPMNotification(message, title);
-//                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
+                        intCAlarmPulang=Integer.parseInt(counterAlarmPulang);
                     }
+
+                    if(intCAlarmPulang==0)
+                    {
+                        if(android.os.Build.VERSION.SDK_INT < 26)
+                        {
+                            Notification.deliverNotification(context, title, message);
+                            intCAlarmPulang++;
+                        }
+                        else
+                        {
+                            Notification.showNotification(context, title, message);
+                            intCAlarmPulang++;
+                        }
+                    }
+                    SharedPreferenceUtils.getSetting(context, "counterAlarmPulang",intCAlarmPulang+"");
+
                 }
             }
             else {

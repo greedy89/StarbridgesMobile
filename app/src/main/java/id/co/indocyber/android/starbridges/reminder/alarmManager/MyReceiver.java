@@ -10,7 +10,9 @@ import com.google.gson.Gson;
 
 import id.co.indocyber.android.starbridges.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.ReturnValue;
 import id.co.indocyber.android.starbridges.network.StringConverter;
@@ -18,11 +20,37 @@ import id.co.indocyber.android.starbridges.reminder.notificationchannels.Notific
 import id.co.indocyber.android.starbridges.utility.SharedPreferenceUtils;
 
 public class MyReceiver extends BroadcastReceiver {
+
+    private void resetAlarmSetting(Context context) {
+        Date dateToday = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String todayStringDate = sdf.format(dateToday);
+
+        String dateCheckWakeUp = SharedPreferenceUtils.getSetting(context, "dateCheckWakeUp", "");
+        if (dateCheckWakeUp == null || dateCheckWakeUp.equalsIgnoreCase("")) {
+            SharedPreferenceUtils.setSetting(context, "dateCheckWakeUp", todayStringDate);
+            SharedPreferenceUtils.setSetting(context, "counterAlarmWakeUp", "0");
+        }
+        else
+        {
+            if (!dateCheckWakeUp.equalsIgnoreCase(todayStringDate))
+            {
+                SharedPreferenceUtils.setSetting(context, "dateCheckWakeUp", "");
+                SharedPreferenceUtils.setSetting(context, "counterAlarmWakeUp", "0");
+            }
+            else
+            {
+                SharedPreferenceUtils.setSetting(context, "dateCheckWakeUp", todayStringDate);
+            }
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Calendar today = Calendar.getInstance();
         String employeeShiftScheduleLogin = SharedPreferenceUtils.getSetting(context,"employeeShiftScheduleLogin","");
         Gson gson=new Gson();
+        resetAlarmSetting(context);
         Log.d("employeeShiftSchedule", employeeShiftScheduleLogin);
         Calendar checkOutTime2 = Calendar.getInstance();
 
@@ -51,13 +79,33 @@ public class MyReceiver extends BroadcastReceiver {
                 if(hasil==true){
                     String message = context.getString(R.string.reminder_pesan_masuk);
                     String title = context.getString(R.string.reminder_title);
-                    if(android.os.Build.VERSION.SDK_INT < 26)
-                        Notification.deliverNotification(context, title, message);
+                    String counterAlarmWakeUp = SharedPreferenceUtils.getSetting(context, "counterAlarmWakeUp","");
+                    int intCAlarmWakeup;
+
+                    if(counterAlarmWakeUp == null || counterAlarmWakeUp.equalsIgnoreCase(""))
+                    {
+                        intCAlarmWakeup = 0;
+                    }
                     else
                     {
-                        new NotificationUtils(context).showPMNotification(message, title);
-//                    NotificationUtils.showPMNotification("Hey, just received new PM from @user");
+                        intCAlarmWakeup=Integer.parseInt(counterAlarmWakeUp);
                     }
+
+                    if(intCAlarmWakeup==0)
+                    {
+                        if(android.os.Build.VERSION.SDK_INT < 26)
+                        {
+                            Notification.deliverNotification(context, title, message);
+                            intCAlarmWakeup++;
+                        }
+                        else
+                        {
+                            Notification.showNotification(context, title, message);
+                            intCAlarmWakeup++;
+                        }
+                    }
+
+                    SharedPreferenceUtils.getSetting(context, "counterAlarmWakeUp",intCAlarmWakeup+"");
 
                     Log.d("myTag", "notif AlarmMasuk di jalankan karena jam masih akan datang");
                 }else{

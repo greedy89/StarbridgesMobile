@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
     private static Retrofit retrofit = null;
-    private static int linkApi = R.string.link_production;
+    private static int linkApi = R.string.link_test_public;
 
     public static Retrofit getClient(Context context) {
 

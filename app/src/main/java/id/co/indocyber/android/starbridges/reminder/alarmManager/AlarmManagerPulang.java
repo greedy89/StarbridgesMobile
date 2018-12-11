@@ -25,7 +25,7 @@ public class AlarmManagerPulang {
     private static final String ACTION_NOTIFY2 = "com.example.android.starbridges.ACTION_NOTIFY_PULANG";
 
     public static void start(Context ctx) {
-        final AlarmManager alarmManager2 = (AlarmManager) ctx.getSystemService(ALARM_SERVICE);
+        final AlarmManager alarmManager2 = (android.app.AlarmManager) ctx.getSystemService(ALARM_SERVICE);
 
 //        Calendar checkOutTime = Calendar.getInstance();
 //        if (DateFormat.is24HourFormat(ctx)) {
@@ -38,7 +38,7 @@ public class AlarmManagerPulang {
 //        checkOutTime.set(Calendar.SECOND, 10);
 //        checkOutTime.set(Calendar.MILLISECOND, 0);
 
-        Intent notifyIntent2 = new Intent(ACTION_NOTIFY2);
+        Intent notifyIntent2 = new Intent(ctx,MyReceiverPulang.class);
 
         final PendingIntent notifyPendingIntent2 = PendingIntent.getBroadcast
                 (ctx.getApplicationContext(), NOTIFICATION_ID2, notifyIntent2, PendingIntent.FLAG_UPDATE_CURRENT);

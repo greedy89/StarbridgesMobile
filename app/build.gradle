@@ -8,8 +8,8 @@ android {
         applicationId "id.co.indocyber.android.starbridges"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 29
-        versionName "1.16.8"
+        versionCode 30
+        versionName "1.16.9"
         testInstrumentationRunner "android.support.ReceiverMasuk.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -89,6 +89,7 @@ dependencies {
     implementation "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"
 
     implementation 'org.parceler:parceler-api:1.1.11'
+
     annotationProcessor 'org.parceler:parceler:1.1.11'
 
 }

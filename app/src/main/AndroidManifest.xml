@@ -380,7 +380,9 @@
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.ListDraftEntertainReimbursementActivity" />
-        <activity android:name=".activity.TransportReimbursementActivity"></activity>
+        <activity android:name=".activity.TransportReimbursementActivity" />
+        <activity android:name=".activity.ListDraftTransportReimbursementActivity" />
+        <activity android:name=".activity.TransportReimbursementCreateActivity"></activity>
     </application>
 
 </manifest>

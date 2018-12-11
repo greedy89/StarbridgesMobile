@@ -61,4 +61,6 @@
     <string name="link_test_local">http://10.100.10.32:7000/</string>
     <string name="disable_fake_gps">Please diable your mock location, or check your location in google maps</string>
     <string name="out">Out</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

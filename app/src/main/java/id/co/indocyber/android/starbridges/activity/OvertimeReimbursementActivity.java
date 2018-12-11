@@ -31,7 +31,7 @@ public class OvertimeReimbursementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overtime_reimbursement);
-        setTitle("Overtime Reimburse");
+        setTitle("Overtime Reimbursement");
 //        ActionBar ab = getActionBar();
 //        ab.setTitle("Overtime");
 //        ab.setSubtitle("Reimbursement");
