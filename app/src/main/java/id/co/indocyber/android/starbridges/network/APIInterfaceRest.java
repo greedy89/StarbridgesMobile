@@ -47,6 +47,7 @@ import id.co.indocyber.android.starbridges.model.Reimbursement.Reimbursement;
 import id.co.indocyber.android.starbridges.model.ReimbursementType.ReimbursementType;
 import id.co.indocyber.android.starbridges.model.SaveShiftExchange.SaveShiftExchange;
 import id.co.indocyber.android.starbridges.model.SubmitOvertime.SubmitOvertime;
+import id.co.indocyber.android.starbridges.model.TransportReimbursement.TransportReimbursement;
 import id.co.indocyber.android.starbridges.model.balanceType.BalanceType;
 import id.co.indocyber.android.starbridges.model.deleteleaverequest.DeleteLeaveRequest;
 import id.co.indocyber.android.starbridges.model.deletemedical.DeleteMedical;
@@ -553,4 +554,7 @@ public interface APIInterfaceRest {
 
     @GET("api/EntertainReimbursement/ListDraft")
     Call<DraftEntertainReimbursement>getEntertainReimbursementDataDraft();
+
+    @GET("api/TransportReimbursement/ListHeader")
+    Call<TransportReimbursement>getTransportReimbursement();
 }

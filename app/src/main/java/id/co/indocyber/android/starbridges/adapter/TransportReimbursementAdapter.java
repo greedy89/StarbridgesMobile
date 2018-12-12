@@ -2,6 +2,8 @@ package id.co.indocyber.android.starbridges.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,66 +11,69 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.model.TransportReimbursement.ReturnValue;
+import id.co.indocyber.android.starbridges.network.StringConverter;
 
 public class TransportReimbursementAdapter extends ArrayAdapter<ReturnValue> {
-    private Context ctx;
-    private List<ReturnValue> listData;
-    private int mode;
-    public TransportReimbursementAdapter(@NonNull Context context, List<ReturnValue> listData, int mode) {
-        super(context,R.layout.lst_transport_reimbursement,listData);
-        this.ctx= context;
-        this.listData = listData;
-        this.mode = mode;
+    Context context;
+    List<id.co.indocyber.android.starbridges.model.TransportReimbursement.ReturnValue> lstorder = new ArrayList<id.co.indocyber.android.starbridges.model.TransportReimbursement.ReturnValue>();
+    LayoutInflater inflater;
+    private SparseBooleanArray mSelectedItemsIds;
+    List<String> lstIdSelected= new ArrayList<>();
+
+
+    public TransportReimbursementAdapter(@NonNull Context context, int resource, @NonNull List<id.co.indocyber.android.starbridges.model.TransportReimbursement.ReturnValue> objects) {
+        super(context, resource, objects);
+        mSelectedItemsIds=new SparseBooleanArray();
+        this.context = context;
+        this.lstorder = objects;
+        inflater=LayoutInflater.from(context);
     }
+
+    private class ViewHolder {
+        TextView lblDecisionNumberTransportReimbursement, lblTypeTransportReimbursement, lblAmountTransportReimbursement;
+        TextView lblApprovedDateTransportReimbursement, lblProcessPeriodTransportReimbursement, lblDescriptionTransportReimbursement;
+    }
+
+
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        LayoutInflater inflater =(LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.lst_transport_reimbursement,parent,false);
-        TextView lbldecisionNumber = rowView.findViewById(R.id.lblDecisionNumber);
-        TextView lblapprovedDate = rowView.findViewById(R.id.lblApprovedDate);
-        TextView decisionNumber = rowView.findViewById(R.id.vDecisionNumber);
-        TextView approvedDate = rowView.findViewById(R.id.vApprovedDate);
-        TextView processPeriod = rowView.findViewById(R.id.vProcessPeriod);
-        TextView type = rowView.findViewById(R.id.vType);
-        TextView amount = rowView.findViewById(R.id.vAmout);
-        final TextView description = rowView.findViewById(R.id.vDescription);
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//        View itemView = convertView;
+        final TransportReimbursementAdapter.ViewHolder holder;
 
+        if(convertView==null)
+        {
+            holder = new TransportReimbursementAdapter.ViewHolder();
+            convertView = inflater.inflate(R.layout.lst_transport_reimbursement, null);
+            // Locate the TextViews in listview_item.xml
+            holder.lblDecisionNumberTransportReimbursement = (TextView) convertView.findViewById(R.id.lblDecisionNumberTransportReimbursement);
+            holder.lblTypeTransportReimbursement = (TextView) convertView.findViewById(R.id.lblTypeTransportReimbursement);
+            holder.lblAmountTransportReimbursement = (TextView) convertView.findViewById(R.id.lblAmountTransportReimbursement);
+            holder.lblApprovedDateTransportReimbursement = (TextView) convertView.findViewById(R.id.lblApprovedDateTransportReimbursement);
+            holder.lblProcessPeriodTransportReimbursement = (TextView) convertView.findViewById(R.id.lblProcessPeriodTransportReimbursement);
+            holder.lblDescriptionTransportReimbursement = (TextView) convertView.findViewById(R.id.lblDescriptionTransportReimbursement);
 
-        if(mode==0){
-            decisionNumber.setText(listData.get(position).getDecisionNumber().toString());
-            approvedDate.setText(listData.get(position).getApprovedDate().substring(0,listData.get(position).getApprovedDate().lastIndexOf(":")));
-            processPeriod.setText(listData.get(position).getProcessPeriod().substring(0,listData.get(position).getProcessPeriod().lastIndexOf(":")));
-            type.setText(listData.get(position).getType());
-            amount.setText(String.valueOf(listData.get(position).getAmount()));
-            description.setText(listData.get(position).getDescription());
-        }else if(mode ==1 ){
-            /*
-            decisionNumber.setText(listData.get(position).getDecisionNumber());
-            approvedDate.setText(listData.get(position).getApprovedDate().substring(0,listData.get(position).getApprovedDate().lastIndexOf(":")));
-            */
-            lbldecisionNumber.setVisibility(View.GONE);
-            lblapprovedDate.setVisibility(View.GONE);
-            decisionNumber.setVisibility(View.GONE);
-            approvedDate.setVisibility(View.GONE);
-            processPeriod.setText(listData.get(position).getProcessPeriod().substring(0,listData.get(position).getProcessPeriod().lastIndexOf(":")));
-            type.setText(listData.get(position).getType());
-            amount.setText(String.valueOf(listData.get(position).getAmount()));
-            description.setText(listData.get(position).getDescription());
-            rowView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ctx,description.getText(),Toast.LENGTH_SHORT).show();
-                }
-            });
-        }else{
-
+            convertView.setTag(holder);
         }
-        return rowView;
+        else
+        {
+            holder = (TransportReimbursementAdapter.ViewHolder) convertView.getTag();
+        }
+
+        StringConverter stringConverter=  new StringConverter();
+        holder.lblDecisionNumberTransportReimbursement.setText(lstorder.get(position).getDecisionNumber());
+        holder.lblTypeTransportReimbursement.setText(lstorder.get(position).getType());
+        holder.lblAmountTransportReimbursement.setText(stringConverter.numberFormat(lstorder.get(position).getAmount()+"")  );
+        holder.lblApprovedDateTransportReimbursement.setText("Approve "+ stringConverter.dateFormatDDMMYYYY(lstorder.get(position).getApprovedDate()));
+        holder.lblProcessPeriodTransportReimbursement.setText("Process "+ stringConverter.dateFormatDDMMYYYY(lstorder.get(position).getProcessPeriod()));
+        holder.lblDescriptionTransportReimbursement.setText( lstorder.get(position).getDescription() );
+
+        return convertView;
     }
 }
 

@@ -16,7 +16,7 @@ public class ReturnValue implements Serializable, Parcelable
     private String iD;
     @SerializedName("DecisionNumber")
     @Expose
-    private Object decisionNumber;
+    private String decisionNumber;
     @SerializedName("IsPreProcess")
     @Expose
     private Boolean isPreProcess;
@@ -44,11 +44,11 @@ public class ReturnValue implements Serializable, Parcelable
     @SerializedName("Year")
     @Expose
     private Integer year;
-    public final static Creator<ReturnValue> CREATOR = new Creator<ReturnValue>() {
+    public final static Parcelable.Creator<ReturnValue> CREATOR = new Creator<ReturnValue>() {
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public ReturnValue createFromParcel(Parcel in) {
             return new ReturnValue(in);
@@ -59,12 +59,12 @@ public class ReturnValue implements Serializable, Parcelable
         }
 
     }
-    ;
-    private final static long serialVersionUID = 1881756130881122122L;
+            ;
+    private final static long serialVersionUID = -514281929032865950L;
 
     protected ReturnValue(Parcel in) {
         this.iD = ((String) in.readValue((String.class.getClassLoader())));
-        this.decisionNumber = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.decisionNumber = ((String) in.readValue((String.class.getClassLoader())));
         this.isPreProcess = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.approvedDate = ((String) in.readValue((String.class.getClassLoader())));
         this.processPeriod = ((String) in.readValue((String.class.getClassLoader())));
@@ -78,13 +78,13 @@ public class ReturnValue implements Serializable, Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
     public ReturnValue() {
     }
 
     /**
-     * 
+     *
      * @param amount
      * @param decisionNumber
      * @param processPeriod
@@ -97,7 +97,7 @@ public class ReturnValue implements Serializable, Parcelable
      * @param type
      * @param iD
      */
-    public ReturnValue(String iD, Object decisionNumber, Boolean isPreProcess, String approvedDate, String processPeriod, String type, String description, String encryptedAmount, Integer amount, Integer month, Integer year) {
+    public ReturnValue(String iD, String decisionNumber, Boolean isPreProcess, String approvedDate, String processPeriod, String type, String description, String encryptedAmount, Integer amount, Integer month, Integer year) {
         super();
         this.iD = iD;
         this.decisionNumber = decisionNumber;
@@ -125,15 +125,15 @@ public class ReturnValue implements Serializable, Parcelable
         return this;
     }
 
-    public Object getDecisionNumber() {
+    public String getDecisionNumber() {
         return decisionNumber;
     }
 
-    public void setDecisionNumber(Object decisionNumber) {
+    public void setDecisionNumber(String decisionNumber) {
         this.decisionNumber = decisionNumber;
     }
 
-    public ReturnValue withDecisionNumber(Object decisionNumber) {
+    public ReturnValue withDecisionNumber(String decisionNumber) {
         this.decisionNumber = decisionNumber;
         return this;
     }

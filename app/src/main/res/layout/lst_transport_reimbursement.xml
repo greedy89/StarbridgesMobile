@@ -33,24 +33,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Approve : 26 Nov 2018"
-        android:textSize="13dp"
-        android:textColor="@color/colorGreen" />
+        android:textColor="@color/colorGreen"
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/lblProcessPeriodTransportReimbursement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Process : 26 Nov 2018"
-        android:textSize="13dp"
-        android:textColor="@color/colorGreen" />
+        android:textColor="@color/colorGreen"
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/lblDescriptionTransportReimbursement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Transportasi"
-        android:textSize="12dp"
-        />
+        android:textSize="12dp" />
 
 
 </LinearLayout>
