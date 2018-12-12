@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.twinkle94.monthyearpicker.picker.YearMonthPickerDialog;
@@ -23,15 +25,20 @@ import com.twinkle94.monthyearpicker.picker.YearMonthPickerDialog;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import id.co.indocyber.android.starbridges.R;
+import id.co.indocyber.android.starbridges.model.TransportReimbursementType.TransportReimbursementType;
+import id.co.indocyber.android.starbridges.model.getmedicalpolicy.ReturnValue;
 import id.co.indocyber.android.starbridges.utility.MonthYearPickerDialog;
 import id.co.indocyber.android.starbridges.utility.YearMonthPickerDialogCustom;
 
 public class TransportReimbursementCreateActivity extends AppCompatActivity {
 
     private EditText txtPeriodCreateTR;
+    private Spinner spnReimbursementType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transport_reimbursement_create);
 
         txtPeriodCreateTR = (EditText)findViewById(R.id.txtPeriodCreateTR);
+        spnReimbursementType = (Spinner)findViewById(R.id.spnReimbursementType);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2018,10,01);
@@ -81,6 +89,21 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
             }
         });
 
+        initSpinnerReimbursementType();
+    }
+
+    private void initSpinnerReimbursementType()
+    {
+        List<TransportReimbursementType> transportReimbursementTypes=new ArrayList<>();
+        TransportReimbursementType transportReimbursementType=new TransportReimbursementType();
+        transportReimbursementType.setName("Transportasi");
+        transportReimbursementType.setReimbursementTranpsportTypeId("3");
+        transportReimbursementTypes.add(transportReimbursementType);
+
+        ArrayAdapter<TransportReimbursementType> adapter = new ArrayAdapter<TransportReimbursementType>(TransportReimbursementCreateActivity.this,
+                android.R.layout.simple_spinner_item, transportReimbursementTypes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnReimbursementType.setAdapter(adapter);
     }
 
 }
