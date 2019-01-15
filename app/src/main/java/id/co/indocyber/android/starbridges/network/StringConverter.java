@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -45,7 +46,22 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         String result="";
         try{
             NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-            result = format.format(new BigInteger(number));
+            result = format.format(new BigInteger(number.replace(".","")));
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        return result;
+    }
+
+    public String numberRemoveFormat(String number)
+    {
+        String result="";
+        try{
+            NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
+            result = format.parse(number).toString();
         }
         catch (Exception e)
         {
@@ -87,11 +103,48 @@ public class StringConverter implements JsonSerializer<String>, JsonDeserializer
         return dateResult;
     }
 
+    public String timeFormatHHMM(Date timeInput) {
+        DateFormat sdf = new SimpleDateFormat("HH:mm");
+        String timeResult = "";
+        try {
+            timeResult = sdf.format(timeInput);
+        } catch (Exception e) {
+
+        }
+
+        return timeResult;
+    }
+
+    public Date timeStringToDate(String timeInput) {
+        DateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date timeResult = Calendar.getInstance().getTime();
+        try {
+            timeResult = sdf.parse(timeInput);
+        } catch (Exception e) {
+
+        }
+
+        return timeResult;
+    }
+
     public Date dateToDate(String dateInput){
         Date date=new Date();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         try{
             date= df.parse(dateInput);
+        }
+        catch (Exception e)
+        {
+
+        }
+        return date;
+    }
+
+    public String dateToString(Date dateInput){
+        String date="";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        try{
+            date= df.format(dateInput);
         }
         catch (Exception e)
         {

@@ -157,7 +157,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 //            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            String cd = sdf.format(myCalendar.getTime());
+//            String cd = sdf.format(calendarSelectedDate.getTime());
 //            Date tmp11 = null;
 //            try {
 //                tmp11 = sdf.parse(cd);
@@ -168,8 +168,8 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
             myCalendar.set(Calendar.MONTH, i1);
             myCalendar.set(Calendar.DAY_OF_MONTH, i2);
 //
-////            Calendar tmp2 = myCalendar;
-//            String cd2 = sdf.format(myCalendar.getTime());
+////            Calendar tmp2 = calendarSelectedDate;
+//            String cd2 = sdf.format(calendarSelectedDate.getTime());
 //            Date tmp22 = null;
 //            try {
 //                tmp22 = sdf.parse(cd2);
@@ -179,7 +179,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 //
 //            if (tmp11.after(tmp22)) {
 //                alertNotif("", "end date tidak boleh lebih kecil dari start date ");
-//                endDate.setText(startDate.getText());
+//                endDate.setName(startDate.getName());
 //                endLeave = sdf.format(Calendar.getInstance().getTime());
 //            } else {
             updateLabel2(myCalendar);
@@ -259,7 +259,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             leaveAt = String.format("%2s", selectedHour).replace(' ', '0') + ":" + String.format("%2s", selectedMinute).replace(' ', '0');
-//                            startDate.setText(startLeave + " - " + leaveAt);
+//                            startDate.setName(startLeave + " - " + leaveAt);
                             startDate.setText(startLeave);
 
                             timeDateStart.setText(leaveAt);
@@ -273,7 +273,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             leaveAt = String.format("%2s", selectedHour).replace(' ', '0') + ":" + String.format("%2s", selectedMinute).replace(' ', '0');
 
-//                            startDate.setText(endLeave + " - " + leaveAt);
+//                            startDate.setName(endLeave + " - " + leaveAt);
                             startDate.setText(startLeave);
                             timeDateStart.setText(leaveAt);
 //                            Toast.makeText(LeaveRequestDetailActivity.this, "pertama2 : " + leaveAt, Toast.LENGTH_LONG).show();
@@ -290,9 +290,9 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
         imgEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new DatePickerDialog(LeaveRequestDetailActivity.this, date2, myCalendar
-//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//                new DatePickerDialog(LeaveRequestDetailActivity.this, date2, calendarSelectedDate
+//                        .get(Calendar.YEAR), calendarSelectedDate.get(Calendar.MONTH),
+//                        calendarSelectedDate.get(Calendar.DAY_OF_MONTH)).show();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Date a = null;
                 try {
@@ -323,7 +323,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             returnAt = String.format("%2s", selectedHour).replace(' ', '0') + ":" + String.format("%2s", selectedMinute).replace(' ', '0');
 //                            }else{
-//                            endDate.setText(endLeave + " - " + returnAt);
+//                            endDate.setName(endLeave + " - " + returnAt);
                             endDate.setText(endLeave);
                             timeDateEnd.setText(returnAt);
 //                            Toast.makeText(LeaveRequestDetailActivity.this, "kedua1 :" + returnAt, Toast.LENGTH_LONG).show();
@@ -338,7 +338,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             returnAt = String.format("%2s", selectedHour).replace(' ', '0') + ":" + String.format("%2s", selectedMinute).replace(' ', '0');
 
-//                            endDate.setText(endLeave + " - " + returnAt);
+//                            endDate.setName(endLeave + " - " + returnAt);
                             endDate.setText(endLeave);
                             timeDateEnd.setText(returnAt);
 //                            Toast.makeText(LeaveRequestDetailActivity.this, "kedua2 : " + returnAt, Toast.LENGTH_LONG).show();
@@ -809,11 +809,11 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
                     accessibilityAttribute = editLeaveRequest.getAccessibilityAttribute();
 
                     // start leave
-//                    startDate.setText(startLeave + " - " + leaveAt);
+//                    startDate.setName(startLeave + " - " + leaveAt);
                     startDate.setText(startLeave);
                     timeDateStart.setText(leaveAt);
                     // end date
-//                    endDate.setText(endLeave + " - " + returnAt);
+//                    endDate.setName(endLeave + " - " + returnAt);
                     endDate.setText(endLeave);
                     timeDateEnd.setText(returnAt);
                     // notes
@@ -852,7 +852,7 @@ public class LeaveRequestDetailActivity extends AppCompatActivity {
 //        if (validasiTime() == true) {
 //            alertNotif("", "Return at tidak boleh lebih kecil dari leave at");
 //            returnAt = "";
-//            timeDateEnd.setText(null);
+//            timeDateEnd.setName(null);
 //        } else {
         apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
         progressDialog = new ProgressDialog(LeaveRequestDetailActivity.this);

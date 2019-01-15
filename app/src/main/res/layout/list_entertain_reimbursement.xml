@@ -1,125 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="4dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="4dp"
+    app:contentPadding="8dp">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/lblDecisionNumberER"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtDecisionNumber"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Decision Number" />
+            android:text="Decision Number"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transportasi"/>
+
+            <TextView
+                android:id="@+id/txtAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="10000"
+                android:textColor="@color/wallet_holo_blue_light"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/approve"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="13dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtApprovedDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26 Nov 2018"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="13dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/process"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="13dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtProcessPeriod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26 Nov 2018"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="13dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack" />
 
         <TextView
-            android:id="@+id/vDecisionNumberER"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rei/11/2018/004" />
+            android:text="Notes : "
+            android:textSize="12dp"
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transportasi"
+            android:textSize="12dp" />
+
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblApprovedDateER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Approved Date" />
-
-        <TextView
-            android:id="@+id/vApprovedDateER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2018-11-25T00:00:00" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblProcessPeriodER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Process Period" />
-
-        <TextView
-            android:id="@+id/vProcessPeriodER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2018-11-26T14:22:22" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblTypeER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Type" />
-
-        <TextView
-            android:id="@+id/vTypeER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="lembur" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblAmountER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Amount" />
-
-        <TextView
-            android:id="@+id/vAmoutER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="0" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblDescriptionER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Description" />
-
-        <TextView
-            android:id="@+id/vDescriptionER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="overtime test 1 dummy" />
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.v7.widget.CardView>

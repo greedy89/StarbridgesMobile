@@ -15,6 +15,10 @@ import id.co.indocyber.android.starbridges.model.EditOvertime.EditOvertime;
 import id.co.indocyber.android.starbridges.model.EditReimbursement.EditReimbursement;
 import id.co.indocyber.android.starbridges.model.EditShiftExchange.EditShiftExchange;
 import id.co.indocyber.android.starbridges.model.EmployeeShiftSchedule.EmployeeShiftSchedule;
+import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursement;
+import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursementDetail;
+import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursementType;
+import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursementViewModel;
 import id.co.indocyber.android.starbridges.model.LeaveCancelationTransaction.LeaveCancelationTransaction;
 import id.co.indocyber.android.starbridges.model.ListAttendanceCorrection.ListAttendanceCorrection;
 import id.co.indocyber.android.starbridges.model.ListDraftCorrection.ListDraftCorrection;
@@ -26,13 +30,11 @@ import id.co.indocyber.android.starbridges.model.ListDraftShiftExchange.ListDraf
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoan.ListDraftTransactionLoan;
 import id.co.indocyber.android.starbridges.model.ListDraftTransactionLoanApproved.ListDraftTransactionLoanApproved;
 import id.co.indocyber.android.starbridges.model.ListEmployee.ListEmployee;
-import id.co.indocyber.android.starbridges.model.ListEntertainReimbursement.EntertainReimbursement;
 import id.co.indocyber.android.starbridges.model.ListLeaveCancelation.ListLeaveCancelation;
 import id.co.indocyber.android.starbridges.model.ListLoanHistory.ListLoanHistory;
 import id.co.indocyber.android.starbridges.model.ListLoanSchedule.ListLoanSchedule;
 import id.co.indocyber.android.starbridges.model.ListLoanTransaction.ListLoanTransaction;
 import id.co.indocyber.android.starbridges.model.ListOvertime.Overtime;
-import id.co.indocyber.android.starbridges.model.ListOvertimeReimbursement.OvertimeReimbursement;
 import id.co.indocyber.android.starbridges.model.ListShift.ListShift;
 import id.co.indocyber.android.starbridges.model.ListShiftExchange.ListShiftExchange;
 import id.co.indocyber.android.starbridges.model.ListTransactionInformation.ListTransactionInformation;
@@ -42,12 +44,23 @@ import id.co.indocyber.android.starbridges.model.LoanTransactionType.LoanTransac
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
 import id.co.indocyber.android.starbridges.model.OLocation.OLocation;
 import id.co.indocyber.android.starbridges.model.OPost;
+import id.co.indocyber.android.starbridges.model.OvertimeReimbursement.OvertimeReimbursement;
+import id.co.indocyber.android.starbridges.model.OvertimeReimbursement.OvertimeReimbursementDetail;
+import id.co.indocyber.android.starbridges.model.OvertimeReimbursement.OvertimeReimbursementType;
+import id.co.indocyber.android.starbridges.model.OvertimeReimbursement.OvertimeReimbursementViewModel;
 import id.co.indocyber.android.starbridges.model.PersonalOvertime.PersonalOvertime;
 import id.co.indocyber.android.starbridges.model.Reimbursement.Reimbursement;
 import id.co.indocyber.android.starbridges.model.ReimbursementType.ReimbursementType;
 import id.co.indocyber.android.starbridges.model.SaveShiftExchange.SaveShiftExchange;
 import id.co.indocyber.android.starbridges.model.SubmitOvertime.SubmitOvertime;
+import id.co.indocyber.android.starbridges.model.TransportReimbursement.EditTransportReimbursement;
 import id.co.indocyber.android.starbridges.model.TransportReimbursement.TransportReimbursement;
+import id.co.indocyber.android.starbridges.model.TransportReimbursement.TransportReimbursementResponse;
+import id.co.indocyber.android.starbridges.model.TransportReimbursement.TransportReimbursementViewModel;
+import id.co.indocyber.android.starbridges.model.TransportReimbursementDetail.TransportReimbursementDetail;
+import id.co.indocyber.android.starbridges.model.TransportReimbursementType.TransportReimbursementType;
+import id.co.indocyber.android.starbridges.model.WebServiceResponseList;
+import id.co.indocyber.android.starbridges.model.WebServiceResponseObject;
 import id.co.indocyber.android.starbridges.model.balanceType.BalanceType;
 import id.co.indocyber.android.starbridges.model.deleteleaverequest.DeleteLeaveRequest;
 import id.co.indocyber.android.starbridges.model.deletemedical.DeleteMedical;
@@ -555,6 +568,112 @@ public interface APIInterfaceRest {
     @GET("api/EntertainReimbursement/ListDraft")
     Call<DraftEntertainReimbursement>getEntertainReimbursementDataDraft();
 
+
+    /* Transport Reimbursement */
+
+    @GET("api/TransportReimbursement/GetReimbursementType")
+    Call<WebServiceResponseList<TransportReimbursementType>>getTransportReimbursementType();
+
+
     @GET("api/TransportReimbursement/ListHeader")
-    Call<TransportReimbursement>getTransportReimbursement();
+    Call<WebServiceResponseList<TransportReimbursement>>getTransportReimbursement();
+
+    @GET("api/TransportReimbursement/ListDraft")
+    Call<WebServiceResponseList<TransportReimbursement>>getTransportReimbursementDraft();
+
+
+    @GET("api/TransportReimbursement/GetTransportAmount")
+    Call<WebServiceResponseObject<String>>getTransportReimbursementTransportAmount(@Query("locationID") String locationId);
+
+    @GET("api/TransportReimbursement/ListDetail")
+    Call<WebServiceResponseList<TransportReimbursementDetail>> getTransportReimbursementDetail(@Query("headerID") String headerId);
+
+    @POST("api/TransportReimbursement/SaveDetail")
+    Call<MessageReturn> saveDetailTransportReimbursement(@Body RequestBody body);
+
+    @POST("api/TransportReimbursement/DeleteDetail")
+    Call<MessageReturn> deleteTransportReimbursementDetail(@Body RequestBody body);
+
+    @POST("api/TransportReimbursement/DeleteDraft")
+    Call<MessageReturn> deleteTransportReimbursementDraft(@Body RequestBody body);
+
+    @POST("api/TransportReimbursement/EditDraft")
+    Call<WebServiceResponseObject<TransportReimbursementViewModel>> editTransportReimbursementDraft(@Query("headerID") String headerId);
+
+    @POST("api/TransportReimbursement/DetailRequestConfirmation")
+    Call<WebServiceResponseObject<TransportReimbursementViewModel>> confirmationTransportReimbursement(@Query("transactionStatus") String transactionStatus,  @Body RequestBody body);
+
+    @POST("api/TransportReimbursement/SaveTransaction")
+    Call<WebServiceResponseObject<String>> saveTransportReimbursement(@Body RequestBody body);
+
+    @POST("api/TransportReimbursement/GenerateClaim")
+    Call<WebServiceResponseObject<String>> generateClaimransportReimbursement(@Body RequestBody body);
+
+    /* End Transport Reimbursement */
+
+
+    /* Overtime Reimbursement */
+    @GET("api/OvertimeReimbursement/ListHeader")
+    Call<WebServiceResponseList<OvertimeReimbursement>>getOvertimeReimbursement();
+
+    @GET("api/OvertimeReimbursement/ListDraft")
+    Call<WebServiceResponseList<OvertimeReimbursement>>getOvertimeReimbursementDraft();
+
+    @GET("api/OvertimeReimbursement/ListDetail")
+    Call<WebServiceResponseList<OvertimeReimbursementDetail>> getOvertimeReimbursementDetail(@Query("headerID") String headerId);
+
+    @GET("api/OvertimeReimbursement/GetReimbursementType")
+    Call<WebServiceResponseList<OvertimeReimbursementType>> getOvertimeReimbursementType();
+
+    @POST("api/OvertimeReimbursement/SaveDetail")
+    Call<MessageReturn> saveDetailOvertimeReimbursement(@Body RequestBody body);
+
+    @POST("api/OvertimeReimbursement/DeleteDetail")
+    Call<MessageReturn> deleteOvertimeReimbursementDetail(@Body RequestBody body);
+
+    @POST("api/OvertimeReimbursement/DeleteDraft")
+    Call<MessageReturn> deleteOvertimeReimbursementDraft(@Body RequestBody body);
+
+    @POST("api/OvertimeReimbursement/EditDraft")
+    Call<WebServiceResponseObject<OvertimeReimbursementViewModel>> editOvertimeReimbursementDraft(@Query("headerID") String headerId);
+
+    @POST("api/OvertimeReimbursement/DetailRequestConfirmation")
+    Call<WebServiceResponseObject<OvertimeReimbursementViewModel>> confirmationOvertimeReimbursement(@Query("transactionStatus") String transactionStatus,  @Body RequestBody body);
+
+    @POST("api/OvertimeReimbursement/SaveTransaction")
+    Call<WebServiceResponseObject<String>> saveOvertimeReimbursement(@Body RequestBody body);
+    /* End Overtime Reimbursement */
+
+    /* Entertain Reimbursement */
+    @GET("api/EntertainReimbursement/ListHeader")
+    Call<WebServiceResponseList<EntertainReimbursement>>getEntertainReimbursement();
+
+    @GET("api/EntertainReimbursement/ListDraft")
+    Call<WebServiceResponseList<EntertainReimbursement>>getEntertainReimbursementDraft();
+
+    @GET("api/EntertainReimbursement/ListDetail")
+    Call<WebServiceResponseList<EntertainReimbursementDetail>> getEntertainReimbursementDetail(@Query("headerID") String headerId);
+
+    @GET("api/EntertainReimbursement/GetReimbursementType")
+    Call<WebServiceResponseList<EntertainReimbursementType>>getEntertainReimbursementType();
+
+    @POST("api/EntertainReimbursement/SaveDetail")
+    Call<MessageReturn> saveDetailEntertainReimbursement(@Body RequestBody body);
+
+    @POST("api/EntertainReimbursement/DeleteDetail")
+    Call<MessageReturn> deleteEntertainReimbursementDetail(@Body RequestBody body);
+
+    @POST("api/EntertainReimbursement/DeleteDraft")
+    Call<MessageReturn> deleteEntertainReimbursementDraft(@Body RequestBody body);
+
+    @POST("api/EntertainReimbursement/EditDraft")
+    Call<WebServiceResponseObject<EntertainReimbursementViewModel>> editEntertainReimbursementDraft(@Query("headerID") String headerId);
+
+    @POST("api/EntertainReimbursement/DetailRequestConfirmation")
+    Call<WebServiceResponseObject<EntertainReimbursementViewModel>> confirmationEntertainReimbursement(@Query("transactionStatus") String transactionStatus,  @Body RequestBody body);
+
+    @POST("api/OvertimeReimbursement/SaveTransaction")
+    Call<WebServiceResponseObject<String>> saveEntertainReimbursement(@Body RequestBody body);
+    /* End Entertain Reimbursement */
+
 }

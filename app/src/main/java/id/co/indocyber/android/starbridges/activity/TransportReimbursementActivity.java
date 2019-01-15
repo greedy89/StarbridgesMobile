@@ -14,11 +14,9 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import id.co.indocyber.android.starbridges.R;
-import id.co.indocyber.android.starbridges.adapter.OvertimeReimbursementAdapter;
-import id.co.indocyber.android.starbridges.adapter.ReimburseAdapter;
 import id.co.indocyber.android.starbridges.adapter.TransportReimbursementAdapter;
-import id.co.indocyber.android.starbridges.model.Reimbursement.Reimbursement;
 import id.co.indocyber.android.starbridges.model.TransportReimbursement.TransportReimbursement;
+import id.co.indocyber.android.starbridges.model.WebServiceResponseList;
 import id.co.indocyber.android.starbridges.network.APIClient;
 import id.co.indocyber.android.starbridges.network.APIInterfaceRest;
 import id.co.indocyber.android.starbridges.utility.GlobalVar;
@@ -40,18 +38,33 @@ public class TransportReimbursementActivity extends AppCompatActivity {
 
         setTitle("Transport Reimbursement");
 
-        lstTransportReimbursement = (ListView)findViewById(R.id.lstTransportReimbursement);
-        fabAddTransportReimbursement = (FloatingActionButton)findViewById(R.id.fabAddTransportReimbursement);
+        initComponent();
 
+        setupFAB();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getTransportReimbursementList();
+    }
+
+    private void initComponent() {
+        lstTransportReimbursement = findViewById(R.id.lstTransportReimbursement);
+        fabAddTransportReimbursement = findViewById(R.id.fabAddTransportReimbursement);
+
+
+    }
+
+    private void setupFAB() {
         fabAddTransportReimbursement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(TransportReimbursementActivity.this, TransportReimbursementCreateActivity.class);
+                Intent intent = new Intent(TransportReimbursementActivity.this, TransportReimbursementCreateActivity.class);
                 startActivity(intent);
             }
         });
-
-        getReimbursementLog();
     }
 
     @Override
@@ -63,28 +76,26 @@ public class TransportReimbursementActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_item_two){
-//            listOR.setAdapter(null);
-//            getListOvertimeReimbursement(1);
-            startActivity(new Intent(TransportReimbursementActivity.this,ListDraftTransportReimbursementActivity.class));
+        if (id == R.id.action_item_two) {
+            startActivity(new Intent(TransportReimbursementActivity.this, ListDraftTransportReimbursementActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void getReimbursementLog() {
+    public void getTransportReimbursementList() {
 
         progressDialog = new ProgressDialog(TransportReimbursementActivity.this);
         progressDialog.setTitle("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
         final APIInterfaceRest apiInterface = APIClient.getClientWithToken(GlobalVar.getToken(), getApplicationContext()).create(APIInterfaceRest.class);
-        Call<TransportReimbursement> call3 = apiInterface.getTransportReimbursement();
-        call3.enqueue(new Callback<TransportReimbursement>() {
+        Call<WebServiceResponseList<TransportReimbursement>> call = apiInterface.getTransportReimbursement();
+        call.enqueue(new Callback<WebServiceResponseList<TransportReimbursement>>() {
             @Override
-            public void onResponse(Call<TransportReimbursement> call, Response<TransportReimbursement> response) {
+            public void onResponse(Call<WebServiceResponseList<TransportReimbursement>> call, Response<WebServiceResponseList<TransportReimbursement>> response) {
                 progressDialog.dismiss();
-                TransportReimbursement data = response.body();
+                WebServiceResponseList<TransportReimbursement> data = response.body();
                 if (data != null && data.getIsSucceed()) {
                     viewAdapter = new TransportReimbursementAdapter(TransportReimbursementActivity.this, R.layout.lst_transport_reimbursement, data.getReturnValue());
                     lstTransportReimbursement.setAdapter(viewAdapter);
@@ -100,7 +111,7 @@ public class TransportReimbursementActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<TransportReimbursement> call, Throwable t) {
+            public void onFailure(Call<WebServiceResponseList<TransportReimbursement>> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), getString(R.string.error_connection), Toast.LENGTH_LONG).show();
                 call.cancel();

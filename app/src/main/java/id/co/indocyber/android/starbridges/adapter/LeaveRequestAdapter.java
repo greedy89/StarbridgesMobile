@@ -52,9 +52,9 @@ public class LeaveRequestAdapter extends ArrayAdapter<ReturnValue> {
         decisionNumber.setText(leaveRequestList.get(position).getDecisionNumber());
         requestType.setText(leaveRequestList.get(position).getRequestType());
         leave.setText(dateFormat(leaveRequestList.get(position).getStartLeave()) + " - " + dateFormat(leaveRequestList.get(position).getEndLeave()) );
-//        unitReduce.setText(leaveRequestList.get(position).getTotalUnit());
+//        unitReduce.setName(leaveRequestList.get(position).getTotalUnit());
         notes.setText(leaveRequestList.get(position).getNotes());
-//        approvedDate.setText(leaveRequestList.get(position).getApproveDate());
+//        approvedDate.setName(leaveRequestList.get(position).getApproveDate());
 
         // return rowView
         return rowView;

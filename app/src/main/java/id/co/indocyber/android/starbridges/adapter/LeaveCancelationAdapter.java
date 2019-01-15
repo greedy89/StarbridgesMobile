@@ -68,10 +68,10 @@ public class LeaveCancelationAdapter extends ArrayAdapter<ReturnValue> {
             holder = (LeaveCancelationAdapter.ViewHolder) convertView.getTag();
         }
 
-//        holder.txtLogDateCorrectionDraft.setText(dateResult);
+//        holder.txtLogDateCorrectionDraft.setName(dateResult);
 //
-//        holder.txtLogInCorrectoinDraft.setText(lstorder.get(position).getActualLogIn());
-//        holder.txtLogOutCorrectionDraft.setText(lstorder.get(position).getActualLogOut());
+//        holder.txtLogInCorrectoinDraft.setName(list.get(position).getActualLogIn());
+//        holder.txtLogOutCorrectionDraft.setName(list.get(position).getActualLogOut());
 
         holder.txtDecisionNumberCancelation.setText(lstorder.get(position).getDecisionNumber());
         holder.txtRequestTypeCancelation.setText(lstorder.get(position).getRequestType());
@@ -83,7 +83,7 @@ public class LeaveCancelationAdapter extends ArrayAdapter<ReturnValue> {
 
 /*
         itemView = LayoutInflater.from(context).inflate(R.layout.lst_correction_draft2,parent,false);
-        final ReturnValue value=lstorder.get(position);
+        final ReturnValue value=list.get(position);
 
 
         TextView txtLogDateCorrectionDraft = (TextView) itemView.findViewById(R.id.txtLogDateCorrectionDraft);
@@ -93,9 +93,9 @@ public class LeaveCancelationAdapter extends ArrayAdapter<ReturnValue> {
         Button btnDetailCorrectionDraft = (Button) itemView.findViewById(R.id.btnDetailCorrectionDraft);
         Button btnDeleteCorrectionDraft = (Button) itemView.findViewById(R.id.btnDeleteCorrectionDraft);
 
-        txtLogDateCorrectionDraft.setText(value.getLogDate());
-        txtLogInCorrectoinDraft.setText(value.getActualLogIn());
-        txtLogOutCorrectionDraft.setText(value.getActualLogOut());
+        txtLogDateCorrectionDraft.setName(value.getLogDate());
+        txtLogInCorrectoinDraft.setName(value.getActualLogIn());
+        txtLogOutCorrectionDraft.setName(value.getActualLogOut());
 
         btnDetailCorrectionDraft.setOnClickListener(new View.OnClickListener() {
             @Override

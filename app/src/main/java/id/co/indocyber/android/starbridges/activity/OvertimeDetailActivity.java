@@ -103,9 +103,9 @@ public class OvertimeDetailActivity extends AppCompatActivity {
 //        reqDate.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                new DatePickerDialog(OvertimeDetailActivity.this, date, myCalendar
-//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//                new DatePickerDialog(OvertimeDetailActivity.this, date, calendarSelectedDate
+//                        .get(Calendar.YEAR), calendarSelectedDate.get(Calendar.MONTH),
+//                        calendarSelectedDate.get(Calendar.DAY_OF_MONTH)).show();
 //            }
 //        });
 //
@@ -121,15 +121,15 @@ public class OvertimeDetailActivity extends AppCompatActivity {
 //                    mTimePicker = new TimePickerDialog(OvertimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
 //                        @Override
 //                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                            ovStart.setText( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
+//                            ovStart.setName( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
 //                        }
-//                    }, Integer.parseInt(ovStart.getText().toString().substring(0,2)) , Integer.parseInt(ovStart.getText().toString().substring(3,5)), true);
+//                    }, Integer.parseInt(ovStart.getName().toString().substring(0,2)) , Integer.parseInt(ovStart.getName().toString().substring(3,5)), true);
 //                } catch (Exception e)
 //                {
 //                    mTimePicker = new TimePickerDialog(OvertimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
 //                        @Override
 //                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                            ovStart.setText( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
+//                            ovStart.setName( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
 //                        }
 //                    }, hour, minute, true);
 //                }
@@ -151,15 +151,15 @@ public class OvertimeDetailActivity extends AppCompatActivity {
 //                    mTimePicker = new TimePickerDialog(OvertimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
 //                        @Override
 //                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                            ovEnd.setText( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
+//                            ovEnd.setName( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
 //                        }
-//                    }, Integer.parseInt(ovEnd.getText().toString().substring(0,2)) , Integer.parseInt(ovEnd.getText().toString().substring(3,5)), true);
+//                    }, Integer.parseInt(ovEnd.getName().toString().substring(0,2)) , Integer.parseInt(ovEnd.getName().toString().substring(3,5)), true);
 //                } catch (Exception e)
 //                {
 //                    mTimePicker = new TimePickerDialog(OvertimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
 //                        @Override
 //                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                            ovEnd.setText( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
+//                            ovEnd.setName( String.format("%2s",selectedHour).replace(' ','0')  + ":" + String.format("%2s",selectedMinute).replace(' ','0'));
 //                        }
 //                    }, hour, minute, true);
 //                }

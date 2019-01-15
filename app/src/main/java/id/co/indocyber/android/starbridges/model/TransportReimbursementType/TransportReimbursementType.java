@@ -1,27 +1,35 @@
 package id.co.indocyber.android.starbridges.model.TransportReimbursementType;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class TransportReimbursementType {
-    private String name;
-    private String reimbursementTranpsportTypeId;
+    @SerializedName("Text")
+    @Expose
+    private String text;
 
-    public String getName() {
-        return name;
+    @SerializedName("Value")
+    @Expose
+    private String value;
+
+    public String getText() {
+        return text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getReimbursementTranpsportTypeId() {
-        return reimbursementTranpsportTypeId;
+    public String getValue() {
+        return value;
     }
 
-    public void setReimbursementTranpsportTypeId(String reimbursementTranpsportTypeId) {
-        this.reimbursementTranpsportTypeId = reimbursementTranpsportTypeId;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return name;
+        return text;
     }
 }

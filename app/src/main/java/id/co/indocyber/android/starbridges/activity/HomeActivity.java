@@ -138,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
         listMenu.add("leaveCancelation");
         listMenu.add("transportReimburse");
         listMenu.add("overtimeReimburse");
+        listMenu.add("entertainReimburse");
         listMenu.add("signOut");
 
         createDynamicMenu();
@@ -212,6 +213,10 @@ public class HomeActivity extends AppCompatActivity {
             {
                 addViewToLayoutHome("OVERTIME\nREIMBURSEMENT", R.mipmap.ic_reimburse2, hshLytHome, c-1, string);
             }
+            else if(string.equalsIgnoreCase("entertainReimburse"))
+            {
+                addViewToLayoutHome("ENTERTAIN\nREIMBURSEMENT", R.mipmap.ic_reimburse2, hshLytHome, c-1, string);
+            }
             else if(string.equalsIgnoreCase(""))
             {
                 addViewToLayoutHome("", 0, hshLytHome, c-1, string);
@@ -282,6 +287,10 @@ public class HomeActivity extends AppCompatActivity {
                 else if(string.equalsIgnoreCase("overtimeReimburse"))
                 {
                     showOvertimeReimbursement();
+                }
+                else if(string.equalsIgnoreCase("entertainReimburse"))
+                {
+                    showEntertainReimbursement();
                 }
             }
         });
@@ -358,7 +367,8 @@ public class HomeActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     finish();
                 }
-                progressDialog.dismiss();
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
             }
 
             @Override
@@ -569,7 +579,7 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(new Intent(this,OvertimeReimbursementActivity.class));
     }
     //pindah ke halaman entertainreimbursement
-    public void showEntertainReimbursement(View view) {
+    public void showEntertainReimbursement() {
         startActivity(new Intent(this,EntertainReimbursementActivity.class));
     }
 

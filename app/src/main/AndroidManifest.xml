@@ -375,14 +375,54 @@
             android:parentActivityName=".activity.OvertimeReimbursementActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.OvertimeReimbursementCreateDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.OvertimeReimbursementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"
+            />
+        <activity
             android:name=".activity.EntertainReimbursementActivity"
             android:configChanges="orientation"
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ListDraftEntertainReimbursementActivity" />
-        <activity android:name=".activity.TransportReimbursementActivity" />
-        <activity android:name=".activity.ListDraftTransportReimbursementActivity" />
-        <activity android:name=".activity.TransportReimbursementCreateActivity"></activity>
+        <activity android:name=".activity.ListDraftEntertainReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.EntertainReimbursementActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.EntertainReimbursementDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.EntertainReimbursementActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.EntertainReimbursementCreateDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.EntertainReimbursementDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"
+            />
+
+        <activity android:name=".activity.TransportReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ListDraftTransportReimbursementActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.TransportReimbursementActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TransportReimbursementCreateActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.TransportReimbursementActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.TransportReimbursementCreateDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".activity.TransportReimbursementCreateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"
+            />
     </application>
 
 </manifest>

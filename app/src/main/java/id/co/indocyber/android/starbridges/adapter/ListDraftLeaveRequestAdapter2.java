@@ -66,7 +66,7 @@ public class ListDraftLeaveRequestAdapter2 extends ArrayAdapter<ReturnValue> {
 
         holder.requestType.setText(draftLeaveRequestList.get(position).getLeaveType());
         holder.leave.setText(dateFormat(draftLeaveRequestList.get(position).getStartLeave())  + " - " + dateFormat(draftLeaveRequestList.get(position).getEndLeave()) );
-//        holder.unitReduce.setText(draftLeaveRequestList.get(position).getTotalUnit().toString());
+//        holder.unitReduce.setName(draftLeaveRequestList.get(position).getTotalUnit().toString());
         holder.note.setText(draftLeaveRequestList.get(position).getNotes());
 
         return convertView;

@@ -10,6 +10,12 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <color name="colorButtonNormal">#D6D7D7</color>
     <color name="colorRed">#fb0000</color>
     <color name="colorGreen">#11fb00</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBackground">#f2f5fa</color>
+    <color name="colorBackgroundSelected">#50000000</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorButton">@android:color/holo_blue_light</color>
+
     <color name="backgroundHome">#2D7ABE</color>
 
     <!--reds-->
@@ -305,4 +311,9 @@ http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
     <color name="md_blue_grey_700">#455A64</color>
     <color name="md_blue_grey_800">#37474F</color>
     <color name="md_blue_grey_900">#263238</color>
+
+    <color name="fontWhiteEnable">#FFF</color>
+    <color name="fontWhiteDisable">#85FFFFFF</color>
+    <color name="fontBlackEnable">#000000</color>
+    <color name="fontBlackDisable">#50000000</color>
 </resources>

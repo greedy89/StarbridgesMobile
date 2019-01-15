@@ -186,7 +186,7 @@ public class MedicalClaimActivity extends AppCompatActivity {
                     medicalSupportName = response.body().getReturnValue().getMedicalSupportName();
 
                     // set text medical grade
-                    //medicalGrade.setText(medicalSupportName);
+                    //medicalGrade.setName(medicalSupportName);
 
                     // init spinner medical policy
                     //initSpinnerMedicalPolicy();

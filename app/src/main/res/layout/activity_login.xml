@@ -165,7 +165,7 @@
                     <!--android:layout_marginBottom="10dp"-->
                     <!--android:layout_marginTop="16dp"-->
                     <!--android:background="@drawable/rounded_btn"-->
-                    <!--android:text="@string/action_register"-->
+                    <!--android:name="@string/action_register"-->
                     <!--android:textColor="@android:color/white"-->
                     <!--android:textStyle="bold" />-->
 

@@ -59,7 +59,7 @@ public class CorrectionAdapter extends RecyclerView.Adapter<CorrectionAdapter.Vi
 
 
         holder.txtDayTypeCorrection.setText(value.getDayType());
-//        holder.txtLogDateCorrection.setText(value.getLogDate());
+//        holder.txtLogDateCorrection.setName(value.getLogDate());
         holder.txtStatusCorrection.setText(value.getStatusCode());
         holder.txtLogDateCorrection.setText(dateResult);
         holder.txtDayCorrection.setText(value.getDay());

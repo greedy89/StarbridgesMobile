@@ -48,7 +48,7 @@ public class ListOvertimeAdapter extends ArrayAdapter<ReturnValue> {
         date.setText(OvertimeList.get(position).getOvertimeDate());
         startOv.setText(OvertimeList.get(position).getOvertimeStart());
         endOv.setText(OvertimeList.get(position).getOvertimeEnd());
-//        approvedDate.setText(OvertimeList.get(position).getApprovedDate());
+//        approvedDate.setName(OvertimeList.get(position).getApprovedDate());
 
         // return rowView
         return rowView;

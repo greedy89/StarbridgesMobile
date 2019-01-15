@@ -34,7 +34,7 @@
 -keep class javax.servlet.Filter
 -keep class javax.servlet.http.HttpServ
 -keep class javax.annotation.Nullable
--keep class com.ibm.icu.text.*
+-keep class com.ibm.icu.name.*
 -keep class id.co.acc.www.amos.util.*
 
 -dontwarn org.jasypt.**

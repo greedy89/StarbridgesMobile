@@ -82,7 +82,7 @@ public class CorrectionListAdapter extends ArrayAdapter<ReturnValue> {
         }
 
         holder.txtDayTypeCorrection.setText(lstorder.get(position).getDayType());
-//        holder.txtLogDateCorrection.setText(value.getLogDate());
+//        holder.txtLogDateCorrection.setName(value.getLogDate());
         holder.txtStatusCorrection.setText(lstorder.get(position).getStatusCode());
         if(!lstorder.get(position).getStatusCode().matches("Normal")||!lstorder.get(position).getStatusCode().equals("Normal"))
             holder.txtStatusCorrection.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
@@ -96,7 +96,7 @@ public class CorrectionListAdapter extends ArrayAdapter<ReturnValue> {
 
 /*
         itemView = LayoutInflater.from(context).inflate(R.layout.lst_correction_draft2,parent,false);
-        final ReturnValue value=lstorder.get(position);
+        final ReturnValue value=list.get(position);
 
 
         TextView txtLogDateCorrectionDraft = (TextView) itemView.findViewById(R.id.txtLogDateCorrectionDraft);
@@ -106,9 +106,9 @@ public class CorrectionListAdapter extends ArrayAdapter<ReturnValue> {
         Button btnDetailCorrectionDraft = (Button) itemView.findViewById(R.id.btnDetailCorrectionDraft);
         Button btnDeleteCorrectionDraft = (Button) itemView.findViewById(R.id.btnDeleteCorrectionDraft);
 
-        txtLogDateCorrectionDraft.setText(value.getLogDate());
-        txtLogInCorrectoinDraft.setText(value.getActualLogIn());
-        txtLogOutCorrectionDraft.setText(value.getActualLogOut());
+        txtLogDateCorrectionDraft.setName(value.getLogDate());
+        txtLogInCorrectoinDraft.setName(value.getActualLogIn());
+        txtLogOutCorrectionDraft.setName(value.getActualLogOut());
 
         btnDetailCorrectionDraft.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -726,11 +726,11 @@ public class StartEndDayActivity extends AppCompatActivity implements OnMapReady
 //                        lastLogType=data.getReturnValue().get(0).getLogType();
 //                    }
 //                    if (lastLogType.equals("Start Day7") ) {
-//                        mShowDetail.setText("End Day");
+//                        mShowDetail.setName("End Day");
 //                    } else if (lastLogType.equals("End Day")) {
 //                        mShowDetail.setEnabled(false);
 //                    } else {
-//                        mShowDetail.setText("Start Day");
+//                        mShowDetail.setName("Start Day");
 //                    }
                     viewAdapter = new HistoryAdapter(StartEndDayActivity.this, data.getReturnValue());
                     recyclerView.setAdapter(viewAdapter);

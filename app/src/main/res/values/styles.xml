@@ -65,4 +65,44 @@
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="MonthPickerDialogStyle" >
+        <!-- Customize month picker theme here. -->
+        <!-- <item name="monthBgColor">#FFFFFF</item>
+         <item name="monthBgSelectedColor">#FF4081</item>
+         <item name="monthFontColorSelected">#ffffff</item>
+         <item name="monthFontColorNormal">#000000</item>
+         <item name="monthFontColorDisabled">#33000000</item>
+
+         <item name="headerBgColor">#FF4081</item>
+         <item name="headerFontColorSelected">#ffffff</item>
+         <item name="headerFontColorNormal">#85ffffff</item>
+         <item name="headerTitleColor">#ffffff</item>-->
+    </style>
+
+    <style name="WhiteBackground" parent="EditTextStyle" >
+        <item name="android:background">@drawable/bg_white_rounded</item>
+        <item name="android:minHeight">@dimen/item_min_height</item>
+    </style>
+    <style name="GrayBorder" parent="EditTextStyle" >
+        <item name="android:background">@drawable/bg_corner_gray_rounded</item>
+        <item name="android:minHeight">@dimen/item_min_height</item>
+    </style>
+    <style name="LabelBlack" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fontBlackEnable</item>
+    </style>
+    <style name="LabelLink" >
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+    <style name="EditTextStyle" >
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/edit_text_size</item>
+        <item name="android:layout_gravity">center</item>
+
+    </style>
+
+
+
 </resources>

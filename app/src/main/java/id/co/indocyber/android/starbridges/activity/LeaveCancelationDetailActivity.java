@@ -922,8 +922,8 @@ public class LeaveCancelationDetailActivity extends AppCompatActivity {
                     txtLeaveToCancelDetail.setText(dateFormat(editLeaveCancelation.getLeaveTo())  );
                     cancelFrom=dateFormat(editLeaveCancelation.getCancelFrom());
                     cancelTo=dateFormat(editLeaveCancelation.getCancelTo());
-//                    txtCancelFromCancelDetail.setText(dateFormat(editLeaveCancelation.getCancelFrom())  );
-//                    txtCancelToCancelDetail.setText(dateFormat(editLeaveCancelation.getCancelTo())  );
+//                    txtCancelFromCancelDetail.setName(dateFormat(editLeaveCancelation.getCancelFrom())  );
+//                    txtCancelToCancelDetail.setName(dateFormat(editLeaveCancelation.getCancelTo())  );
                     txtNotesCancelDetail.setText(editLeaveCancelation.getNotes());
                     photo=editLeaveCancelation.getAttachmentFile();
 

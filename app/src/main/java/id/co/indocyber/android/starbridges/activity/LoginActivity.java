@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             year = "2017";
         }
 
-//        txtFooter.setText("Copyright " + year + " PT. Indocyber Global Teknologi\nAll Right Reserved");
+//        txtFooter.setName("Copyright " + year + " PT. Indocyber Global Teknologi\nAll Right Reserved");
 
 //        alarmManager.start(getApplicationContext());
 //        checkAppVersion();
@@ -148,8 +148,8 @@ public class LoginActivity extends AppCompatActivity {
             mPasswordView.setText("");
         }
 
-//        mUsernameView.setText("");
-//        mPasswordView.setText("");
+//        mUsernameView.setName("");
+//        mPasswordView.setName("");
 
 //        checkIMEIPermission();
 

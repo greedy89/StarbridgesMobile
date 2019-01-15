@@ -51,7 +51,7 @@ public class MedicalAdapter extends ArrayAdapter<ReturnValue> {
         policy.setText(medicalList.get(position).getPolicyName());
         family.setText(medicalList.get(position).getFamily());
         claim.setText("Claim: "+medicalList.get(position).getClaim());
-        //remainingBalance.setText(medicalList.get(position).get);
+        //remainingBalance.setName(medicalList.get(position).get);
         reimbursement.setText("Reimburse: "+medicalList.get(position).getReimbursement());
 
         // return rowView

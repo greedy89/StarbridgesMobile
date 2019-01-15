@@ -5,11 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ListDraftEntertainReimbursementActivity">
+
     <ListView
-        android:id="@+id/lvDraftEntertainReimbursement"
+        android:id="@+id/lstDraftEntertainReimbursement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
+        android:paddingTop="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="5dp"></ListView>
+        android:paddingBottom="5dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddDraftEntertainReimbursement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/wallet_holo_blue_light"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_menu_add" />
+
 </RelativeLayout>
