@@ -30,7 +30,7 @@ public class EntertainReimbursementViewModel {
     @Expose
     private Integer amount;
 
-    @SerializedName("TranscationDate")
+    @SerializedName("TransactionDate")
     @Expose
     private String transactionDate;
 
@@ -58,9 +58,9 @@ public class EntertainReimbursementViewModel {
     @Expose
     private Boolean isTaxable;
 
-    @SerializedName("Process_Period_Entertain")
+    @SerializedName("ProcessPeriod")
     @Expose
-    private String processPeriodEntertain;
+    private String processPeriod;
 
     @SerializedName("TransactionStatusSaveOrSubmit")
     @Expose
@@ -170,12 +170,12 @@ public class EntertainReimbursementViewModel {
         isTaxable = taxable;
     }
 
-    public String getProcessPeriodEntertain() {
-        return processPeriodEntertain;
+    public String getProcessPeriod() {
+        return processPeriod;
     }
 
-    public void setProcessPeriodEntertain(String processPeriodEntertain) {
-        this.processPeriodEntertain = processPeriodEntertain;
+    public void setProcessPeriod(String processPeriod) {
+        this.processPeriod = processPeriod;
     }
 
     public String getTransactionStatusSaveOrSubmit() {

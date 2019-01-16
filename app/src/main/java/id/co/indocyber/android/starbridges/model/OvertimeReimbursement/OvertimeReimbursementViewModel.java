@@ -51,7 +51,7 @@ public class OvertimeReimbursementViewModel {
     @Expose
     private String attachmentFile;
 
-    @SerializedName("TransactionSttausSaveOrSubmit")
+    @SerializedName("TransactionStatusSaveOrSubmit")
     @Expose
     private String transactionStatusSaveOrSubmit;
 

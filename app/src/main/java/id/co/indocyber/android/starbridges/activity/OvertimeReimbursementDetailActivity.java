@@ -362,7 +362,7 @@ public class OvertimeReimbursementDetailActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean validaingAndSetViewModel() {
+    private Boolean validaingAndSetViewModel(String transactionStatus) {
 
         if (TextUtils.isEmpty(txtPeriod.getText().toString())) {
             MessageUtil.showMessage(this, "Warning", "Mohon pilih period terlebih dahulu");
@@ -387,6 +387,7 @@ public class OvertimeReimbursementDetailActivity extends AppCompatActivity {
 
         overtimeReimbursementViewModel.setReimbursementTypeId(Integer.parseInt(type.getValue()));
         overtimeReimbursementViewModel.setEmployeeId(GlobalVar.getEmployeeId());
+        overtimeReimbursementViewModel.setTransactionStatusSaveOrSubmit(transactionStatus);
         //entertainReimbursementViewModel.setListDetail();
 
         return true;
@@ -395,7 +396,7 @@ public class OvertimeReimbursementDetailActivity extends AppCompatActivity {
     }
 
     private void saveTransactionGetId(String transactionStatus) {
-        if (validaingAndSetViewModel() == false)
+        if (validaingAndSetViewModel(transactionStatus) == false)
             return;
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
@@ -467,7 +468,7 @@ public class OvertimeReimbursementDetailActivity extends AppCompatActivity {
 
     private void requestConfirmation(final String transactionStatus) {
 
-        if(validaingAndSetViewModel() == false)
+        if(validaingAndSetViewModel(transactionStatus) == false)
             return;
 
         progressDialog = new ProgressDialog(this);
@@ -483,7 +484,7 @@ public class OvertimeReimbursementDetailActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 WebServiceResponseObject<OvertimeReimbursementViewModel> data = response.body();
                 if (data != null && data.getIsSucceed()) {
-                    overtimeReimbursementViewModel = data.getReturnValue();
+                    //overtimeReimbursementViewModel = data.getReturnValue();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(OvertimeReimbursementDetailActivity.this);
                     alert.setTitle("Request Confirmation");

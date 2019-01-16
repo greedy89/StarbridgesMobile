@@ -672,7 +672,7 @@ public interface APIInterfaceRest {
     @POST("api/EntertainReimbursement/DetailRequestConfirmation")
     Call<WebServiceResponseObject<EntertainReimbursementViewModel>> confirmationEntertainReimbursement(@Query("transactionStatus") String transactionStatus,  @Body RequestBody body);
 
-    @POST("api/OvertimeReimbursement/SaveTransaction")
+    @POST("api/EntertainReimbursement/SaveTransaction")
     Call<WebServiceResponseObject<String>> saveEntertainReimbursement(@Body RequestBody body);
     /* End Entertain Reimbursement */
 

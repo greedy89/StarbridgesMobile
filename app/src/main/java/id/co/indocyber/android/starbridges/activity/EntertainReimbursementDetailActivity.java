@@ -1,7 +1,6 @@
 package id.co.indocyber.android.starbridges.activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,19 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,7 +42,6 @@ import id.co.indocyber.android.starbridges.model.EntertainReimbursement.Entertai
 import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursementType;
 import id.co.indocyber.android.starbridges.model.EntertainReimbursement.EntertainReimbursementViewModel;
 import id.co.indocyber.android.starbridges.model.MessageReturn.MessageReturn;
-import id.co.indocyber.android.starbridges.model.OvertimeReimbursement.OvertimeReimbursementDetail;
 import id.co.indocyber.android.starbridges.model.WebServiceResponseList;
 import id.co.indocyber.android.starbridges.model.WebServiceResponseObject;
 import id.co.indocyber.android.starbridges.network.APIClient;
@@ -373,11 +367,11 @@ public class EntertainReimbursementDetailActivity extends AppCompatActivity {
         if (entertainReimbursementViewModel != null) {
             StringConverter stringConverter = new StringConverter();
 
-            period.setTime(stringConverter.dateToDate(entertainReimbursementViewModel.getProcessPeriodEntertain()));
+            period.setTime(stringConverter.dateToDate(entertainReimbursementViewModel.getProcessPeriod()));
 
             DateUtil.setFirstDayOfMonth(period);
             DateUtil.setFirstTimeOfDay(period);
-            txtPeriod.setText(stringConverter.dateFormatMMMMYYYY(entertainReimbursementViewModel.getProcessPeriodEntertain()));
+            txtPeriod.setText(stringConverter.dateFormatMMMMYYYY(entertainReimbursementViewModel.getProcessPeriod()));
 
             txtDescription.setText(entertainReimbursementViewModel.getDescription());
             //txtTotalAmount.setName(stringConverter.numberFormat( entertainReimbursementViewModel.getAmount()+""));
@@ -393,7 +387,7 @@ public class EntertainReimbursementDetailActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validaingAndSetViewModel() {
+    private Boolean validatingAndSetViewModel(String transactionStatus) {
         if (TextUtils.isEmpty(txtPeriod.getText().toString())) {
             MessageUtil.showMessage(this, "Warning", "Mohon pilih period terlebih dahulu");
             return false;
@@ -412,17 +406,18 @@ public class EntertainReimbursementDetailActivity extends AppCompatActivity {
         }
         entertainReimbursementViewModel.setAmount(Integer.parseInt(stringConverter.numberRemoveFormat(amount)));
 
-        entertainReimbursementViewModel.setProcessPeriodEntertain(stringConverter.dateToString(period.getTime()));
+        entertainReimbursementViewModel.setProcessPeriod(stringConverter.dateToString(period.getTime()));
         EntertainReimbursementType reimbursementType = (EntertainReimbursementType) spnReimbursementType.getSelectedItem();
         entertainReimbursementViewModel.setReimbursementTypeId(Integer.parseInt(reimbursementType.getValue()));
         entertainReimbursementViewModel.setEmployeeId(GlobalVar.getEmployeeId());
+        entertainReimbursementViewModel.setTransactionStatusSaveOrSubmit(transactionStatus);
 
         //entertainReimbursementViewModel.setListDetail();
         return true;
     }
 
     private void saveTransactionGetId(String transactionStatus) {
-        if (validaingAndSetViewModel() == false)
+        if (validatingAndSetViewModel(transactionStatus) == false)
             return;
 
         progressDialog = new ProgressDialog(this);
@@ -460,7 +455,7 @@ public class EntertainReimbursementDetailActivity extends AppCompatActivity {
 
     private void requestConfirmation(final String transactionStatus) {
 
-        if (validaingAndSetViewModel() == false)
+        if (validatingAndSetViewModel(transactionStatus) == false)
             return;
 
         progressDialog = new ProgressDialog(this);
@@ -476,7 +471,7 @@ public class EntertainReimbursementDetailActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 WebServiceResponseObject<EntertainReimbursementViewModel> data = response.body();
                 if (data != null && data.getIsSucceed()) {
-                    entertainReimbursementViewModel = data.getReturnValue();
+                    //entertainReimbursementViewModel = data.getReturnValue();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(EntertainReimbursementDetailActivity.this);
                     alert.setTitle("Request Confirmation");

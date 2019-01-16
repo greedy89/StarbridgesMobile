@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import id.co.indocyber.android.starbridges.Manifest;
+
 import id.co.indocyber.android.starbridges.R;
 import id.co.indocyber.android.starbridges.adapter.TransportReimbursementDetailAdapter;
 import id.co.indocyber.android.starbridges.interfaces.OnItemClickListener;
@@ -463,7 +463,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
     }
 
     private void generateClaimTransportReimbursement() {
-        if(validaingAndSetViewModel() == false)
+        if(validaingAndSetViewModel("Save") == false)
             return;
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
@@ -616,7 +616,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean validaingAndSetViewModel() {
+    private Boolean validaingAndSetViewModel(String transactionStatus) {
         if(TextUtils.isEmpty (txtPeriod.getText().toString()))
         {
             MessageUtil.showMessage(this,"Warning", "Mohon pilih period terlebih dahulu");
@@ -643,6 +643,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
         transportReimbursementViewModel.setReimbursementType(transportReimbursementType.getText());
         transportReimbursementViewModel.setReimbursementTypeID(Integer.parseInt(transportReimbursementType.getValue()));
         transportReimbursementViewModel.setEmployeeID(GlobalVar.getEmployeeId());
+        transportReimbursementViewModel.setTransactionStatusSaveOrSubmit(transactionStatus);
         //entertainReimbursementViewModel.setListDetail();
 
         return true;
@@ -650,7 +651,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
 
     private void requestConfirmation(final String transactionStatus) {
 
-        if(validaingAndSetViewModel() == false)
+        if(validaingAndSetViewModel(transactionStatus) == false)
             return;
 
         progressDialog = new ProgressDialog(this);
@@ -667,7 +668,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 WebServiceResponseObject<TransportReimbursementViewModel> data = response.body();
                 if (data != null && data.getIsSucceed()) {
-                    transportReimbursementViewModel = data.getReturnValue();
+                    //transportReimbursementViewModel = data.getReturnValue();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(TransportReimbursementCreateActivity.this);
                     alert.setTitle("Request Confirmation");
@@ -751,7 +752,7 @@ public class TransportReimbursementCreateActivity extends AppCompatActivity {
         });
     }
     private void saveTransactionGetId(final String transactionStatus, final String nextStep) {
-        if(validaingAndSetViewModel() == false)
+        if(validaingAndSetViewModel(transactionStatus) == false)
             return;
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading");
