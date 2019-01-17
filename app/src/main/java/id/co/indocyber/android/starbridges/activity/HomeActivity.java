@@ -140,6 +140,7 @@ public class HomeActivity extends AppCompatActivity {
         listMenu.add("overtimeReimburse");
         listMenu.add("entertainReimburse");
         listMenu.add("signOut");
+        listMenu.add("beacon");
 
         createDynamicMenu();
     }
@@ -217,6 +218,10 @@ public class HomeActivity extends AppCompatActivity {
             {
                 addViewToLayoutHome("ENTERTAIN\nREIMBURSEMENT", R.mipmap.ic_reimburse2, hshLytHome, c-1, string);
             }
+            else if(string.equalsIgnoreCase("beacon"))
+            {
+                addViewToLayoutHome("BEACON", R.mipmap.ic_beacon, hshLytHome, c-1, string);
+            }
             else if(string.equalsIgnoreCase(""))
             {
                 addViewToLayoutHome("", 0, hshLytHome, c-1, string);
@@ -291,6 +296,10 @@ public class HomeActivity extends AppCompatActivity {
                 else if(string.equalsIgnoreCase("entertainReimburse"))
                 {
                     showEntertainReimbursement();
+                }
+                else if(string.equalsIgnoreCase("beacon"))
+                {
+                    showBeacon();
                 }
             }
         });
@@ -556,7 +565,7 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(shiftExchange);
     }
 
-    public void showBeacon(View view){
+    public void showBeacon(){
         Intent beacon = new Intent(this, BeaconActivity.class);
         startActivity(beacon);
     }
